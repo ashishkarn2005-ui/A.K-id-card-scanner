@@ -589,8 +589,8 @@
             <div class="opt">
                 <label>Output Size</label>
                 <select id="outputSize">
+                    <option value="a4port" selected>A4 Portrait 150dpi</option>
                     <option value="a4land">A4 Landscape 150dpi</option>
-                    <option value="a4port">A4 Portrait 150dpi</option>
                     <option value="a4land2">A4 Landscape 200dpi</option>
                 </select>
             </div>
@@ -1172,140 +1172,95 @@ async function startProcess() {
 // SMART CROP
 // ═══════════════════════════════════════════════════════════
 function smartCrop(img) {
-    var mode  = document.getElementById('cropMode').value;
-    var wc    = document.getElementById('workCanvas');
-    var ctx   = wc.getContext('2d');
+    var mode = document.getElementById('cropMode').value;
 
     var origW = img.naturalWidth  || img.width;
     var origH = img.naturalHeight || img.height;
 
-    var maxDim = 1600;
-    var wScale = 1;
-    var wW = origW, wH = origH;
-
-    if (wW > maxDim || wH > maxDim) {
-        wScale = Math.min(maxDim / wW, maxDim / wH);
-        wW = Math.round(wW * wScale);
-        wH = Math.round(wH * wScale);
-    }
-
-    wc.width  = wW;
-    wc.height = wH;
-    ctx.drawImage(img, 0, 0, wW, wH);
-
     if (mode === 'full') {
         var full = document.createElement('canvas');
-        full.width  = origW;
-        full.height = origH;
+        full.width = origW; full.height = origH;
         full.getContext('2d').drawImage(img, 0, 0);
         return full;
     }
 
+    // ── Work canvas at reduced size ──
+    var maxDim = 1200;
+    var wScale = Math.min(maxDim / origW, maxDim / origH, 1);
+    var wW = Math.round(origW * wScale);
+    var wH = Math.round(origH * wScale);
+
+    var wc = document.getElementById('workCanvas');
+    wc.width = wW; wc.height = wH;
+    var ctx = wc.getContext('2d');
+    ctx.drawImage(img, 0, 0, wW, wH);
+
     var id = ctx.getImageData(0, 0, wW, wH);
     var px = id.data;
 
-    var rs = [], gs = [], bs = [];
-    var step = 2;
-
-    for (var x = 0; x < wW; x += step) {
-        for (var ey = 0; ey < 8; ey++) {
-            var p1 = getPx(px, wW, x, ey);
-            var p2 = getPx(px, wW, x, wH-1-ey);
-            rs.push(p1[0]); gs.push(p1[1]); bs.push(p1[2]);
-            rs.push(p2[0]); gs.push(p2[1]); bs.push(p2[2]);
-        }
-    }
-    for (var y = 0; y < wH; y += step) {
-        for (var ex = 0; ex < 8; ex++) {
-            var p3 = getPx(px, wW, ex, y);
-            var p4 = getPx(px, wW, wW-1-ex, y);
-            rs.push(p3[0]); gs.push(p3[1]); bs.push(p3[2]);
-            rs.push(p4[0]); gs.push(p4[1]); bs.push(p4[2]);
-        }
+    // ── Build luma array ──
+    var luma = new Float32Array(wW * wH);
+    for (var i = 0; i < wW * wH; i++) {
+        luma[i] = 0.299*px[i*4] + 0.587*px[i*4+1] + 0.114*px[i*4+2];
     }
 
-    rs.sort(function(a,b){return a-b;});
-    gs.sort(function(a,b){return a-b;});
-    bs.sort(function(a,b){return a-b;});
+    // ── Variance-based edge detection ──
+    // A border strip (dark line, white margin) has near-zero variance.
+    // Real card content has high variance (text, photos, colours).
+    // Scan inward from each edge until variance jumps above threshold.
 
-    var mid = Math.floor(rs.length / 2);
-    var bgR = rs[mid], bgG = gs[mid], bgB = bs[mid];
+    var VAR_THR = 300; // variance threshold — low = uniform border, high = content
 
-    var spread = 0;
-    for (var vi = 0; vi < rs.length; vi++) {
-        spread += Math.abs(rs[vi]-bgR) + Math.abs(gs[vi]-bgG) + Math.abs(bs[vi]-bgB);
+    function colVariance(x) {
+        var sum=0, sum2=0, n=wH;
+        for (var y=0; y<n; y++) { var v=luma[y*wW+x]; sum+=v; sum2+=v*v; }
+        return sum2/n - (sum/n)*(sum/n);
     }
-    spread /= rs.length;
-
-    var baseT = mode === 'edge' ? 20 : 28;
-    var thr   = Math.max(baseT, Math.min(65, baseT + spread * 0.35));
-
-    var mask = new Uint8Array(wW * wH);
-    for (var my = 0; my < wH; my++) {
-        for (var mx = 0; mx < wW; mx++) {
-            var mi = (my * wW + mx) * 4;
-            var dr = Math.abs(px[mi]   - bgR);
-            var dg = Math.abs(px[mi+1] - bgG);
-            var db = Math.abs(px[mi+2] - bgB);
-            var maxD = Math.max(dr, dg, db);
-            var euc  = Math.sqrt(dr*dr + dg*dg + db*db);
-            if (maxD > thr || euc > thr*1.5) mask[my*wW+mx] = 1;
-        }
+    function rowVariance(y) {
+        var sum=0, sum2=0, n=wW;
+        for (var x=0; x<n; x++) { var v=luma[y*wW+x]; sum+=v; sum2+=v*v; }
+        return sum2/n - (sum/n)*(sum/n);
     }
 
-    var rad = Math.max(3, Math.round(Math.min(wW,wH)*0.014));
-    mask = morphClose(mask, wW, wH, rad);
+    // Find left edge
+    var left = 0;
+    while (left < wW - 1 && colVariance(left) < VAR_THR) left++;
 
-    var top=-1, bottom=-1, left=-1, right=-1, found;
+    // Find right edge
+    var right = wW - 1;
+    while (right > left && colVariance(right) < VAR_THR) right--;
 
-    found=false;
-    for (var fy=0; fy<wH&&!found; fy++) {
-        for (var fx=0; fx<wW; fx++) {
-            if (mask[fy*wW+fx]) { top=fy; found=true; break; }
-        }
-    }
-    found=false;
-    for (var fy=wH-1; fy>=0&&!found; fy--) {
-        for (var fx=0; fx<wW; fx++) {
-            if (mask[fy*wW+fx]) { bottom=fy; found=true; break; }
-        }
-    }
-    found=false;
-    for (var fx=0; fx<wW&&!found; fx++) {
-        for (var fy=0; fy<wH; fy++) {
-            if (mask[fy*wW+fx]) { left=fx; found=true; break; }
-        }
-    }
-    found=false;
-    for (var fx=wW-1; fx>=0&&!found; fx--) {
-        for (var fy=0; fy<wH; fy++) {
-            if (mask[fy*wW+fx]) { right=fx; found=true; break; }
-        }
+    // Find top edge
+    var top = 0;
+    while (top < wH - 1 && rowVariance(top) < VAR_THR) top++;
+
+    // Find bottom edge
+    var bottom = wH - 1;
+    while (bottom > top && rowVariance(bottom) < VAR_THR) bottom--;
+
+    // ── Sanity check ──
+    if ((right - left) < wW * 0.2 || (bottom - top) < wH * 0.2) {
+        left=0; right=wW-1; top=0; bottom=wH-1;
     }
 
-    if (top<0||left<0||right<=left+20||bottom<=top+20) {
-        top=0; left=0; right=wW-1; bottom=wH-1;
-    }
+    // ── Tiny 1px padding, map to original coords ──
+    left   = Math.max(0,    left   - 1);
+    top    = Math.max(0,    top    - 1);
+    right  = Math.min(wW-1, right  + 1);
+    bottom = Math.min(wH-1, bottom + 1);
 
-    var marg = Math.round(Math.min(wW,wH)*0.005);
-    top    = Math.max(0,      top    - marg);
-    left   = Math.max(0,      left   - marg);
-    bottom = Math.min(wH-1,   bottom + marg);
-    right  = Math.min(wW-1,   right  + marg);
-
-    var oLeft = Math.round(left / wScale);
-    var oTop  = Math.round(top  / wScale);
+    var oLeft = Math.round(left   / wScale);
+    var oTop  = Math.round(top    / wScale);
     var oCW   = Math.round((right  - left + 1) / wScale);
     var oCH   = Math.round((bottom - top  + 1) / wScale);
 
     oLeft = Math.max(0, Math.min(origW-1, oLeft));
     oTop  = Math.max(0, Math.min(origH-1, oTop));
-    oCW   = Math.max(1, Math.min(origW-oLeft, oCW));
-    oCH   = Math.max(1, Math.min(origH-oTop,  oCH));
+    oCW   = Math.max(1, Math.min(origW - oLeft, oCW));
+    oCH   = Math.max(1, Math.min(origH - oTop,  oCH));
 
     var out = document.createElement('canvas');
-    out.width  = oCW;
-    out.height = oCH;
+    out.width = oCW; out.height = oCH;
     out.getContext('2d').drawImage(img, oLeft, oTop, oCW, oCH, 0, 0, oCW, oCH);
     return out;
 }
