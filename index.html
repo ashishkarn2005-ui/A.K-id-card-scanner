@@ -397,6 +397,7 @@
 
         .btn-primary { background: linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
         .btn-green   { background: linear-gradient(135deg,#11998e,#38ef7d); color:#fff; }
+        .btn-purple  { background: linear-gradient(135deg,#6e1199,#8a38ef); color:#fff; }
         .btn-red     { background: linear-gradient(135deg,#e94560,#c62a47); color:#fff; }
         .btn-outline { background: transparent; color:#667eea; border:2px solid #667eea; }
         .btn-crop    { background: #3a3b5c; color: #fff; border: 1px solid rgba(255,255,255,0.15); margin-top: 8px; width: 100%; justify-content: center; font-size: 0.8rem; padding: 8px;}
@@ -461,6 +462,11 @@
             box-shadow: 0 6px 30px rgba(0,0,0,0.5);
             display: block;
             margin: 0 auto;
+        }
+
+        /* Hidden image injected specifically for physical standard browser printing engines */
+        #printImageLayer {
+            display: none;
         }
 
         .a4-info {
@@ -558,7 +564,6 @@
         }
         .rot-btn:hover { background: #667eea; border-color: #667eea; }
 
-        /* Interactive Modal Crop Overlay Styles */
         .crop-modal {
             display: none;
             position: fixed;
@@ -604,12 +609,42 @@
             cursor: crosshair;
         }
 
-        @media (max-width: 600px) {
-            .upload-grid { grid-template-columns: 1fr; }
-            .preview-pair { grid-template-columns: 1fr; }
-            .pos-grid { grid-template-columns: 1fr; }
-            .header h1 { font-size: 1.5rem; }
-            .manual-controls-grid { grid-template-columns: 1fr; }
+        /* RE-ENGINEERED ISOLATION SYSTEM FOR IMAGE RENDERING MATRIX */
+        @media print {
+            @page {
+                size: portrait;
+                margin: 0mm !important; /* Forces title and date removal */
+            }
+            
+            html, body {
+                background: #ffffff !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                overflow: hidden !important;
+            }
+
+            .container, .header, .card, .result-wrap, canvas, .canvas-outer {
+                display: none !important; 
+                visibility: hidden !important;
+            }
+
+            /* Display the converted web image perfectly isolated onto exactly 1 physical page */
+            #printImageLayer {
+                display: block !important;
+                visibility: visible !important;
+                position: fixed !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100vw !important;  
+                height: 100vh !important; 
+                object-fit: contain !important; 
+                margin: 0 !important;
+                padding: 0 !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
         }
     </style>
 </head>
@@ -619,12 +654,11 @@
 
     <div class="header">
         <h1>ID Card <span>Scanner Pro</span></h1>
-        <p>Auto crop • Magic enhance • Full position control • A4 PDF output</p>
+        <p>Auto crop • Magic enhance • Full position control • A4 PDF & Print output</p>
     </div>
 
     <div class="card">
 
-        <!-- Upload -->
         <div class="section-title">📤 Upload ID Card</div>
         <div class="upload-grid">
             <div class="upload-box" id="frontBox">
@@ -648,10 +682,8 @@
             </div>
         </div>
 
-        <!-- Crop Selection & Rotation Modifiers -->
         <div class="section-title">✂️ Selection Crop & Rotation Modifiers</div>
         <div class="manual-controls-grid">
-            <!-- Front Advanced Options -->
             <div class="control-subcard">
                 <h4>Front Adjustments</h4>
                 <div class="control-row-item">
@@ -678,7 +710,6 @@
                 </div>
             </div>
 
-            <!-- Back Advanced Options -->
             <div class="control-subcard back">
                 <h4>Back Adjustments</h4>
                 <div class="control-row-item">
@@ -707,7 +738,6 @@
         </div>
         <br>
 
-        <!-- Enhancement Options -->
         <div class="section-title">⚙️ Enhancement Settings</div>
         <div class="opts-grid">
             <div class="opt">
@@ -770,23 +800,18 @@
             </div>
         </div>
 
-        <!-- Position Control -->
         <div class="section-title">📍 Position Control</div>
         <div class="position-panel">
-
             <div class="pos-tabs">
                 <button class="pos-tab active-tab" onclick="switchTab('front')">📄 Front Card</button>
                 <button class="pos-tab" onclick="switchTab('back')">📋 Back Card</button>
                 <button class="pos-tab" onclick="switchTab('both')">⚡ Quick Presets</button>
             </div>
 
-            <!-- Front Tab -->
             <div class="pos-tab-content show" id="tab-front">
                 <div class="pos-grid">
                     <div>
-                        <div class="pos-card-title">
-                            Position <span class="front-tag">FRONT</span>
-                        </div>
+                        <div class="pos-card-title">Position <span class="front-tag">FRONT</span></div>
                         <div class="pos-picker" id="frontPicker">
                             <div class="pos-cell" data-side="front" data-pos="top-left"     onclick="setPos('front','top-left')">↖</div>
                             <div class="pos-cell" data-side="front" data-pos="top-center"   onclick="setPos('front','top-center')">↑</div>
@@ -798,7 +823,6 @@
                             <div class="pos-cell" data-side="front" data-pos="bot-center"   onclick="setPos('front','bot-center')">↓</div>
                             <div class="pos-cell" data-side="front" data-pos="bot-right"    onclick="setPos('front','bot-right')">↘</div>
                         </div>
-
                         <div class="pos-extra">
                             <div class="opt">
                                 <label>Scale <span class="sl-v" id="frontScaleV">100%</span></label>
@@ -816,26 +840,19 @@
                             </div>
                         </div>
                     </div>
-
                     <div>
                         <div class="pos-card-title">Live Preview</div>
                         <div class="pos-preview" id="posPreviewFront">
                             <div class="pos-preview-card" id="previewFrontCard">FRONT</div>
                         </div>
-                        <div style="margin-top:8px; font-size:0.7rem; color:rgba(255,255,255,0.3);">
-                            Blue = Front card position inside its cell
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Back Tab -->
             <div class="pos-tab-content" id="tab-back">
                 <div class="pos-grid">
                     <div>
-                        <div class="pos-card-title">
-                            Position <span class="back-tag">BACK</span>
-                        </div>
+                        <div class="pos-card-title">Position <span class="back-tag">BACK</span></div>
                         <div class="pos-picker" id="backPicker">
                             <div class="pos-cell" data-side="back" data-pos="top-left"    onclick="setPos('back','top-left')">↖</div>
                             <div class="pos-cell" data-side="back" data-pos="top-center"  onclick="setPos('back','top-center')">↑</div>
@@ -847,7 +864,6 @@
                             <div class="pos-cell" data-side="back" data-pos="bot-center"  onclick="setPos('back','bot-center')">↓</div>
                             <div class="pos-cell" data-side="back" data-pos="bot-right"   onclick="setPos('back','bot-right')">↘</div>
                         </div>
-
                         <div class="pos-extra">
                             <div class="opt">
                                 <label>Scale <span class="sl-v" id="backScaleV">100%</span></label>
@@ -865,129 +881,84 @@
                             </div>
                         </div>
                     </div>
-
                     <div>
                         <div class="pos-card-title">Live Preview</div>
                         <div class="pos-preview" id="posPreviewBack">
                             <div class="pos-preview-card back-card" id="previewBackCard">BACK</div>
                         </div>
-                        <div style="margin-top:8px; font-size:0.7rem; color:rgba(255,255,255,0.3);">
-                            Red = Back card position inside its cell
-                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Presets Tab -->
             <div class="pos-tab-content" id="tab-both">
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:10px;">
                     <button class="preset-btn" onclick="applyPreset('centered')">
                         <div class="preset-icon">⬛</div>
                         <div class="preset-name">Centered</div>
-                        <div class="preset-desc">Both cards centred in their cells</div>
                     </button>
                     <button class="preset-btn" onclick="applyPreset('top-aligned')">
                         <div class="preset-icon">⬆️</div>
                         <div class="preset-name">Top Aligned</div>
-                        <div class="preset-desc">Both cards aligned to top</div>
                     </button>
                     <button class="preset-btn" onclick="applyPreset('bottom-aligned')">
                         <div class="preset-icon">⬇️</div>
                         <div class="preset-name">Bottom Aligned</div>
-                        <div class="preset-desc">Both cards aligned to bottom</div>
-                    </button>
-                    <button class="preset-btn" onclick="applyPreset('left-aligned')">
-                        <div class="preset-icon">⬅️</div>
-                        <div class="preset-name">Left Aligned</div>
-                        <div class="preset-desc">Both cards aligned to left</div>
                     </button>
                     <button class="preset-btn" onclick="applyPreset('fill')">
                         <div class="preset-icon">🔲</div>
                         <div class="preset-name">Fill Cells</div>
-                        <div class="preset-desc">Cards fill their cells completely</div>
                     </button>
                     <button class="preset-btn" onclick="applyPreset('compact')">
                         <div class="preset-icon">📐</div>
                         <div class="preset-name">Compact 80%</div>
-                        <div class="preset-desc">Cards at 80% scale centred</div>
                     </button>
                     <button class="preset-btn" onclick="applyPreset('camscanner')">
                         <div class="preset-icon">📷</div>
                         <div class="preset-name">CamScanner Style</div>
-                        <div class="preset-desc">Exact CamScanner layout</div>
-                    </button>
-                    <button class="preset-btn" onclick="applyPreset('passport')">
-                        <div class="preset-icon">🛂</div>
-                        <div class="preset-name">Passport Style</div>
-                        <div class="preset-desc">Top-left, full size</div>
                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- Progress -->
         <div class="prog-wrap" id="progWrap">
-            <div class="prog-bar">
-                <div class="prog-fill" id="progFill"></div>
-            </div>
+            <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
             <div class="prog-msg" id="progMsg"></div>
         </div>
 
-        <div class="status-line" id="statusLine">
-            Upload both sides of your ID card to get started
-        </div>
+        <div class="status-line" id="statusLine">Upload both sides of your ID card to get started</div>
 
         <div class="btn-row">
-            <button class="btn btn-primary" id="processBtn" disabled onclick="startProcess()">
-                ⚡ Scan and Generate
-            </button>
+            <button class="btn btn-primary" id="processBtn" disabled onclick="startProcess()">⚡ Scan and Generate</button>
             <button class="btn btn-outline" onclick="resetAll()">🔄 Reset</button>
         </div>
-
     </div>
 
-    <!-- Result -->
     <div class="result-wrap" id="resultWrap">
         <h2>✅ Scanned ID Card — A4 Ready</h2>
-
         <div class="preview-pair">
-            <div class="preview-panel" id="prevFrontPanel">
-                <p>Front — Processed</p>
-                <canvas id="prevFront"></canvas>
-            </div>
-            <div class="preview-panel" id="prevBackPanel">
-                <p>Back — Processed</p>
-                <canvas id="prevBack"></canvas>
-            </div>
+            <div class="preview-panel" id="prevFrontPanel"><p>Front — Processed</p><canvas id="prevFront"></canvas></div>
+            <div class="preview-panel" id="prevBackPanel"><p>Back — Processed</p><canvas id="prevBack"></canvas></div>
         </div>
-
         <div class="canvas-outer">
             <canvas id="outputCanvas"></canvas>
         </div>
         <div class="a4-info" id="a4info"></div>
-
         <div class="btn-row" style="margin-top:16px;">
+            <button class="btn btn-purple"  onclick="directPrint()">🖨️ Direct Print</button>
             <button class="btn btn-green"   onclick="downloadImg()">⬇️ Download JPG</button>
             <button class="btn btn-red"     onclick="downloadPDF()">📄 Save as PDF</button>
             <button class="btn btn-outline" onclick="resetAll()">🔄 New Scan</button>
         </div>
     </div>
-
 </div>
 
-<!-- Interactive Bounding Box Modal Interface -->
 <div class="crop-modal" id="cropModalOverlay">
     <div class="crop-modal-content">
         <div class="crop-modal-header">
             <h3 id="cropModalTitle">Position Manual Selection Box</h3>
             <button class="rot-btn" style="padding:4px 10px; min-width:auto; flex:none;" onclick="closeVisualCropModal(false)">✕</button>
         </div>
-        <div class="crop-canvas-wrapper">
-            <canvas id="interactiveCropCanvas"></canvas>
-        </div>
-        <div style="font-size:0.75rem; color:rgba(255,255,255,0.4); margin-bottom:14px; text-align:center;">
-            Drag the window box boundaries or handles to slice your target coordinates cleanly.
-        </div>
+        <div class="crop-canvas-wrapper"><canvas id="interactiveCropCanvas"></canvas></div>
         <div class="btn-row">
             <button class="btn btn-primary" style="padding:8px 16px; font-size:0.8rem;" onclick="closeVisualCropModal(true)">💾 Save Selected Area</button>
             <button class="btn btn-outline" style="padding:8px 16px; font-size:0.8rem; border-color:rgba(255,255,255,0.2); color:white;" onclick="closeVisualCropModal(false)">Cancel</button>
@@ -995,7 +966,8 @@
     </div>
 </div>
 
-<!-- Isolated hidden canvas for computing matrix transformations without rendering delays -->
+<img id="printImageLayer" alt="A4 Printable Sheet Document">
+
 <canvas id="workCanvas" style="display:none;"></canvas>
 <canvas id="livePreviewCanvas" style="display:none;"></canvas>
 
@@ -1004,8 +976,6 @@ var frontImg       = null;
 var backImg        = null;
 var processedFront = null;
 var processedBack  = null;
-
-// Persistent base transformation state 
 var rotations = { front: 0, back: 0 };
 
 var posState = {
@@ -1013,18 +983,16 @@ var posState = {
     back:  { pos: 'center', scale: 100, fit: 'contain' }
 };
 
-// Global object metrics storage for manually parsed selections
 var customCropBox = {
     front: { x: 0, y: 0, w: 0, h: 0, initialized: false },
     back:  { x: 0, y: 0, w: 0, h: 0, initialized: false }
 };
 
-// Internal transient tracking properties for canvas box interaction logic
 var currentCropSide = 'front';
 var activeHandle = null;
 var isDraggingBox = false;
 var dragStartX = 0, dragStartY = 0;
-var boxInstance = { x: 50, y: 50, w: 200, h: 130 }; // Active viewport values scale relative to displayed modal view
+var boxInstance = { x: 50, y: 50, w: 200, h: 130 };
 
 var A4_SIZES = {
     'a4port':  { W: 1240, H: 1754, label: 'A4 Portrait 150dpi'  },
@@ -1032,27 +1000,21 @@ var A4_SIZES = {
     'a4land2': { W: 2339, H: 1654, label: 'A4 Landscape 200dpi' }
 };
 
-// Listeners for fine adjustments updates
 document.getElementById('fRot').addEventListener('input', function() { document.getElementById('fRotV').textContent = this.value + '°'; });
 document.getElementById('bRot').addEventListener('input', function() { document.getElementById('bRotV').textContent = this.value + '°'; });
 
 function handleCropSelectChange(side) {
     var selectElement = document.getElementById(side === 'front' ? 'fCropSelect' : 'bCropSelect');
     var targetBtn = document.getElementById(side === 'front' ? 'btnFrontCropModal' : 'btnBackCropModal');
-    
     if (selectElement.value === 'custom') {
         targetBtn.style.display = 'block';
-        // Auto trigger launch box interface window directly if it was never setup
-        if(!customCropBox[side].initialized) {
-            openVisualCropModal(side);
-        }
+        if(!customCropBox[side].initialized) openVisualCropModal(side);
     } else {
         targetBtn.style.display = 'none';
         liveRefreshUploadBox(side);
     }
 }
 
-// Handles step adjustments and immediately triggers a box refresh
 function rotateDirection(side, direction) {
     if (direction === 'right') {
         rotations[side] = (rotations[side] + 90) % 360;
@@ -1063,7 +1025,6 @@ function rotateDirection(side, direction) {
     liveRefreshUploadBox(side);
 }
 
-// Instant feedback drawing loop for structural transformation sliders
 function liveRefreshUploadBox(side) {
     var source = (side === 'front') ? frontImg : backImg;
     var previewElement = document.getElementById(side + 'Preview');
@@ -1071,79 +1032,58 @@ function liveRefreshUploadBox(side) {
 
     var tempCanvas = document.getElementById('livePreviewCanvas');
     var tempCtx = tempCanvas.getContext('2d');
-
     var cropType = document.getElementById(side === 'front' ? 'fCropSelect' : 'bCropSelect').value;
     var manualFineAngle = parseInt(document.getElementById(side === 'front' ? 'fRot' : 'bRot').value) * Math.PI / 180;
     var fixedFlipAngle = rotations[side];
 
     var sX = 0, sY = 0, sW = source.width, sH = source.height;
-    var finalCropW = sW;
-    var finalCropH = sH;
+    var finalCropW = sW, finalCropH = sH;
 
     if (cropType === 'id1') {
         if (sW / sH > 1.58) { finalCropW = sH * 1.58; } else { finalCropH = sW / 1.58; }
-        sX = (sW - finalCropW) / 2;
-        sY = (sH - finalCropH) / 2;
+        sX = (sW - finalCropW) / 2; sY = (sH - finalCropH) / 2;
     } else if (cropType === 'passport') {
-        var minDim = Math.min(sW, sH);
-        finalCropW = minDim; finalCropH = minDim;
-        sX = (sW - finalCropW) / 2;
-        sY = (sH - finalCropH) / 2;
+        var minDim = Math.min(sW, sH); finalCropW = minDim; finalCropH = minDim;
+        sX = (sW - finalCropW) / 2; sY = (sH - finalCropH) / 2;
     } else if (cropType === 'tight') {
         finalCropW = sW * 0.85; finalCropH = sH * 0.85;
-        sX = (sW - finalCropW) / 2;
-        sY = (sH - finalCropH) / 2;
+        sX = (sW - finalCropW) / 2; sY = (sH - finalCropH) / 2;
     } else if (cropType === 'custom' && customCropBox[side].initialized) {
-        // Apply custom window constraints calculated by interactive component context
-        sX = customCropBox[side].x;
-        sY = customCropBox[side].y;
-        finalCropW = customCropBox[side].w;
-        finalCropH = customCropBox[side].h;
+        sX = customCropBox[side].x; sY = customCropBox[side].y;
+        finalCropW = customCropBox[side].w; finalCropH = customCropBox[side].h;
     }
 
     var totalAngle = manualFineAngle + (fixedFlipAngle * Math.PI / 180);
     var rotCanvasW = Math.abs(finalCropW * Math.cos(totalAngle)) + Math.abs(finalCropH * Math.sin(totalAngle));
     var rotCanvasH = Math.abs(finalCropW * Math.sin(totalAngle)) + Math.abs(finalCropH * Math.cos(totalAngle));
 
-    tempCanvas.width = rotCanvasW;
-    tempCanvas.height = rotCanvasH;
-
-    tempCtx.clearRect(0, 0, rotCanvasW, rotCanvasH);
+    tempCanvas.width = rotCanvasW; tempCanvas.height = rotCanvasH;
     tempCtx.save();
     tempCtx.translate(rotCanvasW / 2, rotCanvasH / 2);
     tempCtx.rotate(totalAngle);
     tempCtx.drawImage(source, sX, sY, finalCropW, finalCropH, -finalCropW / 2, -finalCropH / 2, finalCropW, finalCropH);
     tempCtx.restore();
-
     previewElement.src = tempCanvas.toDataURL();
 }
 
 document.getElementById('bri').addEventListener('input', function() {
-    var v = parseInt(this.value);
-    document.getElementById('briV').textContent = (v >= 0 ? '+' : '') + v;
+    var v = parseInt(this.value); document.getElementById('briV').textContent = (v >= 0 ? '+' : '') + v;
 });
 document.getElementById('con').addEventListener('input', function() {
-    var v = parseInt(this.value);
-    document.getElementById('conV').textContent = (v >= 0 ? '+' : '') + v;
+    var v = parseInt(this.value); document.getElementById('conV').textContent = (v >= 0 ? '+' : '') + v;
 });
 
-document.getElementById('frontFile').addEventListener('change', function(e) {
-    if (e.target.files[0]) loadImg(e.target.files[0], 'front');
-});
-document.getElementById('backFile').addEventListener('change', function(e) {
-    if (e.target.files[0]) loadImg(e.target.files[0], 'back');
-});
+document.getElementById('frontFile').addEventListener('change', function(e) { if (e.target.files[0]) loadImg(e.target.files[0], 'front'); });
+document.getElementById('backFile').addEventListener('change', function(e) { if (e.target.files[0]) loadImg(e.target.files[0], 'back'); });
 
-setupDrop('frontBox', 'front');
-setupDrop('backBox',  'back');
+setupDrop('frontBox', 'front'); setupDrop('backBox', 'back');
 
 function setupDrop(id, side) {
     var box = document.getElementById(id);
     box.addEventListener('dragover', function(e) { e.preventDefault(); box.style.borderColor = '#e94560'; });
     box.addEventListener('dragleave', function() { box.style.borderColor = ''; });
     box.addEventListener('drop', function(e) {
-        e.preventDefault();
-        box.style.borderColor = '';
+        e.preventDefault(); box.style.borderColor = '';
         if (e.dataTransfer.files && e.dataTransfer.files[0]) loadImg(e.dataTransfer.files[0], side);
     });
 }
@@ -1156,7 +1096,6 @@ function loadImg(file, side) {
             if (side === 'front') {
                 frontImg = img;
                 showBoxUploaded('frontBox', 'frontIcon', 'frontTitle', 'frontSub', 'frontPreview', event.target.result);
-                // Pre-init custom values inside baseline bounds context object container
                 customCropBox.front = { x: 0, y: 0, w: img.width, h: img.height, initialized: false };
                 liveRefreshUploadBox('front');
             } else {
@@ -1178,8 +1117,7 @@ function showBoxUploaded(boxId, iconId, titleId, subId, prevId, src) {
     document.getElementById(titleId).style.display = 'none';
     document.getElementById(subId).style.display = 'none';
     var prev = document.getElementById(prevId);
-    prev.src = src;
-    prev.style.display = 'block';
+    prev.src = src; prev.style.display = 'block';
 }
 
 function checkReadyState() {
@@ -1188,66 +1126,40 @@ function checkReadyState() {
     var layoutDropdown = document.getElementById('layout');
     
     if (frontImg && backImg) {
-        btn.disabled = false;
-        status.textContent = "Ready! Both faces loaded. Hit 'Scan and Generate'.";
-        status.style.color = '#4CAF50';
-        
-        if (layoutDropdown.value === 'single') {
-            layoutDropdown.value = 'side';
-        }
+        btn.disabled = false; status.textContent = "Ready! Both faces loaded. Hit 'Scan and Generate'."; status.style.color = '#4CAF50';
+        if (layoutDropdown.value === 'single') layoutDropdown.value = 'side';
         updatePosPreview();
     } else if (frontImg) {
-        btn.disabled = false;
-        status.textContent = "Single image detected. Ready to process.";
-        status.style.color = '#64b5f6';
-        if (layoutDropdown.value !== 'single') {
-            layoutDropdown.value = 'single';
-        }
+        btn.disabled = false; status.textContent = "Single image detected. Ready to process."; status.style.color = '#64b5f6';
+        if (layoutDropdown.value !== 'single') layoutDropdown.value = 'single';
         updatePosPreview();
     }
 }
 
-/* --- Native Canvas Crop Interactivity Operations System --- */
 function openVisualCropModal(side) {
     var source = (side === 'front') ? frontImg : backImg;
     if(!source) return;
-
     currentCropSide = side;
     document.getElementById('cropModalTitle').textContent = `Crop Custom Selection Window: ${side.toUpperCase()} IMAGE`;
     
     var modalCanvas = document.getElementById('interactiveCropCanvas');
-    var wrapper = modalCanvas.parentNode;
-    
-    // Fit target dimension calculations elegantly matching container dimensions responsive profiles
     var displayMaxWidth = Math.min(window.innerWidth - 60, 560);
     var displayMaxHeight = 380;
-    
     var scaleRatio = Math.min(displayMaxWidth / source.width, displayMaxHeight / source.height);
     
-    modalCanvas.width = source.width * scaleRatio;
-    modalCanvas.height = source.height * scaleRatio;
+    modalCanvas.width = source.width * scaleRatio; modalCanvas.height = source.height * scaleRatio;
     
-    // Initialize target overlay container sizes relative metrics
     if(!customCropBox[side].initialized) {
-        // Center initial window selection template default profile 1.58 structure mapping ratio matrix
-        var defaultW = modalCanvas.width * 0.75;
-        var defaultH = defaultW / 1.58;
-        if(defaultH > modalCanvas.height) {
-            defaultH = modalCanvas.height * 0.75;
-            defaultW = defaultH * 1.58;
-        }
-        boxInstance.w = defaultW;
-        boxInstance.h = defaultH;
-        boxInstance.x = (modalCanvas.width - boxInstance.w) / 2;
-        boxInstance.y = (modalCanvas.height - boxInstance.h) / 2;
+        var defaultW = modalCanvas.width * 0.75; var defaultH = defaultW / 1.58;
+        if(defaultH > modalCanvas.height) { defaultH = modalCanvas.height * 0.75; defaultW = defaultH * 1.58; }
+        boxInstance.w = defaultW; boxInstance.h = defaultH;
+        boxInstance.x = (modalCanvas.width - boxInstance.w) / 2; boxInstance.y = (modalCanvas.height - boxInstance.h) / 2;
     } else {
-        // Map stored coordinate sets into scale configuration parameters
         boxInstance.x = (customCropBox[side].x / source.width) * modalCanvas.width;
         boxInstance.y = (customCropBox[side].y / source.height) * modalCanvas.height;
         boxInstance.w = (customCropBox[side].w / source.width) * modalCanvas.width;
         boxInstance.h = (customCropBox[side].h / source.height) * modalCanvas.height;
     }
-
     document.getElementById('cropModalOverlay').style.display = 'flex';
     drawCropModalCanvas();
 }
@@ -1256,272 +1168,120 @@ function drawCropModalCanvas() {
     var canvas = document.getElementById('interactiveCropCanvas');
     var ctx = canvas.getContext('2d');
     var source = (currentCropSide === 'front') ? frontImg : backImg;
-    
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.drawImage(source, 0, 0, canvas.width, canvas.height);
     
-    // Draw Dark Overlay Shade Layer Mask
     ctx.fillStyle = "rgba(0,0,0,0.55)";
-    // Top strip
     ctx.fillRect(0, 0, canvas.width, boxInstance.y);
-    // Bottom strip
     ctx.fillRect(0, boxInstance.y + boxInstance.h, canvas.width, canvas.height - (boxInstance.y + boxInstance.h));
-    // Left side block middle
     ctx.fillRect(0, boxInstance.y, boxInstance.x, boxInstance.h);
-    // Right side block middle
     ctx.fillRect(boxInstance.x + boxInstance.w, boxInstance.y, canvas.width - (boxInstance.x + boxInstance.w), boxInstance.h);
     
-    // Outer Border Frame Selection Highlight Stroke Line
-    ctx.strokeStyle = "#667eea";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(boxInstance.x, boxInstance.y, boxInstance.w, boxInstance.h);
-    
-    // Draw Interactive Drag Corner Square Node Vectors Elements
-    ctx.fillStyle = "#fff";
-    var sizeNode = 8;
-    ctx.fillRect(boxInstance.x - sizeNode/2, boxInstance.y - sizeNode/2, sizeNode, sizeNode); // TL
-    ctx.fillRect(boxInstance.x + boxInstance.w - sizeNode/2, boxInstance.y - sizeNode/2, sizeNode, sizeNode); // TR
-    ctx.fillRect(boxInstance.x - sizeNode/2, boxInstance.y + boxInstance.h - sizeNode/2, sizeNode, sizeNode); // BL
-    ctx.fillRect(boxInstance.x + boxInstance.w - sizeNode/2, boxInstance.y + boxInstance.h - sizeNode/2, sizeNode, sizeNode); // BR
+    ctx.strokeStyle = "#667eea"; ctx.lineWidth = 2; ctx.strokeRect(boxInstance.x, boxInstance.y, boxInstance.w, boxInstance.h);
+    ctx.fillStyle = "#fff"; var sizeNode = 8;
+    ctx.fillRect(boxInstance.x - sizeNode/2, boxInstance.y - sizeNode/2, sizeNode, sizeNode);
+    ctx.fillRect(boxInstance.x + boxInstance.w - sizeNode/2, boxInstance.y - sizeNode/2, sizeNode, sizeNode);
+    ctx.fillRect(boxInstance.x - sizeNode/2, boxInstance.y + boxInstance.h - sizeNode/2, sizeNode, sizeNode);
+    ctx.fillRect(boxInstance.x + boxInstance.w - sizeNode/2, boxInstance.y + boxInstance.h - sizeNode/2, sizeNode, sizeNode);
 }
 
 function closeVisualCropModal(saveData) {
     if(saveData) {
         var canvas = document.getElementById('interactiveCropCanvas');
         var source = (currentCropSide === 'front') ? frontImg : backImg;
-        
-        // Calculate dynamic proportional scalar factors configuration map back to target source properties natively
-        var factorX = source.width / canvas.width;
-        var factorY = source.height / canvas.height;
-        
-        customCropBox[currentCropSide] = {
-            x: boxInstance.x * factorX,
-            y: boxInstance.y * factorY,
-            w: boxInstance.w * factorX,
-            h: boxInstance.h * factorY,
-            initialized: true
-        };
+        var factorX = source.width / canvas.width; var factorY = source.height / canvas.height;
+        customCropBox[currentCropSide] = { x: boxInstance.x * factorX, y: boxInstance.y * factorY, w: boxInstance.w * factorX, h: boxInstance.h * factorY, initialized: true };
         liveRefreshUploadBox(currentCropSide);
     }
     document.getElementById('cropModalOverlay').style.display = 'none';
 }
 
-// Attach event tracking mapping handles loops inside modal surface space interface scope block properties
 (function registerCropMouseListeners() {
     var cropCanvas = document.getElementById('interactiveCropCanvas');
-    
-    function getMousePosition(event) {
-        var rect = cropCanvas.getBoundingClientRect();
-        return {
-            x: event.clientX - rect.left,
-            y: event.clientY - rect.top
-        };
-    }
-    
+    function getMousePosition(event) { var rect = cropCanvas.getBoundingClientRect(); return { x: event.clientX - rect.left, y: event.clientY - rect.top }; }
     function detectTargetHandle(mx, my) {
-        var d = 14; // Handle active tracking sensitivity radius threshold metrics range
+        var d = 14;
         if (Math.abs(mx - boxInstance.x) < d && Math.abs(my - boxInstance.y) < d) return 'TL';
         if (Math.abs(mx - (boxInstance.x + boxInstance.w)) < d && Math.abs(my - boxInstance.y) < d) return 'TR';
         if (Math.abs(mx - boxInstance.x) < d && Math.abs(my - (boxInstance.y + boxInstance.h)) < d) return 'BL';
         if (Math.abs(mx - (boxInstance.x + boxInstance.w)) < d && Math.abs(my - (boxInstance.y + boxInstance.h)) < d) return 'BR';
-        
-        // Test internal target bounds area vector coordinates layout space matrix for dragging action trigger validation
-        if (mx > boxInstance.x && mx < boxInstance.x + boxInstance.w && my > boxInstance.y && my < boxInstance.y + boxInstance.h) {
-            return 'INSIDE';
-        }
+        if (mx > boxInstance.x && mx < boxInstance.x + boxInstance.w && my > boxInstance.y && my < boxInstance.y + boxInstance.h) return 'INSIDE';
         return null;
     }
-    
     cropCanvas.addEventListener('mousedown', function(e) {
-        var m = getMousePosition(e);
-        activeHandle = detectTargetHandle(m.x, m.y);
-        if (activeHandle) {
-            isDraggingBox = true;
-            dragStartX = m.x;
-            dragStartY = m.y;
-        }
+        var m = getMousePosition(e); activeHandle = detectTargetHandle(m.x, m.y);
+        if (activeHandle) { isDraggingBox = true; dragStartX = m.x; dragStartY = m.y; }
     });
-    
     window.addEventListener('mousemove', function(e) {
         if (!isDraggingBox) return;
-        var rect = cropCanvas.getBoundingClientRect();
-        var mx = e.clientX - rect.left;
-        var my = e.clientY - rect.top;
-        
-        var dx = mx - dragStartX;
-        var dy = my - dragStartY;
-        
-        var limitW = cropCanvas.width;
-        var limitH = cropCanvas.height;
-        
-        if (activeHandle === 'INSIDE') {
-            boxInstance.x = Math.max(0, Math.min(limitW - boxInstance.w, boxInstance.x + dx));
-            boxInstance.y = Math.max(0, Math.min(limitH - boxInstance.h, boxInstance.y + dy));
-        } else if (activeHandle === 'TL') {
-            var newX = Math.max(0, Math.min(boxInstance.x + boxInstance.w - 20, boxInstance.x + dx));
-            boxInstance.w = boxInstance.w + (boxInstance.x - newX);
-            boxInstance.x = newX;
-            var newY = Math.max(0, Math.min(boxInstance.y + boxInstance.h - 20, boxInstance.y + dy));
-            boxInstance.h = boxInstance.h + (boxInstance.y - newY);
-            boxInstance.y = newY;
-        } else if (activeHandle === 'TR') {
-            boxInstance.w = Math.max(20, Math.min(limitW - boxInstance.x, boxInstance.w + dx));
-            var newY = Math.max(0, Math.min(boxInstance.y + boxInstance.h - 20, boxInstance.y + dy));
-            boxInstance.h = boxInstance.h + (boxInstance.y - newY);
-            boxInstance.y = newY;
-        } else if (activeHandle === 'BL') {
-            var newX = Math.max(0, Math.min(boxInstance.x + boxInstance.w - 20, boxInstance.x + dx));
-            boxInstance.w = boxInstance.w + (boxInstance.x - newX);
-            boxInstance.x = newX;
-            boxInstance.h = Math.max(20, Math.min(limitH - boxInstance.y, boxInstance.h + dy));
-        } else if (activeHandle === 'BR') {
-            boxInstance.w = Math.max(20, Math.min(limitW - boxInstance.x, boxInstance.w + dx));
-            boxInstance.h = Math.max(20, Math.min(limitH - boxInstance.y, boxInstance.h + dy));
-        }
-        
-        dragStartX = mx;
-        dragStartY = my;
-        drawCropModalCanvas();
-    });
-    
-    window.addEventListener('mouseup', function() {
-        isDraggingBox = false;
-        activeHandle = null;
-    });
-
-    // Mobile Responsive Touch Handler Port Processing Layers Maps
-    cropCanvas.addEventListener('touchstart', function(e) {
-        if(e.touches.length === 0) return;
-        var t = e.touches[0];
-        var rect = cropCanvas.getBoundingClientRect();
-        var mx = t.clientX - rect.left;
-        var my = t.clientY - rect.top;
-        activeHandle = detectTargetHandle(mx, my);
-        if (activeHandle) {
-            isDraggingBox = true;
-            dragStartX = mx;
-            dragStartY = my;
-            e.preventDefault();
-        }
-    }, { passive: false });
-
-    cropCanvas.addEventListener('touchmove', function(e) {
-        if (!isDraggingBox || e.touches.length === 0) return;
-        var t = e.touches[0];
-        var rect = cropCanvas.getBoundingClientRect();
-        var mx = t.clientX - rect.left;
-        var my = t.clientY - rect.top;
-        
-        var dx = mx - dragStartX;
-        var dy = my - dragStartY;
-        
+        var rect = cropCanvas.getBoundingClientRect(); var mx = e.clientX - rect.left; var my = e.clientY - rect.top;
+        var dx = mx - dragStartX; var dy = my - dragStartY;
         if (activeHandle === 'INSIDE') {
             boxInstance.x = Math.max(0, Math.min(cropCanvas.width - boxInstance.w, boxInstance.x + dx));
             boxInstance.y = Math.max(0, Math.min(cropCanvas.height - boxInstance.h, boxInstance.y + dy));
         } else if (activeHandle === 'TL') {
-            var newX = Math.max(0, Math.min(boxInstance.x + boxInstance.w - 20, boxInstance.x + dx));
-            boxInstance.w += (boxInstance.x - newX); boxInstance.x = newX;
-            var newY = Math.max(0, Math.min(boxInstance.y + boxInstance.h - 20, boxInstance.y + dy));
-            boxInstance.h += (boxInstance.y - newY); boxInstance.y = newY;
-        } else if (activeHandle === 'BR') {
+            var newX = Math.max(0, Math.min(boxInstance.x + boxInstance.w - 20, boxInstance.x + dx)); boxInstance.w += (boxInstance.x - newX); boxInstance.x = newX;
+            var newY = Math.max(0, Math.min(boxInstance.y + boxInstance.h - 20, boxInstance.y + dy)); boxInstance.h += (boxInstance.y - newY); boxInstance.y = newY;
+        } else if (activeHandle === 'TR') {
             boxInstance.w = Math.max(20, Math.min(cropCanvas.width - boxInstance.x, boxInstance.w + dx));
+            var newY = Math.max(0, Math.min(boxInstance.y + boxInstance.h - 20, boxInstance.y + dy)); boxInstance.h += (boxInstance.y - newY); boxInstance.y = newY;
+        } else if (activeHandle === 'BL') {
+            var newX = Math.max(0, Math.min(boxInstance.x + boxInstance.w - 20, boxInstance.x + dx)); boxInstance.w += (boxInstance.x - newX); boxInstance.x = newX;
             boxInstance.h = Math.max(20, Math.min(cropCanvas.height - boxInstance.y, boxInstance.h + dy));
+        } else if (activeHandle === 'BR') {
+            boxInstance.w = Math.max(20, Math.min(cropCanvas.width - boxInstance.x, boxInstance.w + dx)); boxInstance.h = Math.max(20, Math.min(cropCanvas.height - boxInstance.y, boxInstance.h + dy));
         }
-        
-        dragStartX = mx; dragStartY = my;
-        drawCropModalCanvas();
-        e.preventDefault();
-    }, { passive: false });
-
-    cropCanvas.addEventListener('touchend', function() { isDraggingBox = false; });
+        dragStartX = mx; dragStartY = my; drawCropModalCanvas();
+    });
+    window.addEventListener('mouseup', function() { isDraggingBox = false; activeHandle = null; });
 })();
 
 function switchTab(side) {
-    var tabs = document.querySelectorAll('.pos-tab');
-    tabs.forEach(t => t.classList.remove('active-tab'));
-    document.getElementById('tab-front').classList.remove('show');
-    document.getElementById('tab-back').classList.remove('show');
-    document.getElementById('tab-both').classList.remove('show');
-
-    if (side === 'front') {
-        tabs[0].classList.add('active-tab');
-        document.getElementById('tab-front').classList.add('show');
-    } else if (side === 'back') {
-        tabs[1].classList.add('active-tab');
-        document.getElementById('tab-back').classList.add('show');
-    } else {
-        tabs[2].classList.add('active-tab');
-        document.getElementById('tab-both').classList.add('show');
-    }
+    var tabs = document.querySelectorAll('.pos-tab'); tabs.forEach(t => t.classList.remove('active-tab'));
+    document.getElementById('tab-front').classList.remove('show'); document.getElementById('tab-back').classList.remove('show'); document.getElementById('tab-both').classList.remove('show');
+    if (side === 'front') { tabs[0].classList.add('active-tab'); document.getElementById('tab-front').classList.add('show'); }
+    else if (side === 'back') { tabs[1].classList.add('active-tab'); document.getElementById('tab-back').classList.add('show'); }
+    else { tabs[2].classList.add('active-tab'); document.getElementById('tab-both').classList.add('show'); }
 }
 
 function setPos(side, placement) {
-    posState[side].pos = placement;
-    var cells = document.querySelectorAll(`.pos-cell[data-side="${side}"]`);
+    posState[side].pos = placement; var cells = document.querySelectorAll(`.pos-cell[data-side="${side}"]`);
     cells.forEach(c => { c.classList.remove('active'); c.classList.remove('active-back'); });
-    
     var targetCell = Array.from(cells).find(c => c.getAttribute('data-pos') === placement);
-    if (targetCell) {
-        targetCell.classList.add('active');
-        if (side === 'back') targetCell.classList.add('active-back');
-    }
+    if (targetCell) { targetCell.classList.add('active'); if (side === 'back') targetCell.classList.add('active-back'); }
     updatePosPreview();
 }
 
 function updateScaleLabel(side) {
-    var scaleVal = document.getElementById(side + 'Scale').value;
-    document.getElementById(side + 'ScaleV').textContent = scaleVal + '%';
+    var scaleVal = document.getElementById(side + 'Scale').value; document.getElementById(side + 'ScaleV').textContent = scaleVal + '%';
     posState[side].scale = parseInt(scaleVal);
 }
 
 function updatePosPreview() {
     var layout = document.getElementById('layout').value;
-    var frontCard = document.getElementById('previewFrontCard');
-    var backCard = document.getElementById('previewBackCard');
-    var fScale = document.getElementById('frontScale').value / 100;
-    var bScale = document.getElementById('backScale').value / 100;
+    var frontCard = document.getElementById('previewFrontCard'); var backCard = document.getElementById('previewBackCard');
+    var fScale = document.getElementById('frontScale').value / 100; var bScale = document.getElementById('backScale').value / 100;
 
-    posState.front.fit = document.getElementById('frontFit').value;
-    posState.back.fit = document.getElementById('backFit').value;
+    posState.front.fit = document.getElementById('frontFit').value; posState.back.fit = document.getElementById('backFit').value;
 
     if (layout === 'side') {
-        document.getElementById('posPreviewFront').style.display = 'block';
-        document.getElementById('posPreviewFront').style.width = '50%';
-        document.getElementById('posPreviewFront').style.float = 'left';
-        document.getElementById('posPreviewBack').style.display = 'block';
-        document.getElementById('posPreviewBack').style.width = '50%';
-        document.getElementById('posPreviewBack').style.float = 'left';
+        document.getElementById('posPreviewFront').style.display = 'block'; document.getElementById('posPreviewFront').style.width = '50%'; document.getElementById('posPreviewFront').style.float = 'left';
+        document.getElementById('posPreviewBack').style.display = 'block'; document.getElementById('posPreviewBack').style.width = '50%'; document.getElementById('posPreviewBack').style.float = 'left';
     } else if (layout === 'stack') {
-        document.getElementById('posPreviewFront').style.display = 'block';
-        document.getElementById('posPreviewFront').style.width = '100%';
-        document.getElementById('posPreviewFront').style.float = 'none';
-        document.getElementById('posPreviewBack').style.display = 'block';
-        document.getElementById('posPreviewBack').style.width = '100%';
-        document.getElementById('posPreviewBack').style.float = 'none';
+        document.getElementById('posPreviewFront').style.display = 'block'; document.getElementById('posPreviewFront').style.width = '100%'; document.getElementById('posPreviewFront').style.float = 'none';
+        document.getElementById('posPreviewBack').style.display = 'block'; document.getElementById('posPreviewBack').style.width = '100%'; document.getElementById('posPreviewBack').style.float = 'none';
     } else {
-        document.getElementById('posPreviewFront').style.display = 'block';
-        document.getElementById('posPreviewFront').style.width = '100%';
-        document.getElementById('posPreviewFront').style.float = 'none';
+        document.getElementById('posPreviewFront').style.display = 'block'; document.getElementById('posPreviewFront').style.width = '100%'; document.getElementById('posPreviewFront').style.float = 'none';
         document.getElementById('posPreviewBack').style.display = 'none';
     }
-
-    applyPreviewCardPlacement(frontCard, posState.front.pos, fScale);
-    applyPreviewCardPlacement(backCard, posState.back.pos, bScale);
+    applyPreviewCardPlacement(frontCard, posState.front.pos, fScale); applyPreviewCardPlacement(backCard, posState.back.pos, bScale);
 }
 
 function applyPreviewCardPlacement(cardElem, posKey, scaleFactor) {
     if(!cardElem) return;
-    var baseW = 60, baseH = 38;
-    var finW = baseW * scaleFactor;
-    var finH = baseH * scaleFactor;
-    
-    cardElem.style.width = finW + 'px';
-    cardElem.style.height = finH + 'px';
-    cardElem.style.top = '50%';
-    cardElem.style.left = '50%';
-    cardElem.style.transform = 'translate(-50%, -50%)';
-    cardElem.style.right = 'auto';
-    cardElem.style.bottom = 'auto';
+    var baseW = 60, baseH = 38; var finW = baseW * scaleFactor; var finH = baseH * scaleFactor;
+    cardElem.style.width = finW + 'px'; cardElem.style.height = finH + 'px';
+    cardElem.style.top = '50%'; cardElem.style.left = '50%'; cardElem.style.transform = 'translate(-50%, -50%)'; cardElem.style.right = 'auto'; cardElem.style.bottom = 'auto';
 
     switch(posKey) {
         case 'top-left':     cardElem.style.top = '4px'; cardElem.style.left = '4px'; cardElem.style.transform = 'none'; break;
@@ -1540,223 +1300,149 @@ function applyPreset(type) {
         case 'centered':       setPos('front', 'center'); setPos('back', 'center'); resetScales(100); break;
         case 'top-aligned':    setPos('front', 'top-center'); setPos('back', 'top-center'); resetScales(100); break;
         case 'bottom-aligned': setPos('front', 'bot-center'); setPos('back', 'bot-center'); resetScales(100); break;
-        case 'left-aligned':   setPos('front', 'mid-left'); setPos('back', 'mid-left'); resetScales(100); break;
         case 'fill':           setPos('front', 'center'); setPos('back', 'center'); document.getElementById('frontFit').value = 'fill'; document.getElementById('backFit').value = 'fill'; resetScales(100); break;
         case 'compact':        setPos('front', 'center'); setPos('back', 'center'); resetScales(80); break;
         case 'camscanner':     document.getElementById('layout').value = 'stack'; setPos('front', 'top-center'); setPos('back', 'bot-center'); resetScales(95); break;
-        case 'passport':       setPos('front', 'top-left'); setPos('back', 'top-left'); resetScales(100); break;
     }
     updatePosPreview();
 }
 
 function resetScales(val) {
-    document.getElementById('frontScale').value = val;
-    document.getElementById('backScale').value = val;
-    updateScaleLabel('front');
-    updateScaleLabel('back');
+    document.getElementById('frontScale').value = val; document.getElementById('backScale').value = val;
+    updateScaleLabel('front'); updateScaleLabel('back');
 }
 
 function startProcess() {
     if (!frontImg && !backImg) return;
-    
-    var progWrap = document.getElementById('progWrap');
-    var progFill = document.getElementById('progFill');
-    var progMsg = document.getElementById('progMsg');
-    var layout = document.getElementById('layout').value;
-    
-    progWrap.style.display = 'block';
-    progFill.style.width = '20%';
-    progMsg.textContent = 'Calculating aspect ratios, cropping targets and rotations...';
+    var progWrap = document.getElementById('progWrap'); var progFill = document.getElementById('progFill'); var progMsg = document.getElementById('progMsg');
+    progWrap.style.display = 'block'; progFill.style.width = '20%'; progMsg.textContent = 'Calculating matrix aspect fields...';
 
     setTimeout(function() {
-        progFill.style.width = '60%';
-        progMsg.textContent = 'Processing visual matrix enhancements and contrast...';
-        
+        progFill.style.width = '60%'; progMsg.textContent = 'Enhancing layout contrast filters...';
         if (frontImg) processedFront = processCardImage(frontImg, 'front');
-        if (backImg && layout !== 'single') processedBack = processCardImage(backImg, 'back');
-        
+        if (backImg && document.getElementById('layout').value !== 'single') processedBack = processCardImage(backImg, 'back');
         renderCroppedPreviews();
     }, 300);
 
     setTimeout(function() {
-        progFill.style.width = '90%';
-        progMsg.textContent = 'Assembling final print layout onto A4 canvas...';
+        progFill.style.width = '90%'; progMsg.textContent = 'Locking onto A4 print matrix...';
         generateMasterA4Canvas();
     }, 700);
 
     setTimeout(function() {
-        progFill.style.width = '100%';
-        document.getElementById('resultWrap').style.display = 'block';
-        progWrap.style.display = 'none';
-        document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth' });
+        progFill.style.width = '100%'; document.getElementById('resultWrap').style.display = 'block';
+        progWrap.style.display = 'none'; document.getElementById('resultWrap').scrollIntoView({ behavior: 'smooth' });
     }, 1000);
 }
 
 function processCardImage(sourceImg, side) {
-    var workCanvas = document.getElementById('workCanvas');
-    var ctx = workCanvas.getContext('2d');
-    
+    var workCanvas = document.getElementById('workCanvas'); var ctx = workCanvas.getContext('2d');
     var cropMode = document.getElementById('cropMode').value;
-    var bri = parseInt(document.getElementById('bri').value);
-    var con = parseInt(document.getElementById('con').value);
+    var bri = parseInt(document.getElementById('bri').value); var con = parseInt(document.getElementById('con').value);
     var filter = document.getElementById('magicFilter').value;
-
     var cropType = document.getElementById(side === 'front' ? 'fCropSelect' : 'bCropSelect').value;
     var manualFineAngle = parseInt(document.getElementById(side === 'front' ? 'fRot' : 'bRot').value) * Math.PI / 180;
     var fixedFlipAngle = rotations[side];
-
     var sX = 0, sY = 0, sW = sourceImg.width, sH = sourceImg.height;
     
-    // Auto margin preprocessing logic checks
     if ((cropMode === 'auto' || cropMode === 'edge') && cropType !== 'custom') {
-        sX = sourceImg.width * 0.04; sY = sourceImg.height * 0.04;
-        sW = sourceImg.width * 0.92; sH = sourceImg.height * 0.92;
+        sX = sourceImg.width * 0.04; sY = sourceImg.height * 0.04; sW = sourceImg.width * 0.92; sH = sourceImg.height * 0.92;
     }
-
-    var finalCropW = sW;
-    var finalCropH = sH;
+    var finalCropW = sW, finalCropH = sH;
 
     if (cropType === 'id1') {
         if (sW / sH > 1.58) { finalCropW = sH * 1.58; } else { finalCropH = sW / 1.58; }
         sX += (sW - finalCropW) / 2; sY += (sH - finalCropH) / 2;
     } else if (cropType === 'passport') {
-        var minDim = Math.min(sW, sH);
-        finalCropW = minDim; finalCropH = minDim;
+        var minDim = Math.min(sW, sH); finalCropW = minDim; finalCropH = minDim;
         sX += (sW - finalCropW) / 2; sY += (sH - finalCropH) / 2;
     } else if (cropType === 'tight') {
         finalCropW = sW * 0.85; finalCropH = sH * 0.85;
         sX += (sW - finalCropW) / 2; sY += (sH - finalCropH) / 2;
     } else if (cropType === 'custom' && customCropBox[side].initialized) {
-        sX = customCropBox[side].x;
-        sY = customCropBox[side].y;
-        finalCropW = customCropBox[side].w;
-        finalCropH = customCropBox[side].h;
+        sX = customCropBox[side].x; sY = customCropBox[side].y; finalCropW = customCropBox[side].w; finalCropH = customCropBox[side].h;
     }
 
     var totalAngle = manualFineAngle + (fixedFlipAngle * Math.PI / 180);
     var rotCanvasW = Math.abs(finalCropW * Math.cos(totalAngle)) + Math.abs(finalCropH * Math.sin(totalAngle));
     var rotCanvasH = Math.abs(finalCropW * Math.sin(totalAngle)) + Math.abs(finalCropH * Math.cos(totalAngle));
 
-    workCanvas.width = rotCanvasW;
-    workCanvas.height = rotCanvasH;
-    
-    ctx.clearRect(0,0,workCanvas.width,workCanvas.height);
-    ctx.save();
-    ctx.translate(workCanvas.width / 2, workCanvas.height / 2);
-    ctx.rotate(totalAngle);
-    ctx.drawImage(sourceImg, sX, sY, finalCropW, finalCropH, -finalCropW / 2, -finalCropH / 2, finalCropW, finalCropH);
-    ctx.restore();
+    workCanvas.width = rotCanvasW; workCanvas.height = rotCanvasH;
+    ctx.save(); ctx.translate(workCanvas.width / 2, workCanvas.height / 2); ctx.rotate(totalAngle);
+    ctx.drawImage(sourceImg, sX, sY, finalCropW, finalCropH, -finalCropW / 2, -finalCropH / 2, finalCropW, finalCropH); ctx.restore();
 
-    var imgData = ctx.getImageData(0, 0, workCanvas.width, workCanvas.height);
-    var d = imgData.data;
+    var imgData = ctx.getImageData(0, 0, workCanvas.width, workCanvas.height); var d = imgData.data;
     var factor = (259 * (con + 255)) / (255 * (259 - con));
 
     for (var i = 0; i < d.length; i += 4) {
-        if(d[i+3] === 0) continue; 
+        if(d[i+3] === 0) continue;
         for(var c=0; c<3; c++) {
-            var val = d[i+c] + bri;
-            val = factor * (val - 128) + 128;
-            d[i+c] = Math.max(0, Math.min(255, val));
+            var val = d[i+c] + bri; val = factor * (val - 128) + 128; d[i+c] = Math.max(0, Math.min(255, val));
         }
-        if (filter === 'scan' || filter === 'magic') {
-            d[i]   = Math.min(255, d[i] * 1.1);
-            d[i+1] = Math.min(255, d[i+1] * 1.1);
-            d[i+2] = Math.min(255, d[i+2] * 1.05);
-        } else if (filter === 'bw') {
-            var gray = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2];
-            d[i] = d[i+1] = d[i+2] = gray > 128 ? 255 : 40;
-        } else if (filter === 'vivid') {
-            d[i]   = Math.min(255, d[i] * 1.25);
-            d[i+1] = Math.min(255, d[i+1] * 1.15);
-        }
+        if (filter === 'scan' || filter === 'magic') { d[i] = Math.min(255, d[i] * 1.1); d[i+1] = Math.min(255, d[i+1] * 1.1); d[i+2] = Math.min(255, d[i+2] * 1.05); }
+        else if (filter === 'bw') { var gray = 0.299*d[i] + 0.587*d[i+1] + 0.114*d[i+2]; d[i] = d[i+1] = d[i+2] = gray > 128 ? 255 : 40; }
     }
     ctx.putImageData(imgData, 0, 0);
 
-    var sharpnessValue = parseInt(document.getElementById('shr').value);
-    if(sharpnessValue > 15) {
-        ctx.globalAlpha = sharpnessValue / 220;
-        ctx.drawImage(workCanvas, -1, -1);
-        ctx.drawImage(workCanvas, 1, 1);
-        ctx.globalAlpha = 1.0;
-    }
-
-    var processedImg = new Image();
-    processedImg.src = workCanvas.toDataURL();
-    return processedImg;
+    var processedImg = new Image(); processedImg.src = workCanvas.toDataURL(); return processedImg;
 }
 
 function renderCroppedPreviews() {
-    var layout = document.getElementById('layout').value;
-    if (frontImg) {
-        renderSingleBoxCanvas('prevFront', processedFront);
-        document.getElementById('prevFrontPanel').style.display = "block";
-    }
-    if (backImg && layout !== 'single') {
-        renderSingleBoxCanvas('prevBack', processedBack);
-        document.getElementById('prevBackPanel').style.display = "block";
+    if (frontImg) renderSingleBoxCanvas('prevFront', processedFront);
+    if (backImg && document.getElementById('layout').value !== 'single') {
+        renderSingleBoxCanvas('prevBack', processedBack); document.getElementById('prevBackPanel').style.display = "block";
     } else {
         document.getElementById('prevBackPanel').style.display = "none";
     }
 }
 
 function renderSingleBoxCanvas(canvasId, srcImgElement) {
-    var canvas = document.getElementById(canvasId);
-    var ctx = canvas.getContext('2d');
-    canvas.width = srcImgElement.width || 300;
-    canvas.height = srcImgElement.height || 180;
-    ctx.drawImage(srcImgElement, 0, 0);
+    var canvas = document.getElementById(canvasId); var ctx = canvas.getContext('2d');
+    canvas.width = srcImgElement.width || 300; canvas.height = srcImgElement.height || 180; ctx.drawImage(srcImgElement, 0, 0);
 }
 
 function generateMasterA4Canvas() {
-    var outputCanvas = document.getElementById('outputCanvas');
-    var ctx = outputCanvas.getContext('2d');
-    var sizeKey = document.getElementById('outputSize').value;
-    var targetDim = A4_SIZES[sizeKey];
+    var outputCanvas = document.getElementById('outputCanvas'); var ctx = outputCanvas.getContext('2d');
+    var sizeKey = document.getElementById('outputSize').value; var targetDim = A4_SIZES[sizeKey];
     var layout = document.getElementById('layout').value;
     
-    outputCanvas.width = targetDim.W;
-    outputCanvas.height = targetDim.H;
+    outputCanvas.width = targetDim.W; outputCanvas.height = targetDim.H;
+    ctx.fillStyle = "#FFFFFF"; ctx.fillRect(0, 0, targetDim.W, targetDim.H);
 
-    ctx.fillStyle = "#FFFFFF";
-    ctx.fillRect(0, 0, targetDim.W, targetDim.H);
-
-    var cellW = targetDim.W;
-    var cellH = targetDim.H;
-    var frontCellX = 0, frontCellY = 0;
-    var backCellX = 0, backCellY = 0;
+    var cellW = targetDim.W, cellH = targetDim.H; var backCellX = 0, backCellY = 0;
 
     if (layout === 'side') {
         cellW = targetDim.W / 2; backCellX = cellW;
-        if (frontImg) drawCardInCell(ctx, processedFront, frontCellX, frontCellY, cellW, cellH, posState.front);
-        if (backImg) drawCardInCell(ctx, processedBack,  backCellX,  backCellY,  cellW, cellH, posState.back);
+        if (frontImg) drawCardInCell(ctx, processedFront, 0, 0, cellW, cellH, posState.front);
+        if (backImg) drawCardInCell(ctx, processedBack, backCellX, backCellY, cellW, cellH, posState.back);
     } else if (layout === 'stack') {
         cellH = targetDim.H / 2; backCellY = cellH;
-        if (frontImg) drawCardInCell(ctx, processedFront, frontCellX, frontCellY, cellW, cellH, posState.front);
-        if (backImg) drawCardInCell(ctx, processedBack,  backCellX,  backCellY,  cellW, cellH, posState.back);
+        if (frontImg) drawCardInCell(ctx, processedFront, 0, 0, cellW, cellH, posState.front);
+        if (backImg) drawCardInCell(ctx, processedBack, backCellX, backCellY, cellW, cellH, posState.back);
     } else {
         if (frontImg) drawCardInCell(ctx, processedFront, 0, 0, targetDim.W, targetDim.H, posState.front);
     }
-
-    document.getElementById('a4info').textContent = `${targetDim.label} — ${targetDim.W}x${targetDim.H} pixels canvas assembled.`;
+    
+    document.getElementById('a4info').textContent = `${targetDim.label} assembled.`;
+    
+    // CRITICAL PRINT IMAGE CONVERSION MATRIX BINDING
+    // Converts canvas pixels to an absolute standard safe image stream right before printing
+    var printableLayer = document.getElementById('printImageLayer');
+    printableLayer.src = outputCanvas.toDataURL('image/jpeg', 1.0);
 }
 
 function drawCardInCell(ctx, img, cellX, cellY, cellW, cellH, state) {
     if(!img || !img.width) return;
-    var imgW = img.width; var imgH = img.height;
-    var targetW = cellW; var targetH = cellH;
+    var imgW = img.width, imgH = img.height; var targetW = cellW, targetH = cellH;
 
-    if (state.fit === 'contain') {
-        var ratio = Math.min(cellW / imgW, cellH / imgH) * 0.85;
-        targetW = imgW * ratio; targetH = imgH * ratio;
-    } else if (state.fit === 'custom') {
-        var ratio = Math.min(cellW / imgW, cellH / imgH) * (state.scale / 100);
-        targetW = imgW * ratio; targetH = imgH * ratio;
+    if (state.fit === 'contain' || state.fit === 'custom') {
+        var multiplier = (state.fit === 'custom') ? (state.scale / 100) : 0.85;
+        var ratio = Math.min(cellW / imgW, cellH / imgH) * multiplier; targetW = imgW * ratio; targetH = imgH * ratio;
     } else {
         targetW = cellW - 40; targetH = cellH - 40;
     }
 
-    var destX = cellX + (cellW - targetW) / 2;
-    var destY = cellY + (cellH - targetH) / 2;
+    var destX = cellX + (cellW - targetW) / 2; var destY = cellY + (cellH - targetH) / 2;
 
     switch(state.pos) {
         case 'top-left':     destX = cellX + 40; destY = cellY + 40; break;
@@ -1772,66 +1458,39 @@ function drawCardInCell(ctx, img, cellX, cellY, cellW, cellH, state) {
 }
 
 function downloadImg() {
-    var canvas = document.getElementById('outputCanvas');
-    var link = document.createElement('a');
-    link.download = 'scanned-document-pro.jpg';
-    link.href = canvas.toDataURL('image/jpeg', 0.92);
-    link.click();
+    var canvas = document.getElementById('outputCanvas'); var link = document.createElement('a');
+    link.download = 'scanned-document-pro.jpg'; link.href = canvas.toDataURL('image/jpeg', 0.92); link.click();
 }
 
+function directPrint() { window.print(); }
+
 function downloadPDF() {
-    var canvas = document.getElementById('outputCanvas');
-    var imgData = canvas.toDataURL('image/jpeg', 1.0);
+    var canvas = document.getElementById('outputCanvas'); var imgData = canvas.toDataURL('image/jpeg', 1.0);
     var win = window.open('', '_blank');
     win.document.write(`
-        <html>
-        <head><title>Print Sheet</title><style>@page { size: auto; margin: 0mm; } body { margin: 0; display: flex; align-items: center; justify-content: center; } img { max-width: 100%; max-height: 100vh; object-fit: contain; }</style></head>
-        <body onload="window.print(); window.close();"><img src="${imgData}" /></body>
-        </html>
+        <html><head><title>Print Sheet</title><style>@page { size: auto; margin: 0mm; } body { margin: 0; display: flex; align-items: center; justify-content: center; } img { max-width: 100%; max-height: 100vh; object-fit: contain; }</style></head>
+        <body onload="window.print(); window.close();"><img src="${imgData}" /></body></html>
     `);
     win.document.close();
 }
 
 function resetAll() {
-    frontImg = null; backImg = null; processedFront = null; processedBack = null;
-    rotations = { front: 0, back: 0 };
-    customCropBox = {
-        front: { x: 0, y: 0, w: 0, h: 0, initialized: false },
-        back:  { x: 0, y: 0, w: 0, h: 0, initialized: false }
-    };
-    
-    document.getElementById('frontFile').value = '';
-    document.getElementById('backFile').value = '';
-    document.getElementById('frontPreview').style.display = 'none';
-    document.getElementById('backPreview').style.display = 'none';
-    document.getElementById('frontBox').classList.remove('done');
-    document.getElementById('backBox').classList.remove('done');
-    
-    document.getElementById('frontIcon').style.display = 'block';
-    document.getElementById('frontTitle').style.display = 'block';
-    document.getElementById('frontSub').style.display = 'block';
-    document.getElementById('backIcon').style.display = 'block';
-    document.getElementById('backTitle').style.display = 'block';
-    document.getElementById('backSub').style.display = 'block';
-    
-    document.getElementById('processBtn').disabled = true;
-    document.getElementById('resultWrap').style.display = 'none';
-    
-    document.getElementById('fCropSelect').value = 'id1';
-    document.getElementById('bCropSelect').value = 'id1';
-    document.getElementById('btnFrontCropModal').style.display = 'none';
-    document.getElementById('btnBackCropModal').style.display = 'none';
+    frontImg = null; backImg = null; processedFront = null; processedBack = null; rotations = { front: 0, back: 0 };
+    customCropBox = { front: { x: 0, y: 0, w: 0, h: 0, initialized: false }, back: { x: 0, y: 0, w: 0, h: 0, initialized: false } };
+    document.getElementById('frontFile').value = ''; document.getElementById('backFile').value = '';
+    document.getElementById('frontPreview').style.display = 'none'; document.getElementById('backPreview').style.display = 'none';
+    document.getElementById('frontBox').classList.remove('done'); document.getElementById('backBox').classList.remove('done');
+    document.getElementById('frontIcon').style.display = 'block'; document.getElementById('frontTitle').style.display = 'block'; document.getElementById('frontSub').style.display = 'block';
+    document.getElementById('backIcon').style.display = 'block'; document.getElementById('backTitle').style.display = 'block'; document.getElementById('backSub').style.display = 'block';
+    document.getElementById('processBtn').disabled = true; document.getElementById('resultWrap').style.display = 'none';
+    document.getElementById('fCropSelect').value = 'id1'; document.getElementById('bCropSelect').value = 'id1';
+    document.getElementById('btnFrontCropModal').style.display = 'none'; document.getElementById('btnBackCropModal').style.display = 'none';
     document.getElementById('fRot').value = 0; document.getElementById('fRotV').textContent = '0°';
     document.getElementById('bRot').value = 0; document.getElementById('bRotV').textContent = '0°';
-
-    var status = document.getElementById('statusLine');
-    status.textContent = "Upload both sides of your ID card to get started";
-    status.style.color = 'rgba(255,255,255,0.4)';
-    
-    applyPreset('centered');
-    switchTab('front');
+    document.getElementById('printImageLayer').src = '';
+    var status = document.getElementById('statusLine'); status.textContent = "Upload both sides of your ID card to get started"; status.style.color = 'rgba(255,255,255,0.4)';
+    applyPreset('centered'); switchTab('front');
 }
-
 updatePosPreview();
 </script>
 </body>
