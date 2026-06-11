@@ -1,703 +1,392 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ID Card Scanner Pro</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ID Card Scanner Pro</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;min-height:100vh;padding:20px;}
+.container{max-width:960px;margin:0 auto;}
+.header{text-align:center;padding:25px 0 20px;}
+.header h1{font-size:2rem;color:#fff;margin-bottom:6px;}
+.header h1 span{color:#e94560;}
+.header p{color:rgba(255,255,255,0.5);font-size:0.88rem;}
+.card{background:#1e1e2e;border-radius:18px;padding:24px;margin-bottom:18px;border:1px solid rgba(255,255,255,0.07);}
+.section-title{font-size:0.72rem;font-weight:800;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+.upload-box{border:2px dashed rgba(255,255,255,0.15);border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(255,255,255,0.03);position:relative;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
+.upload-box:hover{border-color:#667eea;background:rgba(102,126,234,0.08);transform:translateY(-2px);}
+.upload-box.done{border-color:#4CAF50;border-style:solid;background:rgba(76,175,80,0.06);}
+.upload-box input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;width:100%;height:100%;}
+.badge{font-size:0.68rem;font-weight:800;letter-spacing:1.5px;padding:3px 12px;border-radius:20px;margin-bottom:10px;display:inline-block;}
+.badge-f{background:rgba(33,150,243,0.2);color:#64b5f6;}
+.badge-b{background:rgba(233,69,96,0.2);color:#ef9a9a;}
+.uicon{font-size:2.5rem;margin-bottom:8px;}
+.upload-box h3{font-size:0.88rem;color:rgba(255,255,255,0.85);margin-bottom:4px;}
+.upload-box p{font-size:0.73rem;color:rgba(255,255,255,0.35);}
+.preview-img{width:100%;max-height:130px;object-fit:contain;border-radius:8px;margin-top:10px;display:none;border:1px solid rgba(255,255,255,0.1);}
+.tick-badge{position:absolute;top:10px;right:10px;background:#4CAF50;color:white;width:22px;height:22px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:12px;font-weight:700;z-index:3;}
+.done .tick-badge{display:flex;}
+.opts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px;background:rgba(255,255,255,0.02);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);}
+.opt{display:flex;flex-direction:column;gap:6px;}
+.opt label{font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.8px;}
+select{padding:8px 10px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;font-size:0.82rem;color:#fff;background:rgba(255,255,255,0.07);outline:none;cursor:pointer;}
+select:focus{border-color:#667eea;}
+select option{background:#1e1e2e;color:#fff;}
+.sl-wrap{display:flex;align-items:center;gap:6px;}
+input[type="range"]{flex:1;height:3px;-webkit-appearance:none;background:rgba(102,126,234,0.4);border-radius:2px;outline:none;cursor:pointer;}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#667eea;cursor:pointer;}
+.sl-v{font-size:0.72rem;font-weight:700;color:#667eea;min-width:30px;text-align:right;}
+.position-panel{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;margin-bottom:18px;}
+.pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.pos-card-title{font-size:0.72rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.pos-card-title span{padding:2px 10px;border-radius:20px;font-size:0.65rem;}
+.front-tag{background:rgba(33,150,243,0.2);color:#64b5f6;}
+.back-tag{background:rgba(233,69,96,0.2);color:#ef9a9a;}
+.pos-picker{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:12px;}
+.pos-cell{aspect-ratio:1;border-radius:6px;border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:rgba(255,255,255,0.3);}
+.pos-cell:hover{border-color:#667eea;background:rgba(102,126,234,0.15);color:#667eea;}
+.pos-cell.active{border-color:#667eea;background:rgba(102,126,234,0.25);color:#667eea;box-shadow:0 0 10px rgba(102,126,234,0.3);}
+.pos-cell.active-back{border-color:#e94560;background:rgba(233,69,96,0.2);color:#e94560;box-shadow:0 0 10px rgba(233,69,96,0.3);}
+.pos-extra{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.pos-extra .opt label{font-size:0.65rem;}
+.pos-preview{width:100%;height:120px;background:rgba(255,255,255,0.05);border-radius:8px;border:1px solid rgba(255,255,255,0.08);position:relative;margin-top:10px;overflow:hidden;}
+.pos-preview-card{position:absolute;background:rgba(102,126,234,0.4);border:1px solid #667eea;border-radius:3px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:#fff;font-weight:700;}
+.pos-preview-card.back-card{background:rgba(233,69,96,0.35);border-color:#e94560;}
+.prog-wrap{display:none;margin:14px 0;}
+.prog-bar{width:100%;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#667eea,#e94560);border-radius:3px;transition:width 0.35s ease;width:0%;}
+.prog-msg{text-align:center;font-size:0.8rem;color:rgba(255,255,255,0.5);margin-top:7px;}
+.status-line{text-align:center;font-size:0.84rem;color:rgba(255,255,255,0.4);margin-bottom:14px;}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.btn{padding:11px 22px;border:none;border-radius:10px;font-size:0.88rem;font-weight:700;cursor:pointer;transition:all 0.25s;display:inline-flex;align-items:center;gap:7px;}
+.btn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.1);}
+.btn:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+.btn-primary{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;}
+.btn-green{background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;}
+.btn-purple{background:linear-gradient(135deg,#6e1199,#8a38ef);color:#fff;}
+.btn-red{background:linear-gradient(135deg,#e94560,#c62a47);color:#fff;}
+.btn-outline{background:transparent;color:#667eea;border:2px solid #667eea;}
+.btn-crop{background:#3a3b5c;color:#fff;border:1px solid rgba(255,255,255,0.15);margin-top:8px;width:100%;justify-content:center;font-size:0.8rem;padding:8px;}
+.btn-crop:hover{background:#4a4b73;}
+.result-wrap{background:#1e1e2e;border-radius:18px;padding:24px;border:1px solid rgba(255,255,255,0.07);display:none;}
+.result-wrap h2{text-align:center;color:#fff;margin-bottom:16px;font-size:1.1rem;}
+.preview-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.preview-panel{background:rgba(255,255,255,0.04);border-radius:10px;padding:10px;text-align:center;}
+.preview-panel p{font-size:0.7rem;color:rgba(255,255,255,0.35);margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.preview-panel canvas{max-width:100%;border-radius:5px;max-height:150px;}
+.canvas-outer{background:#666;border-radius:10px;padding:10px;text-align:center;overflow:auto;}
+#outputCanvas{max-width:100%;height:auto;border-radius:3px;box-shadow:0 6px 30px rgba(0,0,0,0.5);display:block;margin:0 auto;}
+#printImageLayer{display:none;}
+.a4-info{text-align:center;font-size:0.73rem;color:rgba(255,255,255,0.25);margin-top:8px;}
+.pos-tabs{display:flex;gap:8px;margin-bottom:14px;}
+.pos-tab{padding:6px 14px;border-radius:8px;font-size:0.78rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);background:transparent;transition:all 0.2s;}
+.pos-tab.active-tab{border-color:#667eea;color:#fff;background:rgba(102,126,234,0.2);}
+.pos-tab-content{display:none;}
+.pos-tab-content.show{display:block;}
+.preset-btn{background:rgba(255,255,255,0.03);border:1.5px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:all 0.2s;color:white;}
+.preset-btn:hover{border-color:#667eea;background:rgba(102,126,234,0.12);transform:translateY(-2px);}
+.preset-icon{font-size:1.8rem;margin-bottom:6px;}
+.preset-name{font-size:0.82rem;font-weight:700;color:#fff;margin-bottom:3px;}
+.manual-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;}
+.control-subcard{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:12px;}
+.control-subcard h4{font-size:0.75rem;color:#64b5f6;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
+.control-subcard.back h4{color:#ef9a9a;}
+.control-row-item{margin-bottom:8px;}
+.control-row-item label{display:flex;justify-content:space-between;font-size:0.68rem;color:rgba(255,255,255,0.5);margin-bottom:3px;}
+.rot-btn-group{display:flex;gap:5px;margin-top:4px;}
+.rot-btn{flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;padding:8px;font-size:0.75rem;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:4px;transition:all 0.2s;}
+.rot-btn:hover{background:#667eea;border-color:#667eea;}
+.crop-modal{display:none;position:fixed;z-index:100;inset:0;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;padding:20px;touch-action:none;}
+.crop-modal-content{background:#1e1e2e;border-radius:14px;width:100%;max-width:600px;padding:20px;border:1px solid rgba(255,255,255,0.1);}
+.crop-modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:white;}
+.crop-modal-header h3{font-size:1rem;}
+.crop-canvas-wrapper{background:#0b0b13;border-radius:8px;overflow:hidden;position:relative;display:flex;justify-content:center;align-items:center;margin-bottom:16px;min-height:300px;max-height:450px;}
+#interactiveCropCanvas{max-width:100%;max-height:400px;display:block;cursor:crosshair;-webkit-user-select:none;user-select:none;touch-action:none;}
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: #0f0f1a;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container { max-width: 960px; margin: 0 auto; }
-
-        .header {
-            text-align: center;
-            padding: 25px 0 20px;
-        }
-
-        .header h1 {
-            font-size: 2rem;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-
-        .header h1 span { color: #e94560; }
-        .header p { color: rgba(255,255,255,0.5); font-size: 0.88rem; }
-
-        .card {
-            background: #1e1e2e;
-            border-radius: 18px;
-            padding: 24px;
-            margin-bottom: 18px;
-            border: 1px solid rgba(255,255,255,0.07);
-        }
-
-        .section-title {
-            font-size: 0.72rem;
-            font-weight: 800;
-            color: rgba(255,255,255,0.35);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(255,255,255,0.07);
-        }
-
-        .upload-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 20px;
-        }
-
-        .upload-box {
-            border: 2px dashed rgba(255,255,255,0.15);
-            border-radius: 14px;
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: rgba(255,255,255,0.03);
-            position: relative;
-            min-height: 200px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .upload-box:hover {
-            border-color: #667eea;
-            background: rgba(102,126,234,0.08);
-            transform: translateY(-2px);
-        }
-
-        .upload-box.done {
-            border-color: #4CAF50;
-            border-style: solid;
-            background: rgba(76,175,80,0.06);
-        }
-
-        .upload-box input[type="file"] {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 2;
-            width: 100%;
-            height: 100%;
-        }
-
-        .badge {
-            font-size: 0.68rem;
-            font-weight: 800;
-            letter-spacing: 1.5px;
-            padding: 3px 12px;
-            border-radius: 20px;
-            margin-bottom: 10px;
-            display: inline-block;
-        }
-
-        .badge-f { background: rgba(33,150,243,0.2); color: #64b5f6; }
-        .badge-b { background: rgba(233,69,96,0.2);  color: #ef9a9a; }
-
-        .uicon { font-size: 2.5rem; margin-bottom: 8px; }
-
-        .upload-box h3 {
-            font-size: 0.88rem;
-            color: rgba(255,255,255,0.85);
-            margin-bottom: 4px;
-        }
-
-        .upload-box p {
-            font-size: 0.73rem;
-            color: rgba(255,255,255,0.35);
-        }
-
-        .preview-img {
-            width: 100%;
-            max-height: 130px;
-            object-fit: contain;
-            border-radius: 8px;
-            margin-top: 10px;
-            display: none;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .tick-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #4CAF50;
-            color: white;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 700;
-            z-index: 3;
-        }
-
-        .done .tick-badge { display: flex; }
-
-        .opts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 18px;
-            background: rgba(255,255,255,0.02);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .opt { display: flex; flex-direction: column; gap: 6px; }
-
-        .opt label {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: rgba(255,255,255,0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
-        select {
-            padding: 8px 10px;
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 8px;
-            font-size: 0.82rem;
-            color: #fff;
-            background: rgba(255,255,255,0.07);
-            outline: none;
-            cursor: pointer;
-        }
-
-        select:focus { border-color: #667eea; }
-        select option { background: #1e1e2e; color: #fff; }
-
-        .sl-wrap { display: flex; align-items: center; gap: 6px; }
-
-        input[type="range"] {
-            flex: 1;
-            height: 3px;
-            -webkit-appearance: none;
-            background: rgba(102,126,234,0.4);
-            border-radius: 2px;
-            outline: none;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #667eea;
-            cursor: pointer;
-        }
-
-        .sl-v {
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: #667eea;
-            min-width: 30px;
-            text-align: right;
-        }
-
-        .position-panel {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.06);
-            border-radius: 14px;
-            padding: 18px;
-            margin-bottom: 18px;
-        }
-
-        .pos-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        .pos-card-title {
-            font-size: 0.72rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .pos-card-title span {
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 0.65rem;
-        }
-
-        .front-tag { background: rgba(33,150,243,0.2); color: #64b5f6; }
-        .back-tag  { background: rgba(233,69,96,0.2);  color: #ef9a9a; }
-
-        .pos-picker {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
-            margin-bottom: 12px;
-        }
-
-        .pos-cell {
-            aspect-ratio: 1;
-            border-radius: 6px;
-            border: 1.5px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.03);
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-            color: rgba(255,255,255,0.3);
-        }
-
-        .pos-cell:hover { border-color: #667eea; background: rgba(102,126,234,0.15); color: #667eea; }
-        .pos-cell.active { border-color: #667eea; background: rgba(102,126,234,0.25); color: #667eea; box-shadow: 0 0 10px rgba(102,126,234,0.3); }
-        .pos-cell.active-back { border-color: #e94560; background: rgba(233,69,96,0.2); color: #e94560; box-shadow: 0 0 10px rgba(233,69,96,0.3); }
-
-        .pos-extra { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .pos-extra .opt label { font-size: 0.65rem; }
-
-        .pos-preview {
-            width: 100%;
-            height: 120px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.08);
-            position: relative;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-
-        .pos-preview-card {
-            position: absolute;
-            background: rgba(102,126,234,0.4);
-            border: 1px solid #667eea;
-            border-radius: 3px;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.55rem;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .pos-preview-card.back-card { background: rgba(233,69,96,0.35); border-color: #e94560; }
-
-        .prog-wrap { display: none; margin: 14px 0; }
-        .prog-bar { width: 100%; height: 5px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
-        .prog-fill { height: 100%; background: linear-gradient(90deg,#667eea,#e94560); border-radius: 3px; transition: width 0.35s ease; width: 0%; }
-        .prog-msg { text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 7px; }
-
-        .status-line { text-align: center; font-size: 0.84rem; color: rgba(255,255,255,0.4); margin-bottom: 14px; }
-
-        .btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-
-        .btn {
-            padding: 11px 22px;
-            border: none;
-            border-radius: 10px;
-            font-size: 0.88rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.25s;
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-        }
-
-        .btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-        .btn-primary { background: linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
-        .btn-green   { background: linear-gradient(135deg,#11998e,#38ef7d); color:#fff; }
-        .btn-purple  { background: linear-gradient(135deg,#6e1199,#8a38ef); color:#fff; }
-        .btn-red     { background: linear-gradient(135deg,#e94560,#c62a47); color:#fff; }
-        .btn-outline { background: transparent; color:#667eea; border:2px solid #667eea; }
-        .btn-crop    { background: #3a3b5c; color:#fff; border:1px solid rgba(255,255,255,0.15); margin-top:8px; width:100%; justify-content:center; font-size:0.8rem; padding:8px; }
-        .btn-crop:hover { background: #4a4b73; }
-
-        .result-wrap {
-            background: #1e1e2e;
-            border-radius: 18px;
-            padding: 24px;
-            border: 1px solid rgba(255,255,255,0.07);
-            display: none;
-        }
-
-        .result-wrap h2 { text-align: center; color: #fff; margin-bottom: 16px; font-size: 1.1rem; }
-
-        .preview-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-
-        .preview-panel { background: rgba(255,255,255,0.04); border-radius: 10px; padding: 10px; text-align: center; }
-        .preview-panel p { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        .preview-panel canvas { max-width: 100%; border-radius: 5px; max-height: 150px; }
-
-        .canvas-outer { background: #666; border-radius: 10px; padding: 10px; text-align: center; overflow: auto; }
-        #outputCanvas { max-width: 100%; height: auto; border-radius: 3px; box-shadow: 0 6px 30px rgba(0,0,0,0.5); display: block; margin: 0 auto; }
-
-        #printImageLayer { display: none; }
-        .a4-info { text-align: center; font-size: 0.73rem; color: rgba(255,255,255,0.25); margin-top: 8px; }
-
-        .pos-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-        .pos-tab { padding: 6px 14px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer; border: 1.5px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); background: transparent; transition: all 0.2s; }
-        .pos-tab.active-tab { border-color: #667eea; color: #fff; background: rgba(102,126,234,0.2); }
-        .pos-tab-content { display: none; }
-        .pos-tab-content.show { display: block; }
-
-        .preset-btn { background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 14px; cursor: pointer; text-align: center; transition: all 0.2s; color: white; }
-        .preset-btn:hover { border-color: #667eea; background: rgba(102,126,234,0.12); transform: translateY(-2px); }
-        .preset-icon { font-size: 1.8rem; margin-bottom: 6px; }
-        .preset-name { font-size: 0.82rem; font-weight: 700; color: #fff; margin-bottom: 3px; }
-
-        .manual-controls-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 10px; }
-        .control-subcard { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 12px; }
-        .control-subcard h4 { font-size: 0.75rem; color: #64b5f6; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
-        .control-subcard.back h4 { color: #ef9a9a; }
-        .control-row-item { margin-bottom: 8px; }
-        .control-row-item label { display: flex; justify-content: space-between; font-size: 0.68rem; color: rgba(255,255,255,0.5); margin-bottom: 3px; }
-        .rot-btn-group { display: flex; gap: 5px; margin-top: 4px; }
-        .rot-btn { flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 8px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; transition: all 0.2s; }
-        .rot-btn:hover { background: #667eea; border-color: #667eea; }
-
-        /* CROP MODAL */
-        .crop-modal {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            touch-action: none;
-        }
-        .crop-modal-content { background: #1e1e2e; border-radius: 14px; width: 100%; max-width: 600px; padding: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .crop-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; color: white; }
-        .crop-modal-header h3 { font-size: 1rem; }
-        .crop-canvas-wrapper { background: #0b0b13; border-radius: 8px; overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 16px; min-height: 300px; max-height: 450px; }
-        #interactiveCropCanvas {
-            max-width: 100%;
-            max-height: 400px;
-            display: block;
-            cursor: crosshair;
-            -webkit-user-select: none;
-            user-select: none;
-            touch-action: none;
-        }
-
-        @media print {
-            @page { size: portrait; margin: 0mm !important; }
-            html, body { background: #ffffff !important; margin: 0 !important; padding: 0 !important; width: 100% !important; height: 100% !important; overflow: hidden !important; }
-            .container, .header, .card, .result-wrap, canvas, .canvas-outer { display: none !important; visibility: hidden !important; }
-            #printImageLayer { display: block !important; visibility: visible !important; position: fixed !important; left: 0 !important; top: 0 !important; width: 100vw !important; height: 100vh !important; object-fit: contain !important; margin: 0 !important; padding: 0 !important; page-break-inside: avoid !important; break-inside: avoid !important; }
-        }
-    </style>
+@media print {
+  @page { size: auto; margin: 0mm !important; }
+  * { visibility: hidden !important; overflow: hidden !important; }
+  html, body { background: #fff !important; margin: 0 !important; padding: 0 !important; height: auto !important; }
+  #printImageLayer {
+    visibility: visible !important;
+    display: block !important;
+    position: fixed !important;
+    top: 0 !important; left: 0 !important;
+    width: 100% !important; height: 100% !important;
+    object-fit: contain !important;
+    margin: 0 !important; padding: 0 !important;
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-before: avoid !important;
+    break-after: avoid !important;
+    break-inside: avoid !important;
+  }
+}
+</style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>ID Card <span>Scanner Pro</span></h1>
-        <p>Auto crop • Magic enhance • Full position control • A4 PDF & Print output</p>
+  <div class="header">
+    <h1>ID Card <span>Scanner Pro</span></h1>
+    <p>Auto crop &bull; Magic enhance &bull; Full position control &bull; A4 PDF &amp; Print output</p>
+  </div>
+
+  <div class="card">
+    <div class="section-title">📤 Upload ID Card</div>
+    <div class="upload-grid">
+      <div class="upload-box" id="frontBox">
+        <input type="file" id="frontFile" accept="image/*">
+        <div class="tick-badge">&#10003;</div>
+        <span class="badge badge-f">FRONT SIDE</span>
+        <div class="uicon" id="frontIcon">📄</div>
+        <h3 id="frontTitle">Upload Front Side</h3>
+        <p id="frontSub">Click or drag image here</p>
+        <img id="frontPreview" class="preview-img" alt="front">
+      </div>
+      <div class="upload-box" id="backBox">
+        <input type="file" id="backFile" accept="image/*">
+        <div class="tick-badge">&#10003;</div>
+        <span class="badge badge-b">BACK SIDE</span>
+        <div class="uicon" id="backIcon">📋</div>
+        <h3 id="backTitle">Upload Back Side</h3>
+        <p id="backSub">Click or drag image here (Optional)</p>
+        <img id="backPreview" class="preview-img" alt="back">
+      </div>
     </div>
 
-    <div class="card">
-        <div class="section-title">📤 Upload ID Card</div>
-        <div class="upload-grid">
-            <div class="upload-box" id="frontBox">
-                <input type="file" id="frontFile" accept="image/*">
-                <div class="tick-badge">✓</div>
-                <span class="badge badge-f">FRONT SIDE</span>
-                <div class="uicon" id="frontIcon">📄</div>
-                <h3 id="frontTitle">Upload Front Side</h3>
-                <p id="frontSub">Click or drag image here</p>
-                <img id="frontPreview" class="preview-img" alt="front">
-            </div>
-            <div class="upload-box" id="backBox">
-                <input type="file" id="backFile" accept="image/*">
-                <div class="tick-badge">✓</div>
-                <span class="badge badge-b">BACK SIDE</span>
-                <div class="uicon" id="backIcon">📋</div>
-                <h3 id="backTitle">Upload Back Side</h3>
-                <p id="backSub">Click or drag image here (Optional)</p>
-                <img id="backPreview" class="preview-img" alt="back">
-            </div>
+    <div class="section-title">✂️ Selection Crop &amp; Rotation Modifiers</div>
+    <div class="manual-controls-grid">
+      <div class="control-subcard">
+        <h4>Front Adjustments</h4>
+        <div class="control-row-item">
+          <label>Selection Crop Window</label>
+          <select id="fCropSelect" style="width:100%;margin-top:4px;" onchange="handleCropSelectChange('front')">
+            <option value="full">No Crop (100% Full Image)</option>
+            <option value="id1" selected>Standard ID Card (85mm x 54mm)</option>
+            <option value="passport">Passport / Square Profile</option>
+            <option value="tight">Tight Auto Margin Border</option>
+            <option value="custom">Custom Area Selection...</option>
+          </select>
+          <button class="btn btn-crop" id="btnFrontCropModal" style="display:none;" onclick="openVisualCropModal('front')">📐 Open Visual Crop Tool</button>
         </div>
-
-        <div class="section-title">✂️ Selection Crop & Rotation Modifiers</div>
-        <div class="manual-controls-grid">
-            <div class="control-subcard">
-                <h4>Front Adjustments</h4>
-                <div class="control-row-item">
-                    <label>Selection Crop Window</label>
-                    <select id="fCropSelect" style="width:100%;margin-top:4px;" onchange="handleCropSelectChange('front')">
-                        <option value="full">No Crop (100% Full Image)</option>
-                        <option value="id1" selected>Standard ID Card (85mm × 54mm)</option>
-                        <option value="passport">Passport / Square Profile</option>
-                        <option value="tight">Tight Auto Margin Border</option>
-                        <option value="custom">Custom Area Selection...</option>
-                    </select>
-                    <button class="btn btn-crop" id="btnFrontCropModal" style="display:none;" onclick="openVisualCropModal('front')">📐 Open Visual Crop Tool</button>
-                </div>
-                <div class="control-row-item" style="margin-top:12px;">
-                    <label>Orientation Rotation Controls</label>
-                    <div class="rot-btn-group">
-                        <button class="rot-btn" onclick="rotateDirection('front','left')">↩️ Rotate Left</button>
-                        <button class="rot-btn" onclick="rotateDirection('front','right')">↪️ Rotate Right</button>
-                    </div>
-                </div>
-                <div class="control-row-item" style="margin-top:12px;">
-                    <label><span>Fine Compass Tilt Adjust</span><span class="sl-v" id="fRotV">0°</span></label>
-                    <input type="range" id="fRot" min="-45" max="45" value="0" style="width:100%;" oninput="liveRefreshUploadBox('front')">
-                </div>
-            </div>
-            <div class="control-subcard back">
-                <h4>Back Adjustments</h4>
-                <div class="control-row-item">
-                    <label>Selection Crop Window</label>
-                    <select id="bCropSelect" style="width:100%;margin-top:4px;" onchange="handleCropSelectChange('back')">
-                        <option value="full">No Crop (100% Full Image)</option>
-                        <option value="id1" selected>Standard ID Card (85mm × 54mm)</option>
-                        <option value="passport">Passport / Square Profile</option>
-                        <option value="tight">Tight Auto Margin Border</option>
-                        <option value="custom">Custom Area Selection...</option>
-                    </select>
-                    <button class="btn btn-crop" id="btnBackCropModal" style="display:none;" onclick="openVisualCropModal('back')">📐 Open Visual Crop Tool</button>
-                </div>
-                <div class="control-row-item" style="margin-top:12px;">
-                    <label>Orientation Rotation Controls</label>
-                    <div class="rot-btn-group">
-                        <button class="rot-btn" onclick="rotateDirection('back','left')">↩️ Rotate Left</button>
-                        <button class="rot-btn" onclick="rotateDirection('back','right')">↪️ Rotate Right</button>
-                    </div>
-                </div>
-                <div class="control-row-item" style="margin-top:12px;">
-                    <label><span>Fine Compass Tilt Adjust</span><span class="sl-v" id="bRotV">0°</span></label>
-                    <input type="range" id="bRot" min="-45" max="45" value="0" style="width:100%;" oninput="liveRefreshUploadBox('back')">
-                </div>
-            </div>
+        <div class="control-row-item" style="margin-top:12px;">
+          <label>Orientation Rotation Controls</label>
+          <div class="rot-btn-group">
+            <button class="rot-btn" onclick="rotateDirection('front','left')">↩️ Rotate Left</button>
+            <button class="rot-btn" onclick="rotateDirection('front','right')">↪️ Rotate Right</button>
+          </div>
         </div>
-        <br>
-
-        <div class="section-title">⚙️ Enhancement Settings</div>
-        <div class="opts-grid">
-            <div class="opt">
-                <label>Layout</label>
-                <select id="layout" onchange="updatePosPreview()">
-                    <option value="side">Side by Side</option>
-                    <option value="stack">Top and Bottom</option>
-                    <option value="single">Single Image Only</option>
-                </select>
-            </div>
-            <div class="opt">
-                <label>Magic Filter</label>
-                <select id="magicFilter">
-                    <option value="magic">Magic Color</option>
-                    <option value="scan">Scan Mode</option>
-                    <option value="bw">Black White</option>
-                    <option value="vivid">Vivid</option>
-                    <option value="none">Original</option>
-                </select>
-            </div>
-            <div class="opt">
-                <label>Crop Mode</label>
-                <select id="cropMode">
-                    <option value="auto">Auto Smart Crop</option>
-                    <option value="edge">Edge Detection</option>
-                    <option value="full">No Crop (Full)</option>
-                </select>
-            </div>
-            <div class="opt">
-                <label>Output Size</label>
-                <select id="outputSize">
-                    <option value="a4port" selected>A4 Portrait 150dpi</option>
-                    <option value="a4land">A4 Landscape 150dpi</option>
-                    <option value="a4land2">A4 Landscape 200dpi</option>
-                </select>
-            </div>
-            <div class="opt">
-                <label>Brightness <span class="sl-v" id="briV">+8</span></label>
-                <div class="sl-wrap"><input type="range" id="bri" min="-80" max="80" value="8"></div>
-            </div>
-            <div class="opt">
-                <label>Contrast <span class="sl-v" id="conV">+20</span></label>
-                <div class="sl-wrap"><input type="range" id="con" min="-80" max="80" value="20"></div>
-            </div>
-            <div class="opt">
-                <label>Sharpness <span class="sl-v" id="shrV">60</span></label>
-                <div class="sl-wrap"><input type="range" id="shr" min="0" max="100" value="60"></div>
-            </div>
+        <div class="control-row-item" style="margin-top:12px;">
+          <label><span>Fine Tilt Adjust</span><span class="sl-v" id="fRotV">0°</span></label>
+          <input type="range" id="fRot" min="-45" max="45" value="0" style="width:100%;" oninput="liveRefreshUploadBox('front')">
         </div>
-
-        <div class="section-title">📍 Position Control</div>
-        <div class="position-panel">
-            <div class="pos-tabs">
-                <button class="pos-tab active-tab" onclick="switchTab('front')">📄 Front Card</button>
-                <button class="pos-tab" onclick="switchTab('back')">📋 Back Card</button>
-                <button class="pos-tab" onclick="switchTab('both')">⚡ Quick Presets</button>
-            </div>
-
-            <div class="pos-tab-content show" id="tab-front">
-                <div class="pos-grid">
-                    <div>
-                        <div class="pos-card-title">Position <span class="front-tag">FRONT</span></div>
-                        <div class="pos-picker" id="frontPicker">
-                            <div class="pos-cell" data-side="front" data-pos="top-left"    onclick="setPos('front','top-left')">↖</div>
-                            <div class="pos-cell" data-side="front" data-pos="top-center"  onclick="setPos('front','top-center')">↑</div>
-                            <div class="pos-cell" data-side="front" data-pos="top-right"   onclick="setPos('front','top-right')">↗</div>
-                            <div class="pos-cell" data-side="front" data-pos="mid-left"    onclick="setPos('front','mid-left')">←</div>
-                            <div class="pos-cell active" data-side="front" data-pos="center" onclick="setPos('front','center')">●</div>
-                            <div class="pos-cell" data-side="front" data-pos="mid-right"   onclick="setPos('front','mid-right')">→</div>
-                            <div class="pos-cell" data-side="front" data-pos="bot-left"    onclick="setPos('front','bot-left')">↙</div>
-                            <div class="pos-cell" data-side="front" data-pos="bot-center"  onclick="setPos('front','bot-center')">↓</div>
-                            <div class="pos-cell" data-side="front" data-pos="bot-right"   onclick="setPos('front','bot-right')">↘</div>
-                        </div>
-                        <div class="pos-extra">
-                            <div class="opt">
-                                <label>Scale <span class="sl-v" id="frontScaleV">100%</span></label>
-                                <div class="sl-wrap"><input type="range" id="frontScale" min="40" max="100" value="100" oninput="updateScaleLabel('front');updatePosPreview()"></div>
-                            </div>
-                            <div class="opt">
-                                <label>Fit Mode</label>
-                                <select id="frontFit" onchange="updatePosPreview()">
-                                    <option value="contain">Contain</option>
-                                    <option value="fill">Fill Cell</option>
-                                    <option value="custom">Custom Scale</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="pos-card-title">Live Preview</div>
-                        <div class="pos-preview" id="posPreviewFront">
-                            <div class="pos-preview-card" id="previewFrontCard">FRONT</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pos-tab-content" id="tab-back">
-                <div class="pos-grid">
-                    <div>
-                        <div class="pos-card-title">Position <span class="back-tag">BACK</span></div>
-                        <div class="pos-picker" id="backPicker">
-                            <div class="pos-cell" data-side="back" data-pos="top-left"    onclick="setPos('back','top-left')">↖</div>
-                            <div class="pos-cell" data-side="back" data-pos="top-center"  onclick="setPos('back','top-center')">↑</div>
-                            <div class="pos-cell" data-side="back" data-pos="top-right"   onclick="setPos('back','top-right')">↗</div>
-                            <div class="pos-cell" data-side="back" data-pos="mid-left"    onclick="setPos('back','mid-left')">←</div>
-                            <div class="pos-cell active active-back" data-side="back" data-pos="center" onclick="setPos('back','center')">●</div>
-                            <div class="pos-cell" data-side="back" data-pos="mid-right"   onclick="setPos('back','mid-right')">→</div>
-                            <div class="pos-cell" data-side="back" data-pos="bot-left"    onclick="setPos('back','bot-left')">↙</div>
-                            <div class="pos-cell" data-side="back" data-pos="bot-center"  onclick="setPos('back','bot-center')">↓</div>
-                            <div class="pos-cell" data-side="back" data-pos="bot-right"   onclick="setPos('back','bot-right')">↘</div>
-                        </div>
-                        <div class="pos-extra">
-                            <div class="opt">
-                                <label>Scale <span class="sl-v" id="backScaleV">100%</span></label>
-                                <div class="sl-wrap"><input type="range" id="backScale" min="40" max="100" value="100" oninput="updateScaleLabel('back');updatePosPreview()"></div>
-                            </div>
-                            <div class="opt">
-                                <label>Fit Mode</label>
-                                <select id="backFit" onchange="updatePosPreview()">
-                                    <option value="contain">Contain</option>
-                                    <option value="fill">Fill Cell</option>
-                                    <option value="custom">Custom Scale</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="pos-card-title">Live Preview</div>
-                        <div class="pos-preview" id="posPreviewBack">
-                            <div class="pos-preview-card back-card" id="previewBackCard">BACK</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pos-tab-content" id="tab-both">
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
-                    <button class="preset-btn" onclick="applyPreset('centered')"><div class="preset-icon">⬛</div><div class="preset-name">Centered</div></button>
-                    <button class="preset-btn" onclick="applyPreset('top-aligned')"><div class="preset-icon">⬆️</div><div class="preset-name">Top Aligned</div></button>
-                    <button class="preset-btn" onclick="applyPreset('bottom-aligned')"><div class="preset-icon">⬇️</div><div class="preset-name">Bottom Aligned</div></button>
-                    <button class="preset-btn" onclick="applyPreset('fill')"><div class="preset-icon">🔲</div><div class="preset-name">Fill Cells</div></button>
-                    <button class="preset-btn" onclick="applyPreset('compact')"><div class="preset-icon">📐</div><div class="preset-name">Compact 80%</div></button>
-                    <button class="preset-btn" onclick="applyPreset('camscanner')"><div class="preset-icon">📷</div><div class="preset-name">CamScanner Style</div></button>
-                </div>
-            </div>
+      </div>
+      <div class="control-subcard back">
+        <h4>Back Adjustments</h4>
+        <div class="control-row-item">
+          <label>Selection Crop Window</label>
+          <select id="bCropSelect" style="width:100%;margin-top:4px;" onchange="handleCropSelectChange('back')">
+            <option value="full">No Crop (100% Full Image)</option>
+            <option value="id1" selected>Standard ID Card (85mm x 54mm)</option>
+            <option value="passport">Passport / Square Profile</option>
+            <option value="tight">Tight Auto Margin Border</option>
+            <option value="custom">Custom Area Selection...</option>
+          </select>
+          <button class="btn btn-crop" id="btnBackCropModal" style="display:none;" onclick="openVisualCropModal('back')">📐 Open Visual Crop Tool</button>
         </div>
-
-        <div class="prog-wrap" id="progWrap">
-            <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
-            <div class="prog-msg" id="progMsg"></div>
+        <div class="control-row-item" style="margin-top:12px;">
+          <label>Orientation Rotation Controls</label>
+          <div class="rot-btn-group">
+            <button class="rot-btn" onclick="rotateDirection('back','left')">↩️ Rotate Left</button>
+            <button class="rot-btn" onclick="rotateDirection('back','right')">↪️ Rotate Right</button>
+          </div>
         </div>
-
-        <div class="status-line" id="statusLine">Upload both sides of your ID card to get started</div>
-
-        <div class="btn-row">
-            <button class="btn btn-primary" id="processBtn" disabled onclick="startProcess()">⚡ Scan and Generate</button>
-            <button class="btn btn-outline" onclick="resetAll()">🔄 Reset</button>
+        <div class="control-row-item" style="margin-top:12px;">
+          <label><span>Fine Tilt Adjust</span><span class="sl-v" id="bRotV">0°</span></label>
+          <input type="range" id="bRot" min="-45" max="45" value="0" style="width:100%;" oninput="liveRefreshUploadBox('back')">
         </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="section-title">⚙️ Enhancement Settings</div>
+    <div class="opts-grid">
+      <div class="opt"><label>Layout</label>
+        <select id="layout" onchange="updatePosPreview()">
+          <option value="side">Side by Side</option>
+          <option value="stack">Top and Bottom</option>
+          <option value="single">Single Image Only</option>
+        </select>
+      </div>
+      <div class="opt"><label>Magic Filter</label>
+        <select id="magicFilter">
+          <option value="magic">Magic Color</option>
+          <option value="scan">Scan Mode</option>
+          <option value="bw">Black White</option>
+          <option value="vivid">Vivid</option>
+          <option value="none">Original</option>
+        </select>
+      </div>
+      <div class="opt"><label>Crop Mode</label>
+        <select id="cropMode">
+          <option value="auto">Auto Smart Crop</option>
+          <option value="edge">Edge Detection</option>
+          <option value="full">No Crop (Full)</option>
+        </select>
+      </div>
+      <div class="opt"><label>Output Size</label>
+        <select id="outputSize">
+          <option value="a4port" selected>A4 Portrait 150dpi</option>
+          <option value="a4land">A4 Landscape 150dpi</option>
+          <option value="a4land2">A4 Landscape 200dpi</option>
+        </select>
+      </div>
+      <div class="opt"><label>Brightness <span class="sl-v" id="briV">+8</span></label>
+        <div class="sl-wrap"><input type="range" id="bri" min="-80" max="80" value="8"></div>
+      </div>
+      <div class="opt"><label>Contrast <span class="sl-v" id="conV">+20</span></label>
+        <div class="sl-wrap"><input type="range" id="con" min="-80" max="80" value="20"></div>
+      </div>
+      <div class="opt"><label>Sharpness <span class="sl-v" id="shrV">60</span></label>
+        <div class="sl-wrap"><input type="range" id="shr" min="0" max="100" value="60"></div>
+      </div>
     </div>
 
-    <div class="result-wrap" id="resultWrap">
-        <h2>✅ Scanned ID Card — A4 Ready</h2>
-        <div class="preview-pair">
-            <div class="preview-panel" id="prevFrontPanel"><p>Front — Processed</p><canvas id="prevFront"></canvas></div>
-            <div class="preview-panel" id="prevBackPanel"><p>Back — Processed</p><canvas id="prevBack"></canvas></div>
+    <div class="section-title">📍 Position Control</div>
+    <div class="position-panel">
+      <div class="pos-tabs">
+        <button class="pos-tab active-tab" onclick="switchTab('front')">📄 Front Card</button>
+        <button class="pos-tab" onclick="switchTab('back')">📋 Back Card</button>
+        <button class="pos-tab" onclick="switchTab('both')">⚡ Quick Presets</button>
+      </div>
+      <div class="pos-tab-content show" id="tab-front">
+        <div class="pos-grid">
+          <div>
+            <div class="pos-card-title">Position <span class="front-tag">FRONT</span></div>
+            <div class="pos-picker" id="frontPicker">
+              <div class="pos-cell" data-side="front" data-pos="top-left"   onclick="setPos('front','top-left')">&#8598;</div>
+              <div class="pos-cell" data-side="front" data-pos="top-center" onclick="setPos('front','top-center')">&#8593;</div>
+              <div class="pos-cell" data-side="front" data-pos="top-right"  onclick="setPos('front','top-right')">&#8599;</div>
+              <div class="pos-cell" data-side="front" data-pos="mid-left"   onclick="setPos('front','mid-left')">&#8592;</div>
+              <div class="pos-cell active" data-side="front" data-pos="center" onclick="setPos('front','center')">&#9679;</div>
+              <div class="pos-cell" data-side="front" data-pos="mid-right"  onclick="setPos('front','mid-right')">&#8594;</div>
+              <div class="pos-cell" data-side="front" data-pos="bot-left"   onclick="setPos('front','bot-left')">&#8601;</div>
+              <div class="pos-cell" data-side="front" data-pos="bot-center" onclick="setPos('front','bot-center')">&#8595;</div>
+              <div class="pos-cell" data-side="front" data-pos="bot-right"  onclick="setPos('front','bot-right')">&#8600;</div>
+            </div>
+            <div class="pos-extra">
+              <div class="opt"><label>Scale <span class="sl-v" id="frontScaleV">100%</span></label>
+                <div class="sl-wrap"><input type="range" id="frontScale" min="40" max="100" value="100" oninput="updateScaleLabel('front');updatePosPreview()"></div>
+              </div>
+              <div class="opt"><label>Fit Mode</label>
+                <select id="frontFit" onchange="updatePosPreview()">
+                  <option value="contain">Contain</option>
+                  <option value="fill">Fill Cell</option>
+                  <option value="custom">Custom Scale</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="pos-card-title">Live Preview</div>
+            <div class="pos-preview" id="posPreviewFront"><div class="pos-preview-card" id="previewFrontCard">FRONT</div></div>
+          </div>
         </div>
-        <div class="canvas-outer"><canvas id="outputCanvas"></canvas></div>
-        <div class="a4-info" id="a4info"></div>
-        <div class="btn-row" style="margin-top:16px;">
-            <button class="btn btn-purple"  onclick="directPrint()">🖨️ Direct Print</button>
-            <button class="btn btn-green"   onclick="downloadImg()">⬇️ Download JPG</button>
-            <button class="btn btn-red"     onclick="downloadPDF()">📄 Save as PDF</button>
-            <button class="btn btn-outline" onclick="resetAll()">🔄 New Scan</button>
+      </div>
+      <div class="pos-tab-content" id="tab-back">
+        <div class="pos-grid">
+          <div>
+            <div class="pos-card-title">Position <span class="back-tag">BACK</span></div>
+            <div class="pos-picker" id="backPicker">
+              <div class="pos-cell" data-side="back" data-pos="top-left"   onclick="setPos('back','top-left')">&#8598;</div>
+              <div class="pos-cell" data-side="back" data-pos="top-center" onclick="setPos('back','top-center')">&#8593;</div>
+              <div class="pos-cell" data-side="back" data-pos="top-right"  onclick="setPos('back','top-right')">&#8599;</div>
+              <div class="pos-cell" data-side="back" data-pos="mid-left"   onclick="setPos('back','mid-left')">&#8592;</div>
+              <div class="pos-cell active active-back" data-side="back" data-pos="center" onclick="setPos('back','center')">&#9679;</div>
+              <div class="pos-cell" data-side="back" data-pos="mid-right"  onclick="setPos('back','mid-right')">&#8594;</div>
+              <div class="pos-cell" data-side="back" data-pos="bot-left"   onclick="setPos('back','bot-left')">&#8601;</div>
+              <div class="pos-cell" data-side="back" data-pos="bot-center" onclick="setPos('back','bot-center')">&#8595;</div>
+              <div class="pos-cell" data-side="back" data-pos="bot-right"  onclick="setPos('back','bot-right')">&#8600;</div>
+            </div>
+            <div class="pos-extra">
+              <div class="opt"><label>Scale <span class="sl-v" id="backScaleV">100%</span></label>
+                <div class="sl-wrap"><input type="range" id="backScale" min="40" max="100" value="100" oninput="updateScaleLabel('back');updatePosPreview()"></div>
+              </div>
+              <div class="opt"><label>Fit Mode</label>
+                <select id="backFit" onchange="updatePosPreview()">
+                  <option value="contain">Contain</option>
+                  <option value="fill">Fill Cell</option>
+                  <option value="custom">Custom Scale</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="pos-card-title">Live Preview</div>
+            <div class="pos-preview" id="posPreviewBack"><div class="pos-preview-card back-card" id="previewBackCard">BACK</div></div>
+          </div>
         </div>
+      </div>
+      <div class="pos-tab-content" id="tab-both">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;">
+          <button class="preset-btn" onclick="applyPreset('centered')"><div class="preset-icon">&#11035;</div><div class="preset-name">Centered</div></button>
+          <button class="preset-btn" onclick="applyPreset('top-aligned')"><div class="preset-icon">⬆️</div><div class="preset-name">Top Aligned</div></button>
+          <button class="preset-btn" onclick="applyPreset('bottom-aligned')"><div class="preset-icon">⬇️</div><div class="preset-name">Bottom Aligned</div></button>
+          <button class="preset-btn" onclick="applyPreset('fill')"><div class="preset-icon">🔲</div><div class="preset-name">Fill Cells</div></button>
+          <button class="preset-btn" onclick="applyPreset('compact')"><div class="preset-icon">📐</div><div class="preset-name">Compact 80%</div></button>
+          <button class="preset-btn" onclick="applyPreset('camscanner')"><div class="preset-icon">📷</div><div class="preset-name">CamScanner Style</div></button>
+        </div>
+      </div>
     </div>
+
+    <div class="prog-wrap" id="progWrap">
+      <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+      <div class="prog-msg" id="progMsg"></div>
+    </div>
+    <div class="status-line" id="statusLine">Upload both sides of your ID card to get started</div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="processBtn" disabled onclick="startProcess()">⚡ Scan and Generate</button>
+      <button class="btn btn-outline" onclick="resetAll()">🔄 Reset</button>
+    </div>
+  </div>
+
+  <div class="result-wrap" id="resultWrap">
+    <h2>✅ Scanned ID Card — A4 Ready</h2>
+    <div class="preview-pair">
+      <div class="preview-panel" id="prevFrontPanel"><p>Front — Processed</p><canvas id="prevFront"></canvas></div>
+      <div class="preview-panel" id="prevBackPanel"><p>Back — Processed</p><canvas id="prevBack"></canvas></div>
+    </div>
+    <div class="canvas-outer"><canvas id="outputCanvas"></canvas></div>
+    <div class="a4-info" id="a4info"></div>
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="btn btn-purple" onclick="directPrint()">🖨️ Direct Print</button>
+      <button class="btn btn-green"  onclick="downloadImg()">⬇️ Download JPG</button>
+      <button class="btn btn-red"    onclick="downloadPDF()">📄 Save as PDF</button>
+      <button class="btn btn-outline" onclick="resetAll()">🔄 New Scan</button>
+    </div>
+  </div>
 </div>
 
-<!-- CROP MODAL -->
 <div class="crop-modal" id="cropModalOverlay">
-    <div class="crop-modal-content">
-        <div class="crop-modal-header">
-            <h3 id="cropModalTitle">Position Manual Selection Box</h3>
-            <button class="rot-btn" style="padding:4px 10px;min-width:auto;flex:none;" onclick="closeVisualCropModal(false)">✕</button>
-        </div>
-        <div class="crop-canvas-wrapper"><canvas id="interactiveCropCanvas"></canvas></div>
-        <div class="btn-row">
-            <button class="btn btn-primary" style="padding:8px 16px;font-size:0.8rem;" onclick="closeVisualCropModal(true)">💾 Save Selected Area</button>
-            <button class="btn btn-outline" style="padding:8px 16px;font-size:0.8rem;border-color:rgba(255,255,255,0.2);color:white;" onclick="closeVisualCropModal(false)">Cancel</button>
-        </div>
+  <div class="crop-modal-content">
+    <div class="crop-modal-header">
+      <h3 id="cropModalTitle">Crop Selection</h3>
+      <button class="rot-btn" style="padding:4px 10px;min-width:auto;flex:none;" onclick="closeVisualCropModal(false)">✕</button>
     </div>
+    <div class="crop-canvas-wrapper"><canvas id="interactiveCropCanvas"></canvas></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" style="padding:8px 16px;font-size:0.8rem;" onclick="closeVisualCropModal(true)">💾 Save Selected Area</button>
+      <button class="btn btn-outline" style="padding:8px 16px;font-size:0.8rem;border-color:rgba(255,255,255,0.2);color:white;" onclick="closeVisualCropModal(false)">Cancel</button>
+    </div>
+  </div>
 </div>
 
-<img id="printImageLayer" alt="A4 Printable Sheet Document">
+<img id="printImageLayer" alt="">
 <canvas id="workCanvas" style="display:none;"></canvas>
 <canvas id="livePreviewCanvas" style="display:none;"></canvas>
 
@@ -708,7 +397,7 @@ var posState={front:{pos:'center',scale:100,fit:'contain'},back:{pos:'center',sc
 var customCropBox={front:{x:0,y:0,w:0,h:0,initialized:false},back:{x:0,y:0,w:0,h:0,initialized:false}};
 var currentCropSide='front',activeHandle=null,isDraggingBox=false,dragStartX=0,dragStartY=0;
 var boxInstance={x:50,y:50,w:200,h:130};
-var A4_SIZES={'a4port':{W:1240,H:1754,label:'A4 Portrait 150dpi'},'a4land':{W:1754,H:1240,label:'A4 Landscape 150dpi'},'a4land2':{W:2339,H:1654,label:'A4 Landscape 200dpi'}};
+var A4={a4port:{W:1240,H:1754,label:'A4 Portrait 150dpi'},a4land:{W:1754,H:1240,label:'A4 Landscape 150dpi'},a4land2:{W:2339,H:1654,label:'A4 Landscape 200dpi'}};
 
 document.getElementById('fRot').addEventListener('input',function(){document.getElementById('fRotV').textContent=this.value+'°';});
 document.getElementById('bRot').addEventListener('input',function(){document.getElementById('bRotV').textContent=this.value+'°';});
@@ -716,370 +405,354 @@ document.getElementById('bri').addEventListener('input',function(){var v=parseIn
 document.getElementById('con').addEventListener('input',function(){var v=parseInt(this.value);document.getElementById('conV').textContent=(v>=0?'+':'')+v;});
 document.getElementById('frontFile').addEventListener('change',function(e){if(e.target.files[0])loadImg(e.target.files[0],'front');});
 document.getElementById('backFile').addEventListener('change',function(e){if(e.target.files[0])loadImg(e.target.files[0],'back');});
-
 setupDrop('frontBox','front');setupDrop('backBox','back');
 
 function setupDrop(id,side){
-    var box=document.getElementById(id);
-    box.addEventListener('dragover',function(e){e.preventDefault();box.style.borderColor='#e94560';});
-    box.addEventListener('dragleave',function(){box.style.borderColor='';});
-    box.addEventListener('drop',function(e){e.preventDefault();box.style.borderColor='';if(e.dataTransfer.files&&e.dataTransfer.files[0])loadImg(e.dataTransfer.files[0],side);});
+  var b=document.getElementById(id);
+  b.addEventListener('dragover',function(e){e.preventDefault();b.style.borderColor='#e94560';});
+  b.addEventListener('dragleave',function(){b.style.borderColor='';});
+  b.addEventListener('drop',function(e){e.preventDefault();b.style.borderColor='';if(e.dataTransfer.files&&e.dataTransfer.files[0])loadImg(e.dataTransfer.files[0],side);});
 }
 
 function handleCropSelectChange(side){
-    var sel=document.getElementById(side==='front'?'fCropSelect':'bCropSelect');
-    var btn=document.getElementById(side==='front'?'btnFrontCropModal':'btnBackCropModal');
-    if(sel.value==='custom'){btn.style.display='block';if(!customCropBox[side].initialized)openVisualCropModal(side);}
-    else{btn.style.display='none';liveRefreshUploadBox(side);}
+  var sel=document.getElementById(side==='front'?'fCropSelect':'bCropSelect');
+  var btn=document.getElementById(side==='front'?'btnFrontCropModal':'btnBackCropModal');
+  if(sel.value==='custom'){btn.style.display='block';if(!customCropBox[side].initialized)openVisualCropModal(side);}
+  else{btn.style.display='none';liveRefreshUploadBox(side);}
 }
 
-function rotateDirection(side,direction){
-    rotations[side]=(direction==='right')?(rotations[side]+90)%360:(rotations[side]-90+360)%360;
-    liveRefreshUploadBox(side);
+function rotateDirection(side,dir){
+  rotations[side]=(dir==='right')?(rotations[side]+90)%360:(rotations[side]-90+360)%360;
+  liveRefreshUploadBox(side);
 }
 
 function liveRefreshUploadBox(side){
-    var source=(side==='front')?frontImg:backImg;
-    var prev=document.getElementById(side+'Preview');
-    if(!source||!prev)return;
-    var tc=document.getElementById('livePreviewCanvas'),ctx=tc.getContext('2d');
-    var cropType=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
-    var fineAngle=parseInt(document.getElementById(side==='front'?'fRot':'bRot').value)*Math.PI/180;
-    var flipAngle=rotations[side];
-    var sX=0,sY=0,sW=source.width,sH=source.height,fW=sW,fH=sH;
-    if(cropType==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX=(sW-fW)/2;sY=(sH-fH)/2;}
-    else if(cropType==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX=(sW-fW)/2;sY=(sH-fH)/2;}
-    else if(cropType==='tight'){fW=sW*0.85;fH=sH*0.85;sX=(sW-fW)/2;sY=(sH-fH)/2;}
-    else if(cropType==='custom'&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
-    var totalAngle=fineAngle+(flipAngle*Math.PI/180);
-    var rW=Math.abs(fW*Math.cos(totalAngle))+Math.abs(fH*Math.sin(totalAngle));
-    var rH=Math.abs(fW*Math.sin(totalAngle))+Math.abs(fH*Math.cos(totalAngle));
-    tc.width=rW;tc.height=rH;
-    ctx.save();ctx.translate(rW/2,rH/2);ctx.rotate(totalAngle);
-    ctx.drawImage(source,sX,sY,fW,fH,-fW/2,-fH/2,fW,fH);ctx.restore();
-    prev.src=tc.toDataURL();
+  var src=(side==='front')?frontImg:backImg;
+  var prev=document.getElementById(side+'Preview');
+  if(!src||!prev)return;
+  var tc=document.getElementById('livePreviewCanvas'),ctx=tc.getContext('2d');
+  var ct=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
+  var fa=parseInt(document.getElementById(side==='front'?'fRot':'bRot').value)*Math.PI/180;
+  var fl=rotations[side];
+  var sX=0,sY=0,sW=src.width,sH=src.height,fW=sW,fH=sH;
+  if(ct==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX=(sW-fW)/2;sY=(sH-fH)/2;}
+  else if(ct==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX=(sW-fW)/2;sY=(sH-fH)/2;}
+  else if(ct==='tight'){fW=sW*.85;fH=sH*.85;sX=(sW-fW)/2;sY=(sH-fH)/2;}
+  else if(ct==='custom'&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
+  var ta=fa+(fl*Math.PI/180);
+  var rW=Math.abs(fW*Math.cos(ta))+Math.abs(fH*Math.sin(ta));
+  var rH=Math.abs(fW*Math.sin(ta))+Math.abs(fH*Math.cos(ta));
+  tc.width=rW;tc.height=rH;
+  ctx.save();ctx.translate(rW/2,rH/2);ctx.rotate(ta);
+  ctx.drawImage(src,sX,sY,fW,fH,-fW/2,-fH/2,fW,fH);ctx.restore();
+  prev.src=tc.toDataURL();
 }
 
 function loadImg(file,side){
-    var reader=new FileReader();
-    reader.onload=function(event){
-        var img=new Image();
-        img.onload=function(){
-            if(side==='front'){frontImg=img;showBoxUploaded('frontBox','frontIcon','frontTitle','frontSub','frontPreview',event.target.result);customCropBox.front={x:0,y:0,w:img.width,h:img.height,initialized:false};liveRefreshUploadBox('front');}
-            else{backImg=img;showBoxUploaded('backBox','backIcon','backTitle','backSub','backPreview',event.target.result);customCropBox.back={x:0,y:0,w:img.width,h:img.height,initialized:false};liveRefreshUploadBox('back');}
-            checkReadyState();
-        };
-        img.src=event.target.result;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      if(side==='front'){frontImg=img;showBoxDone('frontBox','frontIcon','frontTitle','frontSub','frontPreview',e.target.result);customCropBox.front={x:0,y:0,w:img.width,h:img.height,initialized:false};liveRefreshUploadBox('front');}
+      else{backImg=img;showBoxDone('backBox','backIcon','backTitle','backSub','backPreview',e.target.result);customCropBox.back={x:0,y:0,w:img.width,h:img.height,initialized:false};liveRefreshUploadBox('back');}
+      checkReady();
     };
-    reader.readAsDataURL(file);
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
 }
 
-function showBoxUploaded(boxId,iconId,titleId,subId,prevId,src){
-    document.getElementById(boxId).classList.add('done');
-    document.getElementById(iconId).style.display='none';
-    document.getElementById(titleId).style.display='none';
-    document.getElementById(subId).style.display='none';
-    var p=document.getElementById(prevId);p.src=src;p.style.display='block';
+function showBoxDone(bId,iId,tId,sId,pId,src){
+  document.getElementById(bId).classList.add('done');
+  document.getElementById(iId).style.display='none';
+  document.getElementById(tId).style.display='none';
+  document.getElementById(sId).style.display='none';
+  var p=document.getElementById(pId);p.src=src;p.style.display='block';
 }
 
-function checkReadyState(){
-    var btn=document.getElementById('processBtn'),status=document.getElementById('statusLine'),ld=document.getElementById('layout');
-    if(frontImg&&backImg){btn.disabled=false;status.textContent="Ready! Both faces loaded.";status.style.color='#4CAF50';if(ld.value==='single')ld.value='side';updatePosPreview();}
-    else if(frontImg){btn.disabled=false;status.textContent="Single image detected. Ready to process.";status.style.color='#64b5f6';if(ld.value!=='single')ld.value='single';updatePosPreview();}
+function checkReady(){
+  var btn=document.getElementById('processBtn'),st=document.getElementById('statusLine'),ld=document.getElementById('layout');
+  if(frontImg&&backImg){btn.disabled=false;st.textContent="Ready! Both faces loaded.";st.style.color='#4CAF50';if(ld.value==='single')ld.value='side';updatePosPreview();}
+  else if(frontImg){btn.disabled=false;st.textContent="Single image detected. Ready.";st.style.color='#64b5f6';if(ld.value!=='single')ld.value='single';updatePosPreview();}
 }
 
-/* ── CROP MODAL ── */
 function openVisualCropModal(side){
-    var source=(side==='front')?frontImg:backImg;
-    if(!source)return;
-    currentCropSide=side;
-    document.getElementById('cropModalTitle').textContent='Crop Custom Selection: '+side.toUpperCase()+' IMAGE';
-    var mc=document.getElementById('interactiveCropCanvas');
-    var maxW=Math.min(window.innerWidth-60,560),maxH=380;
-    var ratio=Math.min(maxW/source.width,maxH/source.height);
-    mc.width=Math.floor(source.width*ratio);mc.height=Math.floor(source.height*ratio);
-    if(!customCropBox[side].initialized){
-        var dW=mc.width*0.75,dH=dW/1.58;
-        if(dH>mc.height){dH=mc.height*0.75;dW=dH*1.58;}
-        boxInstance.w=dW;boxInstance.h=dH;
-        boxInstance.x=(mc.width-dW)/2;boxInstance.y=(mc.height-dH)/2;
-    }else{
-        boxInstance.x=(customCropBox[side].x/source.width)*mc.width;
-        boxInstance.y=(customCropBox[side].y/source.height)*mc.height;
-        boxInstance.w=(customCropBox[side].w/source.width)*mc.width;
-        boxInstance.h=(customCropBox[side].h/source.height)*mc.height;
-    }
-    document.getElementById('cropModalOverlay').style.display='flex';
-    drawCropModalCanvas();
+  var src=(side==='front')?frontImg:backImg;
+  if(!src)return;
+  currentCropSide=side;
+  document.getElementById('cropModalTitle').textContent='Crop: '+side.toUpperCase()+' IMAGE';
+  var mc=document.getElementById('interactiveCropCanvas');
+  var mW=Math.min(window.innerWidth-60,560),mH=380;
+  var r=Math.min(mW/src.width,mH/src.height);
+  mc.width=Math.floor(src.width*r);mc.height=Math.floor(src.height*r);
+  if(!customCropBox[side].initialized){
+    var dW=mc.width*.75,dH=dW/1.58;
+    if(dH>mc.height){dH=mc.height*.75;dW=dH*1.58;}
+    boxInstance.w=dW;boxInstance.h=dH;
+    boxInstance.x=(mc.width-dW)/2;boxInstance.y=(mc.height-dH)/2;
+  }else{
+    boxInstance.x=(customCropBox[side].x/src.width)*mc.width;
+    boxInstance.y=(customCropBox[side].y/src.height)*mc.height;
+    boxInstance.w=(customCropBox[side].w/src.width)*mc.width;
+    boxInstance.h=(customCropBox[side].h/src.height)*mc.height;
+  }
+  document.getElementById('cropModalOverlay').style.display='flex';
+  drawCropCanvas();
 }
 
-function drawCropModalCanvas(){
-    var c=document.getElementById('interactiveCropCanvas'),ctx=c.getContext('2d');
-    var src=(currentCropSide==='front')?frontImg:backImg;
-    ctx.clearRect(0,0,c.width,c.height);ctx.drawImage(src,0,0,c.width,c.height);
-    ctx.fillStyle='rgba(0,0,0,0.55)';
-    ctx.fillRect(0,0,c.width,boxInstance.y);
-    ctx.fillRect(0,boxInstance.y+boxInstance.h,c.width,c.height-(boxInstance.y+boxInstance.h));
-    ctx.fillRect(0,boxInstance.y,boxInstance.x,boxInstance.h);
-    ctx.fillRect(boxInstance.x+boxInstance.w,boxInstance.y,c.width-(boxInstance.x+boxInstance.w),boxInstance.h);
-    ctx.strokeStyle='#667eea';ctx.lineWidth=2;ctx.strokeRect(boxInstance.x,boxInstance.y,boxInstance.w,boxInstance.h);
-    var hs=9;ctx.fillStyle='#fff';
-    ctx.fillRect(boxInstance.x-hs/2,boxInstance.y-hs/2,hs,hs);
-    ctx.fillRect(boxInstance.x+boxInstance.w-hs/2,boxInstance.y-hs/2,hs,hs);
-    ctx.fillRect(boxInstance.x-hs/2,boxInstance.y+boxInstance.h-hs/2,hs,hs);
-    ctx.fillRect(boxInstance.x+boxInstance.w-hs/2,boxInstance.y+boxInstance.h-hs/2,hs,hs);
+function drawCropCanvas(){
+  var c=document.getElementById('interactiveCropCanvas'),ctx=c.getContext('2d');
+  var src=(currentCropSide==='front')?frontImg:backImg;
+  ctx.clearRect(0,0,c.width,c.height);ctx.drawImage(src,0,0,c.width,c.height);
+  ctx.fillStyle='rgba(0,0,0,0.55)';
+  ctx.fillRect(0,0,c.width,boxInstance.y);
+  ctx.fillRect(0,boxInstance.y+boxInstance.h,c.width,c.height-(boxInstance.y+boxInstance.h));
+  ctx.fillRect(0,boxInstance.y,boxInstance.x,boxInstance.h);
+  ctx.fillRect(boxInstance.x+boxInstance.w,boxInstance.y,c.width-(boxInstance.x+boxInstance.w),boxInstance.h);
+  ctx.strokeStyle='#667eea';ctx.lineWidth=2;ctx.strokeRect(boxInstance.x,boxInstance.y,boxInstance.w,boxInstance.h);
+  var hs=9;ctx.fillStyle='#fff';
+  [[boxInstance.x,boxInstance.y],[boxInstance.x+boxInstance.w,boxInstance.y],[boxInstance.x,boxInstance.y+boxInstance.h],[boxInstance.x+boxInstance.w,boxInstance.y+boxInstance.h]].forEach(function(pt){ctx.fillRect(pt[0]-hs/2,pt[1]-hs/2,hs,hs);});
 }
 
 function closeVisualCropModal(save){
-    if(save){
-        var c=document.getElementById('interactiveCropCanvas');
-        var src=(currentCropSide==='front')?frontImg:backImg;
-        var fx=src.width/c.width,fy=src.height/c.height;
-        customCropBox[currentCropSide]={x:boxInstance.x*fx,y:boxInstance.y*fy,w:boxInstance.w*fx,h:boxInstance.h*fy,initialized:true};
-        liveRefreshUploadBox(currentCropSide);
-    }
-    document.getElementById('cropModalOverlay').style.display='none';
-}
-
-/* ── Unified pointer helpers (mouse + touch) ── */
-function getCanvasPoint(canvas,clientX,clientY){
-    var rect=canvas.getBoundingClientRect();
-    return{x:(clientX-rect.left)*(canvas.width/rect.width),y:(clientY-rect.top)*(canvas.height/rect.height)};
-}
-
-function detectHandle(mx,my){
-    var d=18;
-    if(Math.abs(mx-boxInstance.x)<d&&Math.abs(my-boxInstance.y)<d)return'TL';
-    if(Math.abs(mx-(boxInstance.x+boxInstance.w))<d&&Math.abs(my-boxInstance.y)<d)return'TR';
-    if(Math.abs(mx-boxInstance.x)<d&&Math.abs(my-(boxInstance.y+boxInstance.h))<d)return'BL';
-    if(Math.abs(mx-(boxInstance.x+boxInstance.w))<d&&Math.abs(my-(boxInstance.y+boxInstance.h))<d)return'BR';
-    if(mx>boxInstance.x&&mx<boxInstance.x+boxInstance.w&&my>boxInstance.y&&my<boxInstance.y+boxInstance.h)return'INSIDE';
-    return null;
-}
-
-function onDragStart(mx,my){activeHandle=detectHandle(mx,my);if(activeHandle){isDraggingBox=true;dragStartX=mx;dragStartY=my;}}
-
-function onDragMove(mx,my){
-    if(!isDraggingBox)return;
+  if(save){
     var c=document.getElementById('interactiveCropCanvas');
-    var dx=mx-dragStartX,dy=my-dragStartY;
-    if(activeHandle==='INSIDE'){
-        boxInstance.x=Math.max(0,Math.min(c.width-boxInstance.w,boxInstance.x+dx));
-        boxInstance.y=Math.max(0,Math.min(c.height-boxInstance.h,boxInstance.y+dy));
-    }else if(activeHandle==='TL'){
-        var nx=Math.max(0,Math.min(boxInstance.x+boxInstance.w-20,boxInstance.x+dx));boxInstance.w+=(boxInstance.x-nx);boxInstance.x=nx;
-        var ny=Math.max(0,Math.min(boxInstance.y+boxInstance.h-20,boxInstance.y+dy));boxInstance.h+=(boxInstance.y-ny);boxInstance.y=ny;
-    }else if(activeHandle==='TR'){
-        boxInstance.w=Math.max(20,Math.min(c.width-boxInstance.x,boxInstance.w+dx));
-        var ny=Math.max(0,Math.min(boxInstance.y+boxInstance.h-20,boxInstance.y+dy));boxInstance.h+=(boxInstance.y-ny);boxInstance.y=ny;
-    }else if(activeHandle==='BL'){
-        var nx=Math.max(0,Math.min(boxInstance.x+boxInstance.w-20,boxInstance.x+dx));boxInstance.w+=(boxInstance.x-nx);boxInstance.x=nx;
-        boxInstance.h=Math.max(20,Math.min(c.height-boxInstance.y,boxInstance.h+dy));
-    }else if(activeHandle==='BR'){
-        boxInstance.w=Math.max(20,Math.min(c.width-boxInstance.x,boxInstance.w+dx));
-        boxInstance.h=Math.max(20,Math.min(c.height-boxInstance.y,boxInstance.h+dy));
-    }
-    dragStartX=mx;dragStartY=my;drawCropModalCanvas();
+    var src=(currentCropSide==='front')?frontImg:backImg;
+    var fx=src.width/c.width,fy=src.height/c.height;
+    customCropBox[currentCropSide]={x:boxInstance.x*fx,y:boxInstance.y*fy,w:boxInstance.w*fx,h:boxInstance.h*fy,initialized:true};
+    liveRefreshUploadBox(currentCropSide);
+  }
+  document.getElementById('cropModalOverlay').style.display='none';
 }
 
-function onDragEnd(){isDraggingBox=false;activeHandle=null;}
+function getCP(canvas,cx,cy){var r=canvas.getBoundingClientRect();return{x:(cx-r.left)*(canvas.width/r.width),y:(cy-r.top)*(canvas.height/r.height)};}
 
-/* Mouse */
+function detectH(mx,my){
+  var d=18;
+  if(Math.abs(mx-boxInstance.x)<d&&Math.abs(my-boxInstance.y)<d)return'TL';
+  if(Math.abs(mx-(boxInstance.x+boxInstance.w))<d&&Math.abs(my-boxInstance.y)<d)return'TR';
+  if(Math.abs(mx-boxInstance.x)<d&&Math.abs(my-(boxInstance.y+boxInstance.h))<d)return'BL';
+  if(Math.abs(mx-(boxInstance.x+boxInstance.w))<d&&Math.abs(my-(boxInstance.y+boxInstance.h))<d)return'BR';
+  if(mx>boxInstance.x&&mx<boxInstance.x+boxInstance.w&&my>boxInstance.y&&my<boxInstance.y+boxInstance.h)return'INSIDE';
+  return null;
+}
+
+function dragStart(mx,my){activeHandle=detectH(mx,my);if(activeHandle){isDraggingBox=true;dragStartX=mx;dragStartY=my;}}
+
+function dragMove(mx,my){
+  if(!isDraggingBox)return;
+  var c=document.getElementById('interactiveCropCanvas');
+  var dx=mx-dragStartX,dy=my-dragStartY;
+  if(activeHandle==='INSIDE'){boxInstance.x=Math.max(0,Math.min(c.width-boxInstance.w,boxInstance.x+dx));boxInstance.y=Math.max(0,Math.min(c.height-boxInstance.h,boxInstance.y+dy));}
+  else if(activeHandle==='TL'){var nx=Math.max(0,Math.min(boxInstance.x+boxInstance.w-20,boxInstance.x+dx));boxInstance.w+=(boxInstance.x-nx);boxInstance.x=nx;var ny=Math.max(0,Math.min(boxInstance.y+boxInstance.h-20,boxInstance.y+dy));boxInstance.h+=(boxInstance.y-ny);boxInstance.y=ny;}
+  else if(activeHandle==='TR'){boxInstance.w=Math.max(20,Math.min(c.width-boxInstance.x,boxInstance.w+dx));var ny=Math.max(0,Math.min(boxInstance.y+boxInstance.h-20,boxInstance.y+dy));boxInstance.h+=(boxInstance.y-ny);boxInstance.y=ny;}
+  else if(activeHandle==='BL'){var nx=Math.max(0,Math.min(boxInstance.x+boxInstance.w-20,boxInstance.x+dx));boxInstance.w+=(boxInstance.x-nx);boxInstance.x=nx;boxInstance.h=Math.max(20,Math.min(c.height-boxInstance.y,boxInstance.h+dy));}
+  else if(activeHandle==='BR'){boxInstance.w=Math.max(20,Math.min(c.width-boxInstance.x,boxInstance.w+dx));boxInstance.h=Math.max(20,Math.min(c.height-boxInstance.y,boxInstance.h+dy));}
+  dragStartX=mx;dragStartY=my;drawCropCanvas();
+}
+
+function dragEnd(){isDraggingBox=false;activeHandle=null;}
+
 (function(){
-    var c=document.getElementById('interactiveCropCanvas');
-    c.addEventListener('mousedown',function(e){var p=getCanvasPoint(c,e.clientX,e.clientY);onDragStart(p.x,p.y);});
-    window.addEventListener('mousemove',function(e){if(!isDraggingBox)return;var p=getCanvasPoint(document.getElementById('interactiveCropCanvas'),e.clientX,e.clientY);onDragMove(p.x,p.y);});
-    window.addEventListener('mouseup',onDragEnd);
-})();
-
-/* Touch — mobile fix */
-(function(){
-    var c=document.getElementById('interactiveCropCanvas');
-    c.addEventListener('touchstart',function(e){e.preventDefault();var t=e.touches[0];var p=getCanvasPoint(c,t.clientX,t.clientY);onDragStart(p.x,p.y);},{passive:false});
-    c.addEventListener('touchmove',function(e){e.preventDefault();if(!isDraggingBox)return;var t=e.touches[0];var p=getCanvasPoint(c,t.clientX,t.clientY);onDragMove(p.x,p.y);},{passive:false});
-    c.addEventListener('touchend',function(e){e.preventDefault();onDragEnd();},{passive:false});
-    c.addEventListener('touchcancel',function(){onDragEnd();});
+  var c=document.getElementById('interactiveCropCanvas');
+  c.addEventListener('mousedown',function(e){var p=getCP(c,e.clientX,e.clientY);dragStart(p.x,p.y);});
+  window.addEventListener('mousemove',function(e){if(!isDraggingBox)return;var p=getCP(document.getElementById('interactiveCropCanvas'),e.clientX,e.clientY);dragMove(p.x,p.y);});
+  window.addEventListener('mouseup',dragEnd);
+  c.addEventListener('touchstart',function(e){e.preventDefault();var t=e.touches[0];var p=getCP(c,t.clientX,t.clientY);dragStart(p.x,p.y);},{passive:false});
+  c.addEventListener('touchmove',function(e){e.preventDefault();if(!isDraggingBox)return;var t=e.touches[0];var p=getCP(c,t.clientX,t.clientY);dragMove(p.x,p.y);},{passive:false});
+  c.addEventListener('touchend',function(e){e.preventDefault();dragEnd();},{passive:false});
+  c.addEventListener('touchcancel',dragEnd);
 })();
 
 function switchTab(side){
-    document.querySelectorAll('.pos-tab').forEach(function(t){t.classList.remove('active-tab');});
-    ['tab-front','tab-back','tab-both'].forEach(function(id){document.getElementById(id).classList.remove('show');});
-    if(side==='front'){document.querySelectorAll('.pos-tab')[0].classList.add('active-tab');document.getElementById('tab-front').classList.add('show');}
-    else if(side==='back'){document.querySelectorAll('.pos-tab')[1].classList.add('active-tab');document.getElementById('tab-back').classList.add('show');}
-    else{document.querySelectorAll('.pos-tab')[2].classList.add('active-tab');document.getElementById('tab-both').classList.add('show');}
+  document.querySelectorAll('.pos-tab').forEach(function(t){t.classList.remove('active-tab');});
+  ['tab-front','tab-back','tab-both'].forEach(function(id){document.getElementById(id).classList.remove('show');});
+  if(side==='front'){document.querySelectorAll('.pos-tab')[0].classList.add('active-tab');document.getElementById('tab-front').classList.add('show');}
+  else if(side==='back'){document.querySelectorAll('.pos-tab')[1].classList.add('active-tab');document.getElementById('tab-back').classList.add('show');}
+  else{document.querySelectorAll('.pos-tab')[2].classList.add('active-tab');document.getElementById('tab-both').classList.add('show');}
 }
 
-function setPos(side,placement){
-    posState[side].pos=placement;
-    var cells=document.querySelectorAll('.pos-cell[data-side="'+side+'"]');
-    cells.forEach(function(c){c.classList.remove('active','active-back');});
-    var t=Array.from(cells).find(function(c){return c.getAttribute('data-pos')===placement;});
-    if(t){t.classList.add('active');if(side==='back')t.classList.add('active-back');}
-    updatePosPreview();
+function setPos(side,pos){
+  posState[side].pos=pos;
+  document.querySelectorAll('.pos-cell[data-side="'+side+'"]').forEach(function(c){c.classList.remove('active','active-back');});
+  var t=Array.from(document.querySelectorAll('.pos-cell[data-side="'+side+'"]')).find(function(c){return c.getAttribute('data-pos')===pos;});
+  if(t){t.classList.add('active');if(side==='back')t.classList.add('active-back');}
+  updatePosPreview();
 }
 
-function updateScaleLabel(side){
-    var v=document.getElementById(side+'Scale').value;
-    document.getElementById(side+'ScaleV').textContent=v+'%';
-    posState[side].scale=parseInt(v);
-}
+function updateScaleLabel(side){var v=document.getElementById(side+'Scale').value;document.getElementById(side+'ScaleV').textContent=v+'%';posState[side].scale=parseInt(v);}
 
 function updatePosPreview(){
-    var layout=document.getElementById('layout').value;
-    var fScale=document.getElementById('frontScale').value/100;
-    var bScale=document.getElementById('backScale').value/100;
-    posState.front.fit=document.getElementById('frontFit').value;
-    posState.back.fit=document.getElementById('backFit').value;
-    var pf=document.getElementById('posPreviewFront'),pb=document.getElementById('posPreviewBack');
-    if(layout==='side'){pf.style.cssText+=';display:block;width:50%;float:left';pb.style.cssText+=';display:block;width:50%;float:left';}
-    else if(layout==='stack'){pf.style.cssText+=';display:block;width:100%;float:none';pb.style.cssText+=';display:block;width:100%;float:none';}
-    else{pf.style.cssText+=';display:block;width:100%;float:none';pb.style.display='none';}
-    applyPreviewCardPlacement(document.getElementById('previewFrontCard'),posState.front.pos,fScale);
-    applyPreviewCardPlacement(document.getElementById('previewBackCard'),posState.back.pos,bScale);
+  var layout=document.getElementById('layout').value;
+  var fS=document.getElementById('frontScale').value/100,bS=document.getElementById('backScale').value/100;
+  posState.front.fit=document.getElementById('frontFit').value;
+  posState.back.fit=document.getElementById('backFit').value;
+  var pf=document.getElementById('posPreviewFront'),pb=document.getElementById('posPreviewBack');
+  if(layout==='side'){pf.style.cssText+=';display:block;width:50%;float:left';pb.style.cssText+=';display:block;width:50%;float:left';}
+  else if(layout==='stack'){pf.style.cssText+=';display:block;width:100%;float:none';pb.style.cssText+=';display:block;width:100%;float:none';}
+  else{pf.style.cssText+=';display:block;width:100%;float:none';pb.style.display='none';}
+  placePrevCard(document.getElementById('previewFrontCard'),posState.front.pos,fS);
+  placePrevCard(document.getElementById('previewBackCard'),posState.back.pos,bS);
 }
 
-function applyPreviewCardPlacement(el,posKey,sf){
-    if(!el)return;
-    var w=60*sf,h=38*sf;el.style.width=w+'px';el.style.height=h+'px';
-    el.style.top='50%';el.style.left='50%';el.style.transform='translate(-50%,-50%)';el.style.right='auto';el.style.bottom='auto';
-    switch(posKey){
-        case'top-left':   el.style.top='4px';el.style.left='4px';el.style.transform='none';break;
-        case'top-center': el.style.top='4px';el.style.left='50%';el.style.transform='translateX(-50%)';break;
-        case'top-right':  el.style.top='4px';el.style.left='auto';el.style.right='4px';el.style.transform='none';break;
-        case'mid-left':   el.style.top='50%';el.style.left='4px';el.style.transform='translateY(-50%)';break;
-        case'mid-right':  el.style.top='50%';el.style.left='auto';el.style.right='4px';el.style.transform='translateY(-50%)';break;
-        case'bot-left':   el.style.top='auto';el.style.bottom='4px';el.style.left='4px';el.style.transform='none';break;
-        case'bot-center': el.style.top='auto';el.style.bottom='4px';el.style.left='50%';el.style.transform='translateX(-50%)';break;
-        case'bot-right':  el.style.top='auto';el.style.bottom='4px';el.style.left='auto';el.style.right='4px';el.style.transform='none';break;
-    }
+function placePrevCard(el,pos,sf){
+  if(!el)return;
+  var w=60*sf,h=38*sf;el.style.width=w+'px';el.style.height=h+'px';
+  el.style.top='50%';el.style.left='50%';el.style.transform='translate(-50%,-50%)';el.style.right='auto';el.style.bottom='auto';
+  switch(pos){
+    case'top-left':   el.style.top='4px';el.style.left='4px';el.style.transform='none';break;
+    case'top-center': el.style.top='4px';el.style.left='50%';el.style.transform='translateX(-50%)';break;
+    case'top-right':  el.style.top='4px';el.style.left='auto';el.style.right='4px';el.style.transform='none';break;
+    case'mid-left':   el.style.top='50%';el.style.left='4px';el.style.transform='translateY(-50%)';break;
+    case'mid-right':  el.style.top='50%';el.style.left='auto';el.style.right='4px';el.style.transform='translateY(-50%)';break;
+    case'bot-left':   el.style.top='auto';el.style.bottom='4px';el.style.left='4px';el.style.transform='none';break;
+    case'bot-center': el.style.top='auto';el.style.bottom='4px';el.style.left='50%';el.style.transform='translateX(-50%)';break;
+    case'bot-right':  el.style.top='auto';el.style.bottom='4px';el.style.left='auto';el.style.right='4px';el.style.transform='none';break;
+  }
 }
 
 function applyPreset(type){
-    switch(type){
-        case'centered':       setPos('front','center');setPos('back','center');resetScales(100);break;
-        case'top-aligned':    setPos('front','top-center');setPos('back','top-center');resetScales(100);break;
-        case'bottom-aligned': setPos('front','bot-center');setPos('back','bot-center');resetScales(100);break;
-        case'fill':           setPos('front','center');setPos('back','center');document.getElementById('frontFit').value='fill';document.getElementById('backFit').value='fill';resetScales(100);break;
-        case'compact':        setPos('front','center');setPos('back','center');resetScales(80);break;
-        case'camscanner':     document.getElementById('layout').value='stack';setPos('front','top-center');setPos('back','bot-center');resetScales(95);break;
-    }
-    updatePosPreview();
+  switch(type){
+    case'centered':       setPos('front','center');setPos('back','center');resetScales(100);break;
+    case'top-aligned':    setPos('front','top-center');setPos('back','top-center');resetScales(100);break;
+    case'bottom-aligned': setPos('front','bot-center');setPos('back','bot-center');resetScales(100);break;
+    case'fill':           setPos('front','center');setPos('back','center');document.getElementById('frontFit').value='fill';document.getElementById('backFit').value='fill';resetScales(100);break;
+    case'compact':        setPos('front','center');setPos('back','center');resetScales(80);break;
+    case'camscanner':     document.getElementById('layout').value='stack';setPos('front','top-center');setPos('back','bot-center');resetScales(95);break;
+  }
+  updatePosPreview();
 }
 
 function resetScales(v){document.getElementById('frontScale').value=v;document.getElementById('backScale').value=v;updateScaleLabel('front');updateScaleLabel('back');}
 
 function startProcess(){
-    if(!frontImg&&!backImg)return;
-    var pw=document.getElementById('progWrap'),pf=document.getElementById('progFill'),pm=document.getElementById('progMsg');
-    pw.style.display='block';pf.style.width='20%';pm.textContent='Calculating matrix aspect fields...';
-    setTimeout(function(){
-        pf.style.width='60%';pm.textContent='Enhancing layout contrast filters...';
-        if(frontImg)processedFront=processCardImage(frontImg,'front');
-        if(backImg&&document.getElementById('layout').value!=='single')processedBack=processCardImage(backImg,'back');
-        renderCroppedPreviews();
-    },300);
-    setTimeout(function(){pf.style.width='90%';pm.textContent='Locking onto A4 print matrix...';generateMasterA4Canvas();},700);
-    setTimeout(function(){pf.style.width='100%';document.getElementById('resultWrap').style.display='block';pw.style.display='none';document.getElementById('resultWrap').scrollIntoView({behavior:'smooth'});},1000);
+  if(!frontImg&&!backImg)return;
+  var pw=document.getElementById('progWrap'),pf=document.getElementById('progFill'),pm=document.getElementById('progMsg');
+  pw.style.display='block';pf.style.width='20%';pm.textContent='Calculating...';
+  setTimeout(function(){
+    pf.style.width='60%';pm.textContent='Enhancing...';
+    if(frontImg)processedFront=processImg(frontImg,'front');
+    if(backImg&&document.getElementById('layout').value!=='single')processedBack=processImg(backImg,'back');
+    renderPreviews();
+  },300);
+  setTimeout(function(){pf.style.width='90%';pm.textContent='Building A4...';buildA4();},700);
+  setTimeout(function(){pf.style.width='100%';document.getElementById('resultWrap').style.display='block';pw.style.display='none';document.getElementById('resultWrap').scrollIntoView({behavior:'smooth'});},1000);
 }
 
-function processCardImage(sourceImg,side){
-    var wc=document.getElementById('workCanvas'),ctx=wc.getContext('2d');
-    var cropMode=document.getElementById('cropMode').value;
-    var bri=parseInt(document.getElementById('bri').value),con=parseInt(document.getElementById('con').value);
-    var filter=document.getElementById('magicFilter').value;
-    var cropType=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
-    var fineAngle=parseInt(document.getElementById(side==='front'?'fRot':'bRot').value)*Math.PI/180;
-    var flipAngle=rotations[side];
-    var sX=0,sY=0,sW=sourceImg.width,sH=sourceImg.height;
-    if((cropMode==='auto'||cropMode==='edge')&&cropType!=='custom'){sX=sourceImg.width*0.04;sY=sourceImg.height*0.04;sW=sourceImg.width*0.92;sH=sourceImg.height*0.92;}
-    var fW=sW,fH=sH;
-    if(cropType==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
-    else if(cropType==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
-    else if(cropType==='tight'){fW=sW*0.85;fH=sH*0.85;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
-    else if(cropType==='custom'&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
-    var totalAngle=fineAngle+(flipAngle*Math.PI/180);
-    var rW=Math.abs(fW*Math.cos(totalAngle))+Math.abs(fH*Math.sin(totalAngle));
-    var rH=Math.abs(fW*Math.sin(totalAngle))+Math.abs(fH*Math.cos(totalAngle));
-    wc.width=rW;wc.height=rH;
-    ctx.save();ctx.translate(wc.width/2,wc.height/2);ctx.rotate(totalAngle);
-    ctx.drawImage(sourceImg,sX,sY,fW,fH,-fW/2,-fH/2,fW,fH);ctx.restore();
-    var id=ctx.getImageData(0,0,wc.width,wc.height),d=id.data;
-    var factor=(259*(con+255))/(255*(259-con));
-    for(var i=0;i<d.length;i+=4){
-        if(d[i+3]===0)continue;
-        for(var c=0;c<3;c++){var val=d[i+c]+bri;val=factor*(val-128)+128;d[i+c]=Math.max(0,Math.min(255,val));}
-        if(filter==='scan'||filter==='magic'){d[i]=Math.min(255,d[i]*1.1);d[i+1]=Math.min(255,d[i+1]*1.1);d[i+2]=Math.min(255,d[i+2]*1.05);}
-        else if(filter==='bw'){var g=0.299*d[i]+0.587*d[i+1]+0.114*d[i+2];d[i]=d[i+1]=d[i+2]=g>128?255:40;}
-    }
-    ctx.putImageData(id,0,0);
-    var pi=new Image();pi.src=wc.toDataURL();return pi;
+function processImg(srcImg,side){
+  var wc=document.getElementById('workCanvas'),ctx=wc.getContext('2d');
+  var cm=document.getElementById('cropMode').value;
+  var bri=parseInt(document.getElementById('bri').value),con=parseInt(document.getElementById('con').value);
+  var filter=document.getElementById('magicFilter').value;
+  var ct=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
+  var fa=parseInt(document.getElementById(side==='front'?'fRot':'bRot').value)*Math.PI/180;
+  var fl=rotations[side];
+  var sX=0,sY=0,sW=srcImg.width,sH=srcImg.height;
+  if((cm==='auto'||cm==='edge')&&ct!=='custom'){sX=srcImg.width*.04;sY=srcImg.height*.04;sW=srcImg.width*.92;sH=srcImg.height*.92;}
+  var fW=sW,fH=sH;
+  if(ct==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
+  else if(ct==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
+  else if(ct==='tight'){fW=sW*.85;fH=sH*.85;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
+  else if(ct==='custom'&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
+  var ta=fa+(fl*Math.PI/180);
+  var rW=Math.abs(fW*Math.cos(ta))+Math.abs(fH*Math.sin(ta));
+  var rH=Math.abs(fW*Math.sin(ta))+Math.abs(fH*Math.cos(ta));
+  wc.width=rW;wc.height=rH;
+  ctx.save();ctx.translate(wc.width/2,wc.height/2);ctx.rotate(ta);
+  ctx.drawImage(srcImg,sX,sY,fW,fH,-fW/2,-fH/2,fW,fH);ctx.restore();
+  var id=ctx.getImageData(0,0,wc.width,wc.height),d=id.data;
+  var fc=(259*(con+255))/(255*(259-con));
+  for(var i=0;i<d.length;i+=4){
+    if(d[i+3]===0)continue;
+    for(var c=0;c<3;c++){var v=d[i+c]+bri;v=fc*(v-128)+128;d[i+c]=Math.max(0,Math.min(255,v));}
+    if(filter==='scan'||filter==='magic'){d[i]=Math.min(255,d[i]*1.1);d[i+1]=Math.min(255,d[i+1]*1.1);d[i+2]=Math.min(255,d[i+2]*1.05);}
+    else if(filter==='bw'){var g=.299*d[i]+.587*d[i+1]+.114*d[i+2];d[i]=d[i+1]=d[i+2]=g>128?255:40;}
+  }
+  ctx.putImageData(id,0,0);
+  var pi=new Image();pi.src=wc.toDataURL();return pi;
 }
 
-function renderCroppedPreviews(){
-    if(frontImg)renderSingleBoxCanvas('prevFront',processedFront);
-    if(backImg&&document.getElementById('layout').value!=='single'){renderSingleBoxCanvas('prevBack',processedBack);document.getElementById('prevBackPanel').style.display='block';}
-    else{document.getElementById('prevBackPanel').style.display='none';}
+function renderPreviews(){
+  if(frontImg)drawToCanvas('prevFront',processedFront);
+  if(backImg&&document.getElementById('layout').value!=='single'){drawToCanvas('prevBack',processedBack);document.getElementById('prevBackPanel').style.display='block';}
+  else{document.getElementById('prevBackPanel').style.display='none';}
 }
 
-function renderSingleBoxCanvas(id,img){var c=document.getElementById(id),ctx=c.getContext('2d');c.width=img.width||300;c.height=img.height||180;ctx.drawImage(img,0,0);}
+function drawToCanvas(id,img){var c=document.getElementById(id),ctx=c.getContext('2d');c.width=img.width||300;c.height=img.height||180;ctx.drawImage(img,0,0);}
 
-function generateMasterA4Canvas(){
-    var oc=document.getElementById('outputCanvas'),ctx=oc.getContext('2d');
-    var sk=document.getElementById('outputSize').value,td=A4_SIZES[sk];
-    var layout=document.getElementById('layout').value;
-    oc.width=td.W;oc.height=td.H;ctx.fillStyle='#FFFFFF';ctx.fillRect(0,0,td.W,td.H);
-    var cW=td.W,cH=td.H,bX=0,bY=0;
-    if(layout==='side'){cW=td.W/2;bX=cW;if(frontImg)drawCardInCell(ctx,processedFront,0,0,cW,cH,posState.front);if(backImg)drawCardInCell(ctx,processedBack,bX,bY,cW,cH,posState.back);}
-    else if(layout==='stack'){cH=td.H/2;bY=cH;if(frontImg)drawCardInCell(ctx,processedFront,0,0,cW,cH,posState.front);if(backImg)drawCardInCell(ctx,processedBack,bX,bY,cW,cH,posState.back);}
-    else{if(frontImg)drawCardInCell(ctx,processedFront,0,0,td.W,td.H,posState.front);}
-    document.getElementById('a4info').textContent=td.label+' assembled.';
-    document.getElementById('printImageLayer').src=oc.toDataURL('image/jpeg',1.0);
+function buildA4(){
+  var oc=document.getElementById('outputCanvas'),ctx=oc.getContext('2d');
+  var sk=document.getElementById('outputSize').value,td=A4[sk];
+  var layout=document.getElementById('layout').value;
+  oc.width=td.W;oc.height=td.H;ctx.fillStyle='#fff';ctx.fillRect(0,0,td.W,td.H);
+  var cW=td.W,cH=td.H,bX=0,bY=0;
+  if(layout==='side'){cW=td.W/2;bX=cW;if(frontImg)drawCell(ctx,processedFront,0,0,cW,cH,posState.front);if(backImg)drawCell(ctx,processedBack,bX,bY,cW,cH,posState.back);}
+  else if(layout==='stack'){cH=td.H/2;bY=cH;if(frontImg)drawCell(ctx,processedFront,0,0,cW,cH,posState.front);if(backImg)drawCell(ctx,processedBack,bX,bY,cW,cH,posState.back);}
+  else{if(frontImg)drawCell(ctx,processedFront,0,0,td.W,td.H,posState.front);}
+  document.getElementById('a4info').textContent=td.label+' assembled.';
+  document.getElementById('printImageLayer').src=oc.toDataURL('image/jpeg',1.0);
 }
 
-function drawCardInCell(ctx,img,cX,cY,cW,cH,state){
-    if(!img||!img.width)return;
-    var iW=img.width,iH=img.height,tW=cW,tH=cH;
-    if(state.fit==='contain'||state.fit==='custom'){var m=(state.fit==='custom')?(state.scale/100):0.85;var r=Math.min(cW/iW,cH/iH)*m;tW=iW*r;tH=iH*r;}
-    else{tW=cW-40;tH=cH-40;}
-    var dX=cX+(cW-tW)/2,dY=cY+(cH-tH)/2;
-    switch(state.pos){
-        case'top-left':   dX=cX+40;dY=cY+40;break;
-        case'top-center': dX=cX+(cW-tW)/2;dY=cY+40;break;
-        case'top-right':  dX=cX+cW-tW-40;dY=cY+40;break;
-        case'mid-left':   dX=cX+40;dY=cY+(cH-tH)/2;break;
-        case'mid-right':  dX=cX+cW-tW-40;dY=cY+(cH-tH)/2;break;
-        case'bot-left':   dX=cX+40;dY=cY+cH-tH-40;break;
-        case'bot-center': dX=cX+(cW-tW)/2;dY=cY+cH-tH-40;break;
-        case'bot-right':  dX=cX+cW-tW-40;dY=cY+cH-tH-40;break;
-    }
-    ctx.drawImage(img,dX,dY,tW,tH);
+function drawCell(ctx,img,cX,cY,cW,cH,state){
+  if(!img||!img.width)return;
+  var iW=img.width,iH=img.height,tW,tH;
+  if(state.fit==='contain'||state.fit==='custom'){var m=(state.fit==='custom')?(state.scale/100):.85;var r=Math.min(cW/iW,cH/iH)*m;tW=iW*r;tH=iH*r;}
+  else{tW=cW-40;tH=cH-40;}
+  var dX=cX+(cW-tW)/2,dY=cY+(cH-tH)/2;
+  switch(state.pos){
+    case'top-left':   dX=cX+40;dY=cY+40;break;
+    case'top-center': dX=cX+(cW-tW)/2;dY=cY+40;break;
+    case'top-right':  dX=cX+cW-tW-40;dY=cY+40;break;
+    case'mid-left':   dX=cX+40;dY=cY+(cH-tH)/2;break;
+    case'mid-right':  dX=cX+cW-tW-40;dY=cY+(cH-tH)/2;break;
+    case'bot-left':   dX=cX+40;dY=cY+cH-tH-40;break;
+    case'bot-center': dX=cX+(cW-tW)/2;dY=cY+cH-tH-40;break;
+    case'bot-right':  dX=cX+cW-tW-40;dY=cY+cH-tH-40;break;
+  }
+  ctx.drawImage(img,dX,dY,tW,tH);
 }
 
-function downloadImg(){var c=document.getElementById('outputCanvas'),a=document.createElement('a');a.download='scanned-document-pro.jpg';a.href=c.toDataURL('image/jpeg',0.92);a.click();}
-function directPrint(){window.print();}
+function directPrint(){
+  var img=document.getElementById('outputCanvas').toDataURL('image/jpeg',1.0);
+  var w=window.open('','_blank');
+  if(!w){alert('Popup blocked. Please allow popups for this site.');return;}
+  w.document.open();
+  w.document.write('<!DOCTYPE html><html><head><title>Print</title><style>@page{size:auto;margin:0mm;}html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#fff;}img{display:block;position:fixed;top:0;left:0;width:100%;height:100%;object-fit:contain;}</style></head><body><img src="'+img+'" onload="window.focus();window.print();setTimeout(function(){window.close();},800);"></body></html>');
+  w.document.close();
+}
+
+function downloadImg(){
+  var a=document.createElement('a');
+  a.download='scanned-id-card.jpg';
+  a.href=document.getElementById('outputCanvas').toDataURL('image/jpeg',0.92);
+  a.click();
+}
+
 function downloadPDF(){
-    var imgData=document.getElementById('outputCanvas').toDataURL('image/jpeg',1.0);
-    var w=window.open('','_blank');
-    w.document.write('<html><head><title>Print</title><style>@page{size:auto;margin:0mm;}body{margin:0;display:flex;align-items:center;justify-content:center;}img{max-width:100%;max-height:100vh;object-fit:contain;}</style></head><body onload="window.print();window.close();"><img src="'+imgData+'"/></body></html>');
-    w.document.close();
+  var img=document.getElementById('outputCanvas').toDataURL('image/jpeg',1.0);
+  var w=window.open('','_blank');
+  if(!w){alert('Popup blocked.');return;}
+  w.document.open();
+  w.document.write('<!DOCTYPE html><html><head><title>PDF</title><style>@page{size:auto;margin:0mm;}html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#fff;}img{display:block;position:fixed;top:0;left:0;width:100%;height:100%;object-fit:contain;}</style></head><body><img src="'+img+'" onload="window.print();setTimeout(function(){window.close();},800);"></body></html>');
+  w.document.close();
 }
 
 function resetAll(){
-    frontImg=null;backImg=null;processedFront=null;processedBack=null;rotations={front:0,back:0};
-    customCropBox={front:{x:0,y:0,w:0,h:0,initialized:false},back:{x:0,y:0,w:0,h:0,initialized:false}};
-    ['frontFile','backFile'].forEach(function(id){document.getElementById(id).value='';});
-    ['frontPreview','backPreview'].forEach(function(id){document.getElementById(id).style.display='none';});
-    ['frontBox','backBox'].forEach(function(id){document.getElementById(id).classList.remove('done');});
-    ['frontIcon','frontTitle','frontSub','backIcon','backTitle','backSub'].forEach(function(id){document.getElementById(id).style.display='block';});
-    document.getElementById('processBtn').disabled=true;
-    document.getElementById('resultWrap').style.display='none';
-    document.getElementById('fCropSelect').value='id1';document.getElementById('bCropSelect').value='id1';
-    document.getElementById('btnFrontCropModal').style.display='none';document.getElementById('btnBackCropModal').style.display='none';
-    document.getElementById('fRot').value=0;document.getElementById('fRotV').textContent='0°';
-    document.getElementById('bRot').value=0;document.getElementById('bRotV').textContent='0°';
-    document.getElementById('printImageLayer').src='';
-    var s=document.getElementById('statusLine');s.textContent='Upload both sides of your ID card to get started';s.style.color='rgba(255,255,255,0.4)';
-    applyPreset('centered');switchTab('front');
+  frontImg=null;backImg=null;processedFront=null;processedBack=null;rotations={front:0,back:0};
+  customCropBox={front:{x:0,y:0,w:0,h:0,initialized:false},back:{x:0,y:0,w:0,h:0,initialized:false}};
+  ['frontFile','backFile'].forEach(function(id){document.getElementById(id).value='';});
+  ['frontPreview','backPreview'].forEach(function(id){document.getElementById(id).style.display='none';});
+  ['frontBox','backBox'].forEach(function(id){document.getElementById(id).classList.remove('done');});
+  ['frontIcon','frontTitle','frontSub','backIcon','backTitle','backSub'].forEach(function(id){document.getElementById(id).style.display='block';});
+  document.getElementById('processBtn').disabled=true;
+  document.getElementById('resultWrap').style.display='none';
+  document.getElementById('fCropSelect').value='id1';document.getElementById('bCropSelect').value='id1';
+  document.getElementById('btnFrontCropModal').style.display='none';document.getElementById('btnBackCropModal').style.display='none';
+  document.getElementById('fRot').value=0;document.getElementById('fRotV').textContent='0°';
+  document.getElementById('bRot').value=0;document.getElementById('bRotV').textContent='0°';
+  document.getElementById('printImageLayer').src='';
+  var s=document.getElementById('statusLine');s.textContent='Upload both sides of your ID card to get started';s.style.color='rgba(255,255,255,0.4)';
+  applyPreset('centered');switchTab('front');
 }
 
 updatePosPreview();
