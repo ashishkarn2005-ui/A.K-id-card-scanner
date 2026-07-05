@@ -35,6 +35,8 @@ body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;min-height:100vh;paddi
 select{padding:8px 10px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;font-size:0.82rem;color:#fff;background:rgba(255,255,255,0.07);outline:none;cursor:pointer;}
 select:focus{border-color:#667eea;}
 select option{background:#1e1e2e;color:#fff;}
+input[type="number"]{padding:8px 10px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;font-size:0.82rem;color:#fff;background:rgba(255,255,255,0.07);outline:none;width:100%;}
+input[type="number"]:focus{border-color:#667eea;}
 .sl-wrap{display:flex;align-items:center;gap:6px;}
 input[type="range"]{flex:1;height:3px;-webkit-appearance:none;background:rgba(102,126,234,0.4);border-radius:2px;outline:none;cursor:pointer;}
 input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#667eea;cursor:pointer;}
@@ -105,6 +107,8 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 .crop-modal-header h3{font-size:1rem;}
 .crop-canvas-wrapper{background:#0b0b13;border-radius:8px;overflow:hidden;position:relative;display:flex;justify-content:center;align-items:center;margin-bottom:16px;min-height:300px;max-height:450px;}
 #interactiveCropCanvas{max-width:100%;max-height:400px;display:block;cursor:crosshair;-webkit-user-select:none;user-select:none;touch-action:none;}
+.custom-dpi-row{display:none;grid-column:1 / -1;display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(102,126,234,0.25);border-radius:10px;padding:12px;margin-top:-4px;gap:12px;grid-template-columns:1fr 1fr;}
+.custom-dpi-row.show{display:grid;}
 
 @media print {
   @page { size: auto; margin: 0mm !important; }
@@ -170,6 +174,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
             <option value="id1" selected>Standard ID Card (85mm x 54mm)</option>
             <option value="passport">Passport / Square Profile</option>
             <option value="tight">Tight Auto Margin Border</option>
+            <option value="free">Free Size Crop (Any Ratio)</option>
             <option value="custom">Custom Area Selection...</option>
           </select>
           <button class="btn btn-crop" id="btnFrontCropModal" style="display:none;" onclick="openVisualCropModal('front')">📐 Open Visual Crop Tool</button>
@@ -195,6 +200,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
             <option value="id1" selected>Standard ID Card (85mm x 54mm)</option>
             <option value="passport">Passport / Square Profile</option>
             <option value="tight">Tight Auto Margin Border</option>
+            <option value="free">Free Size Crop (Any Ratio)</option>
             <option value="custom">Custom Area Selection...</option>
           </select>
           <button class="btn btn-crop" id="btnBackCropModal" style="display:none;" onclick="openVisualCropModal('back')">📐 Open Visual Crop Tool</button>
@@ -240,10 +246,11 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
         </select>
       </div>
       <div class="opt"><label>Output Size</label>
-        <select id="outputSize">
+        <select id="outputSize" onchange="handleOutputSizeChange()">
           <option value="a4port" selected>A4 Portrait 150dpi</option>
           <option value="a4land">A4 Landscape 150dpi</option>
           <option value="a4land2">A4 Landscape 200dpi</option>
+          <option value="custom">Custom DPI...</option>
         </select>
       </div>
       <div class="opt"><label>Brightness <span class="sl-v" id="briV">+8</span></label>
@@ -253,7 +260,18 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
         <div class="sl-wrap"><input type="range" id="con" min="-80" max="80" value="20"></div>
       </div>
       <div class="opt"><label>Sharpness <span class="sl-v" id="shrV">60</span></label>
-        <div class="sl-wrap"><input type="range" id="shr" min="0" max="100" value="60"></div>
+        <div class="sl-wrap"><input type="range" id="shr" min="0" max="100" value="60" oninput="document.getElementById('shrV').textContent=this.value;"></div>
+      </div>
+      <div class="custom-dpi-row" id="customDpiRow">
+        <div class="opt"><label>Custom DPI (1&ndash;1200)</label>
+          <input type="number" id="customDpiValue" min="1" max="1200" value="300" oninput="handleCustomDpiChange()">
+        </div>
+        <div class="opt"><label>Orientation</label>
+          <select id="customDpiOrientation" onchange="handleCustomDpiChange()">
+            <option value="port">Portrait</option>
+            <option value="land">Landscape</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -280,14 +298,13 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
               <div class="pos-cell" data-side="front" data-pos="bot-right"  onclick="setPos('front','bot-right')">&#8600;</div>
             </div>
             <div class="pos-extra">
-              <div class="opt"><label>Scale <span class="sl-v" id="frontScaleV">100%</span></label>
-                <div class="sl-wrap"><input type="range" id="frontScale" min="40" max="100" value="100" oninput="updateScaleLabel('front');updatePosPreview()"></div>
+              <div class="opt"><label>Scale <span class="sl-v" id="frontScaleV">90%</span></label>
+                <div class="sl-wrap"><input type="range" id="frontScale" min="20" max="150" value="90" oninput="updateScaleLabel('front');updatePosPreview()"></div>
               </div>
               <div class="opt"><label>Fit Mode</label>
                 <select id="frontFit" onchange="updatePosPreview()">
-                  <option value="contain">Contain</option>
-                  <option value="fill">Fill Cell</option>
-                  <option value="custom">Custom Scale</option>
+                  <option value="contain">Contain (keep proportions)</option>
+                  <option value="fill">Fill Cell (edge to edge)</option>
                 </select>
               </div>
             </div>
@@ -314,14 +331,13 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
               <div class="pos-cell" data-side="back" data-pos="bot-right"  onclick="setPos('back','bot-right')">&#8600;</div>
             </div>
             <div class="pos-extra">
-              <div class="opt"><label>Scale <span class="sl-v" id="backScaleV">100%</span></label>
-                <div class="sl-wrap"><input type="range" id="backScale" min="40" max="100" value="100" oninput="updateScaleLabel('back');updatePosPreview()"></div>
+              <div class="opt"><label>Scale <span class="sl-v" id="backScaleV">90%</span></label>
+                <div class="sl-wrap"><input type="range" id="backScale" min="20" max="150" value="90" oninput="updateScaleLabel('back');updatePosPreview()"></div>
               </div>
               <div class="opt"><label>Fit Mode</label>
                 <select id="backFit" onchange="updatePosPreview()">
-                  <option value="contain">Contain</option>
-                  <option value="fill">Fill Cell</option>
-                  <option value="custom">Custom Scale</option>
+                  <option value="contain">Contain (keep proportions)</option>
+                  <option value="fill">Fill Cell (edge to edge)</option>
                 </select>
               </div>
             </div>
@@ -393,11 +409,12 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 <script>
 var frontImg=null,backImg=null,processedFront=null,processedBack=null;
 var rotations={front:0,back:0};
-var posState={front:{pos:'center',scale:100,fit:'contain'},back:{pos:'center',scale:100,fit:'contain'}};
+var posState={front:{pos:'center',scale:90,fit:'contain'},back:{pos:'center',scale:90,fit:'contain'}};
 var customCropBox={front:{x:0,y:0,w:0,h:0,initialized:false},back:{x:0,y:0,w:0,h:0,initialized:false}};
 var currentCropSide='front',activeHandle=null,isDraggingBox=false,dragStartX=0,dragStartY=0;
 var boxInstance={x:50,y:50,w:200,h:130};
 var A4={a4port:{W:1240,H:1754,label:'A4 Portrait 150dpi'},a4land:{W:1754,H:1240,label:'A4 Landscape 150dpi'},a4land2:{W:2339,H:1654,label:'A4 Landscape 200dpi'}};
+var A4_MM_W=210,A4_MM_H=297;
 
 document.getElementById('fRot').addEventListener('input',function(){document.getElementById('fRotV').textContent=this.value+'°';});
 document.getElementById('bRot').addEventListener('input',function(){document.getElementById('bRotV').textContent=this.value+'°';});
@@ -414,10 +431,39 @@ function setupDrop(id,side){
   b.addEventListener('drop',function(e){e.preventDefault();b.style.borderColor='';if(e.dataTransfer.files&&e.dataTransfer.files[0])loadImg(e.dataTransfer.files[0],side);});
 }
 
+function handleOutputSizeChange(){
+  var sel=document.getElementById('outputSize').value;
+  var row=document.getElementById('customDpiRow');
+  if(sel==='custom'){row.classList.add('show');}
+  else{row.classList.remove('show');}
+}
+
+function handleCustomDpiChange(){
+  var v=document.getElementById('customDpiValue');
+  var n=parseInt(v.value);
+  if(isNaN(n))return;
+  if(n<1)v.value=1;
+  if(n>1200)v.value=1200;
+}
+
+function getCustomDpiConfig(){
+  var dpiInput=document.getElementById('customDpiValue');
+  var dpi=parseInt(dpiInput.value);
+  if(isNaN(dpi)||dpi<1)dpi=1;
+  if(dpi>1200)dpi=1200;
+  var orient=document.getElementById('customDpiOrientation').value;
+  var wMM=(orient==='land')?A4_MM_H:A4_MM_W;
+  var hMM=(orient==='land')?A4_MM_W:A4_MM_H;
+  var W=Math.round((wMM/25.4)*dpi);
+  var H=Math.round((hMM/25.4)*dpi);
+  var label='A4 '+(orient==='land'?'Landscape':'Portrait')+' '+dpi+'dpi (Custom)';
+  return{W:W,H:H,label:label};
+}
+
 function handleCropSelectChange(side){
   var sel=document.getElementById(side==='front'?'fCropSelect':'bCropSelect');
   var btn=document.getElementById(side==='front'?'btnFrontCropModal':'btnBackCropModal');
-  if(sel.value==='custom'){btn.style.display='block';if(!customCropBox[side].initialized)openVisualCropModal(side);}
+  if(sel.value==='custom'||sel.value==='free'){btn.style.display='block';if(!customCropBox[side].initialized)openVisualCropModal(side);}
   else{btn.style.display='none';liveRefreshUploadBox(side);}
 }
 
@@ -438,7 +484,7 @@ function liveRefreshUploadBox(side){
   if(ct==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX=(sW-fW)/2;sY=(sH-fH)/2;}
   else if(ct==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX=(sW-fW)/2;sY=(sH-fH)/2;}
   else if(ct==='tight'){fW=sW*.85;fH=sH*.85;sX=(sW-fW)/2;sY=(sH-fH)/2;}
-  else if(ct==='custom'&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
+  else if((ct==='custom'||ct==='free')&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
   var ta=fa+(fl*Math.PI/180);
   var rW=Math.abs(fW*Math.cos(ta))+Math.abs(fH*Math.sin(ta));
   var rH=Math.abs(fW*Math.sin(ta))+Math.abs(fH*Math.cos(ta));
@@ -480,16 +526,23 @@ function openVisualCropModal(side){
   var src=(side==='front')?frontImg:backImg;
   if(!src)return;
   currentCropSide=side;
-  document.getElementById('cropModalTitle').textContent='Crop: '+side.toUpperCase()+' IMAGE';
+  var cropType=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
+  document.getElementById('cropModalTitle').textContent=(cropType==='free'?'Free Size Crop: ':'Crop: ')+side.toUpperCase()+' IMAGE';
   var mc=document.getElementById('interactiveCropCanvas');
   var mW=Math.min(window.innerWidth-60,560),mH=380;
   var r=Math.min(mW/src.width,mH/src.height);
   mc.width=Math.floor(src.width*r);mc.height=Math.floor(src.height*r);
   if(!customCropBox[side].initialized){
-    var dW=mc.width*.75,dH=dW/1.58;
-    if(dH>mc.height){dH=mc.height*.75;dW=dH*1.58;}
-    boxInstance.w=dW;boxInstance.h=dH;
-    boxInstance.x=(mc.width-dW)/2;boxInstance.y=(mc.height-dH)/2;
+    if(cropType==='free'){
+      var fdW=mc.width*.92,fdH=mc.height*.92;
+      boxInstance.w=fdW;boxInstance.h=fdH;
+      boxInstance.x=(mc.width-fdW)/2;boxInstance.y=(mc.height-fdH)/2;
+    }else{
+      var dW=mc.width*.75,dH=dW/1.58;
+      if(dH>mc.height){dH=mc.height*.75;dW=dH*1.58;}
+      boxInstance.w=dW;boxInstance.h=dH;
+      boxInstance.x=(mc.width-dW)/2;boxInstance.y=(mc.height-dH)/2;
+    }
   }else{
     boxInstance.x=(customCropBox[side].x/src.width)*mc.width;
     boxInstance.y=(customCropBox[side].y/src.height)*mc.height;
@@ -623,7 +676,7 @@ function applyPreset(type){
   updatePosPreview();
 }
 
-function resetScales(v){document.getElementById('frontScale').value=v;document.getElementById('backScale').value=v;updateScaleLabel('front');updateScaleLabel('back');}
+function resetScales(v){document.getElementById('frontScale').value=Math.min(150,Math.max(20,v));document.getElementById('backScale').value=Math.min(150,Math.max(20,v));updateScaleLabel('front');updateScaleLabel('back');}
 
 function startProcess(){
   if(!frontImg&&!backImg)return;
@@ -639,21 +692,118 @@ function startProcess(){
   setTimeout(function(){pf.style.width='100%';document.getElementById('resultWrap').style.display='block';pw.style.display='none';document.getElementById('resultWrap').scrollIntoView({behavior:'smooth'});},1000);
 }
 
+function detectContentBounds(srcImg,mode){
+  var aw=140,ah=Math.max(1,Math.round(140*srcImg.height/srcImg.width));
+  var ac=document.createElement('canvas');ac.width=aw;ac.height=ah;
+  var actx=ac.getContext('2d');actx.drawImage(srcImg,0,0,aw,ah);
+  var d=actx.getImageData(0,0,aw,ah).data;
+  var gray=new Float32Array(aw*ah);
+  for(var i=0;i<aw*ah;i++){gray[i]=.299*d[i*4]+.587*d[i*4+1]+.114*d[i*4+2];}
+  var minX=aw,maxX=0,minY=ah,maxY=0,found=false;
+  if(mode==='edge'){
+    var gmag=new Float32Array(aw*ah);
+    for(var y=1;y<ah-1;y++){
+      for(var x=1;x<aw-1;x++){
+        var gx=gray[y*aw+x+1]-gray[y*aw+x-1];
+        var gy=gray[(y+1)*aw+x]-gray[(y-1)*aw+x];
+        gmag[y*aw+x]=Math.sqrt(gx*gx+gy*gy);
+      }
+    }
+    var maxG=0;for(i=0;i<gmag.length;i++)if(gmag[i]>maxG)maxG=gmag[i];
+    var thr=maxG*0.18;
+    for(var yy=0;yy<ah;yy++){
+      for(var xx=0;xx<aw;xx++){
+        if(gmag[yy*aw+xx]>thr){found=true;if(xx<minX)minX=xx;if(xx>maxX)maxX=xx;if(yy<minY)minY=yy;if(yy>maxY)maxY=yy;}
+      }
+    }
+  }else{
+    var borderVals=[];
+    for(var x=0;x<aw;x++){borderVals.push(gray[x]);borderVals.push(gray[(ah-1)*aw+x]);}
+    for(var y2=0;y2<ah;y2++){borderVals.push(gray[y2*aw]);borderVals.push(gray[y2*aw+aw-1]);}
+    borderVals.sort(function(a,b){return a-b;});
+    var bg=borderVals[Math.floor(borderVals.length/2)];
+    var thresh=32;
+    for(var yy2=0;yy2<ah;yy2++){
+      for(var xx2=0;xx2<aw;xx2++){
+        if(Math.abs(gray[yy2*aw+xx2]-bg)>thresh){found=true;if(xx2<minX)minX=xx2;if(xx2>maxX)maxX=xx2;if(yy2<minY)minY=yy2;if(yy2>maxY)maxY=yy2;}
+      }
+    }
+  }
+  if(!found||maxX<=minX||maxY<=minY)return null;
+  var mgX=(maxX-minX)*0.05,mgY=(maxY-minY)*0.05;
+  minX=Math.max(0,minX-mgX);maxX=Math.min(aw,maxX+mgX);
+  minY=Math.max(0,minY-mgY);maxY=Math.min(ah,maxY+mgY);
+  var w=(maxX-minX)/aw*srcImg.width,h=(maxY-minY)/ah*srcImg.height;
+  if(w<srcImg.width*0.25||h<srcImg.height*0.25)return null;
+  return{x:minX/aw*srcImg.width,y:minY/ah*srcImg.height,w:w,h:h};
+}
+
+function rgb2hsl(r,g,b){
+  r/=255;g/=255;b/=255;
+  var max=Math.max(r,g,b),min=Math.min(r,g,b),h,s,l=(max+min)/2;
+  if(max===min){h=s=0;}
+  else{
+    var d=max-min;s=l>0.5?d/(2-max-min):d/(max+min);
+    switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;default:h=(r-g)/d+4;}
+    h/=6;
+  }
+  return[h,s,l];
+}
+function hue2rgb(p,q,t){
+  if(t<0)t+=1;if(t>1)t-=1;
+  if(t<1/6)return p+(q-p)*6*t;
+  if(t<1/2)return q;
+  if(t<2/3)return p+(q-p)*(2/3-t)*6;
+  return p;
+}
+function hsl2rgb(h,s,l){
+  var r,g,b;
+  if(s===0){r=g=b=l;}
+  else{
+    var q=l<0.5?l*(1+s):l+s-l*s;
+    var p=2*l-q;
+    r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3);
+  }
+  return[r*255,g*255,b*255];
+}
+
+function applySharpen(data,width,height,amount){
+  if(amount<=0.001)return;
+  var src=new Uint8ClampedArray(data);
+  var w4=width*4;
+  for(var y=1;y<height-1;y++){
+    for(var x=1;x<width-1;x++){
+      var idx=(y*width+x)*4;
+      for(var c=0;c<3;c++){
+        var i=idx+c;
+        var avg=(src[i-4]+src[i+4]+src[i-w4]+src[i+w4])/4;
+        var val=src[i]+(src[i]-avg)*amount;
+        data[i]=val<0?0:(val>255?255:val);
+      }
+    }
+  }
+}
+
 function processImg(srcImg,side){
   var wc=document.getElementById('workCanvas'),ctx=wc.getContext('2d');
   var cm=document.getElementById('cropMode').value;
   var bri=parseInt(document.getElementById('bri').value),con=parseInt(document.getElementById('con').value);
+  var shr=parseInt(document.getElementById('shr').value)||0;
   var filter=document.getElementById('magicFilter').value;
   var ct=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
   var fa=parseInt(document.getElementById(side==='front'?'fRot':'bRot').value)*Math.PI/180;
   var fl=rotations[side];
   var sX=0,sY=0,sW=srcImg.width,sH=srcImg.height;
-  if((cm==='auto'||cm==='edge')&&ct!=='custom'){sX=srcImg.width*.04;sY=srcImg.height*.04;sW=srcImg.width*.92;sH=srcImg.height*.92;}
+  if((cm==='auto'||cm==='edge')&&ct!=='custom'&&ct!=='free'){
+    var bounds=detectContentBounds(srcImg,cm);
+    if(bounds){sX=bounds.x;sY=bounds.y;sW=bounds.w;sH=bounds.h;}
+    else{sX=srcImg.width*.04;sY=srcImg.height*.04;sW=srcImg.width*.92;sH=srcImg.height*.92;}
+  }
   var fW=sW,fH=sH;
   if(ct==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
   else if(ct==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
   else if(ct==='tight'){fW=sW*.85;fH=sH*.85;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
-  else if(ct==='custom'&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
+  else if((ct==='custom'||ct==='free')&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
   var ta=fa+(fl*Math.PI/180);
   var rW=Math.abs(fW*Math.cos(ta))+Math.abs(fH*Math.sin(ta));
   var rH=Math.abs(fW*Math.sin(ta))+Math.abs(fH*Math.cos(ta));
@@ -661,13 +811,81 @@ function processImg(srcImg,side){
   ctx.save();ctx.translate(wc.width/2,wc.height/2);ctx.rotate(ta);
   ctx.drawImage(srcImg,sX,sY,fW,fH,-fW/2,-fH/2,fW,fH);ctx.restore();
   var id=ctx.getImageData(0,0,wc.width,wc.height),d=id.data;
+  var width=wc.width,height=wc.height;
   var fc=(259*(con+255))/(255*(259-con));
+
+  // Pass 1: brightness + contrast (base tone correction for every filter)
   for(var i=0;i<d.length;i+=4){
     if(d[i+3]===0)continue;
-    for(var c=0;c<3;c++){var v=d[i+c]+bri;v=fc*(v-128)+128;d[i+c]=Math.max(0,Math.min(255,v));}
-    if(filter==='scan'||filter==='magic'){d[i]=Math.min(255,d[i]*1.1);d[i+1]=Math.min(255,d[i+1]*1.1);d[i+2]=Math.min(255,d[i+2]*1.05);}
-    else if(filter==='bw'){var g=.299*d[i]+.587*d[i+1]+.114*d[i+2];d[i]=d[i+1]=d[i+2]=g>128?255:40;}
+    for(var c=0;c<3;c++){var v=d[i+c]+bri;v=fc*(v-128)+128;d[i+c]=v<0?0:(v>255?255:v);}
   }
+
+  if(filter==='magic'){
+    // Auto white-balance (gray-world assumption) removes color casts, then a gentle saturation lift
+    var rSum=0,gSum=0,bSum=0,n=0,step=68;
+    for(i=0;i<d.length;i+=step){if(d[i+3]===0)continue;rSum+=d[i];gSum+=d[i+1];bSum+=d[i+2];n++;}
+    if(n>0){
+      var gray=(rSum+gSum+bSum)/(3*n);
+      var wr=Math.min(1.25,Math.max(0.8,gray/(rSum/n||1)));
+      var wg=Math.min(1.25,Math.max(0.8,gray/(gSum/n||1)));
+      var wb=Math.min(1.25,Math.max(0.8,gray/(bSum/n||1)));
+      for(i=0;i<d.length;i+=4){
+        if(d[i+3]===0)continue;
+        var r=d[i]*wr,g=d[i+1]*wg,b=d[i+2]*wb;
+        var hsl=rgb2hsl(r,g,b);hsl[1]=Math.min(1,hsl[1]*1.18);
+        var rgb=hsl2rgb(hsl[0],hsl[1],hsl[2]);
+        d[i]=rgb[0]<0?0:(rgb[0]>255?255:rgb[0]);
+        d[i+1]=rgb[1]<0?0:(rgb[1]>255?255:rgb[1]);
+        d[i+2]=rgb[2]<0?0:(rgb[2]>255?255:rgb[2]);
+      }
+    }
+  }else if(filter==='vivid'){
+    for(i=0;i<d.length;i+=4){
+      if(d[i+3]===0)continue;
+      var hsl2=rgb2hsl(d[i],d[i+1],d[i+2]);hsl2[1]=Math.min(1,hsl2[1]*1.45);
+      var rgb2=hsl2rgb(hsl2[0],hsl2[1],hsl2[2]);
+      d[i]=rgb2[0]<0?0:(rgb2[0]>255?255:rgb2[0]);
+      d[i+1]=rgb2[1]<0?0:(rgb2[1]>255?255:rgb2[1]);
+      d[i+2]=rgb2[2]<0?0:(rgb2[2]>255?255:rgb2[2]);
+    }
+  }else if(filter==='scan'){
+    // Mimic a flatbed scan: mild desaturation toward luminance + brighten whites
+    for(i=0;i<d.length;i+=4){
+      if(d[i+3]===0)continue;
+      var lum=.299*d[i]+.587*d[i+1]+.114*d[i+2];
+      d[i]=d[i]*0.72+lum*0.28;d[i+1]=d[i+1]*0.72+lum*0.28;d[i+2]=d[i+2]*0.72+lum*0.28;
+      d[i]=Math.min(255,d[i]*1.06);d[i+1]=Math.min(255,d[i+1]*1.06);d[i+2]=Math.min(255,d[i+2]*1.04);
+    }
+  }else if(filter==='bw'){
+    // Local-adaptive threshold (like a simplified Bradley threshold) instead of one global cutoff,
+    // so uneven lighting across the card doesn't wipe out half the text
+    var blockSize=Math.max(8,Math.round(Math.min(width,height)/24));
+    var bw=Math.ceil(width/blockSize),bh=Math.ceil(height/blockSize);
+    var sums=new Float32Array(bw*bh),counts=new Int32Array(bw*bh);
+    for(var y=0;y<height;y++){
+      for(var x=0;x<width;x++){
+        var idx=(y*width+x)*4;
+        var lum2=.299*d[idx]+.587*d[idx+1]+.114*d[idx+2];
+        var bIdx=Math.floor(y/blockSize)*bw+Math.floor(x/blockSize);
+        sums[bIdx]+=lum2;counts[bIdx]++;
+      }
+    }
+    for(var k=0;k<sums.length;k++){if(counts[k]>0)sums[k]/=counts[k];}
+    for(var y2=0;y2<height;y2++){
+      for(var x2=0;x2<width;x2++){
+        var idx2=(y2*width+x2)*4;
+        if(d[idx2+3]===0)continue;
+        var lum3=.299*d[idx2]+.587*d[idx2+1]+.114*d[idx2+2];
+        var localAvg=sums[Math.floor(y2/blockSize)*bw+Math.floor(x2/blockSize)];
+        var out=lum3<localAvg-14?28:250;
+        d[idx2]=d[idx2+1]=d[idx2+2]=out;
+      }
+    }
+  }
+
+  // Sharpness pass: real unsharp-mask, applied after color/tone so it always reflects the slider
+  applySharpen(d,width,height,(shr/100)*1.3);
+
   ctx.putImageData(id,0,0);
   var pi=new Image();pi.src=wc.toDataURL();return pi;
 }
@@ -682,7 +900,8 @@ function drawToCanvas(id,img){var c=document.getElementById(id),ctx=c.getContext
 
 function buildA4(){
   var oc=document.getElementById('outputCanvas'),ctx=oc.getContext('2d');
-  var sk=document.getElementById('outputSize').value,td=A4[sk];
+  var sk=document.getElementById('outputSize').value;
+  var td=(sk==='custom')?getCustomDpiConfig():A4[sk];
   var layout=document.getElementById('layout').value;
   oc.width=td.W;oc.height=td.H;ctx.fillStyle='#fff';ctx.fillRect(0,0,td.W,td.H);
   var cW=td.W,cH=td.H,bX=0,bY=0;
@@ -696,8 +915,12 @@ function buildA4(){
 function drawCell(ctx,img,cX,cY,cW,cH,state){
   if(!img||!img.width)return;
   var iW=img.width,iH=img.height,tW,tH;
-  if(state.fit==='contain'||state.fit==='custom'){var m=(state.fit==='custom')?(state.scale/100):.85;var r=Math.min(cW/iW,cH/iH)*m;tW=iW*r;tH=iH*r;}
-  else{tW=cW-40;tH=cH-40;}
+  var sf=(typeof state.scale==='number'?state.scale:90)/100;
+  if(state.fit==='fill'){
+    tW=(cW-40)*sf;tH=(cH-40)*sf;
+  }else{
+    var r=Math.min(cW/iW,cH/iH)*sf;tW=iW*r;tH=iH*r;
+  }
   var dX=cX+(cW-tW)/2,dY=cY+(cH-tH)/2;
   switch(state.pos){
     case'top-left':   dX=cX+40;dY=cY+40;break;
@@ -751,6 +974,12 @@ function resetAll(){
   document.getElementById('fRot').value=0;document.getElementById('fRotV').textContent='0°';
   document.getElementById('bRot').value=0;document.getElementById('bRotV').textContent='0°';
   document.getElementById('printImageLayer').src='';
+  document.getElementById('outputSize').value='a4port';
+  document.getElementById('customDpiValue').value=300;
+  document.getElementById('customDpiOrientation').value='port';
+  document.getElementById('customDpiRow').classList.remove('show');
+  document.getElementById('frontFit').value='contain';document.getElementById('backFit').value='contain';
+  document.getElementById('shr').value=60;document.getElementById('shrV').textContent='60';
   var s=document.getElementById('statusLine');s.textContent='Upload both sides of your ID card to get started';s.style.color='rgba(255,255,255,0.4)';
   applyPreset('centered');switchTab('front');
 }
