@@ -54,9 +54,10 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 .pos-cell.active-back{border-color:#e94560;background:rgba(233,69,96,0.2);color:#e94560;box-shadow:0 0 10px rgba(233,69,96,0.3);}
 .pos-extra{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .pos-extra .opt label{font-size:0.65rem;}
-.pos-preview{width:100%;height:120px;background:rgba(255,255,255,0.05);border-radius:8px;border:1px solid rgba(255,255,255,0.08);position:relative;margin-top:10px;overflow:hidden;}
-.pos-preview-card{position:absolute;background:rgba(102,126,234,0.4);border:1px solid #667eea;border-radius:3px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;font-size:0.55rem;color:#fff;font-weight:700;}
-.pos-preview-card.back-card{background:rgba(233,69,96,0.35);border-color:#e94560;}
+.pos-preview-combined{display:flex;gap:10px;margin-top:10px;}
+.pos-preview{flex:1;width:100%;height:190px;background:rgba(255,255,255,0.05);border-radius:8px;border:1px solid rgba(255,255,255,0.08);position:relative;overflow:hidden;transition:all 0.2s;}
+.pos-preview-card{position:absolute;background:rgba(102,126,234,0.4);border:1px solid #667eea;border-radius:3px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;font-size:0.5rem;color:#fff;font-weight:700;background-size:contain;background-position:center;background-repeat:no-repeat;}
+.pos-preview-card.back-card{background-color:rgba(233,69,96,0.35);border-color:#e94560;}
 .prog-wrap{display:none;margin:14px 0;}
 .prog-bar{width:100%;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;}
 .prog-fill{height:100%;background:linear-gradient(90deg,#667eea,#e94560);border-radius:3px;transition:width 0.35s ease;width:0%;}
@@ -283,68 +284,52 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
         <button class="pos-tab" onclick="switchTab('both')">⚡ Quick Presets</button>
       </div>
       <div class="pos-tab-content show" id="tab-front">
-        <div class="pos-grid">
-          <div>
-            <div class="pos-card-title">Position <span class="front-tag">FRONT</span></div>
-            <div class="pos-picker" id="frontPicker">
-              <div class="pos-cell" data-side="front" data-pos="top-left"   onclick="setPos('front','top-left')">&#8598;</div>
-              <div class="pos-cell" data-side="front" data-pos="top-center" onclick="setPos('front','top-center')">&#8593;</div>
-              <div class="pos-cell" data-side="front" data-pos="top-right"  onclick="setPos('front','top-right')">&#8599;</div>
-              <div class="pos-cell" data-side="front" data-pos="mid-left"   onclick="setPos('front','mid-left')">&#8592;</div>
-              <div class="pos-cell active" data-side="front" data-pos="center" onclick="setPos('front','center')">&#9679;</div>
-              <div class="pos-cell" data-side="front" data-pos="mid-right"  onclick="setPos('front','mid-right')">&#8594;</div>
-              <div class="pos-cell" data-side="front" data-pos="bot-left"   onclick="setPos('front','bot-left')">&#8601;</div>
-              <div class="pos-cell" data-side="front" data-pos="bot-center" onclick="setPos('front','bot-center')">&#8595;</div>
-              <div class="pos-cell" data-side="front" data-pos="bot-right"  onclick="setPos('front','bot-right')">&#8600;</div>
-            </div>
-            <div class="pos-extra">
-              <div class="opt"><label>Scale <span class="sl-v" id="frontScaleV">90%</span></label>
-                <div class="sl-wrap"><input type="range" id="frontScale" min="20" max="150" value="90" oninput="updateScaleLabel('front');updatePosPreview()"></div>
-              </div>
-              <div class="opt"><label>Fit Mode</label>
-                <select id="frontFit" onchange="updatePosPreview()">
-                  <option value="contain">Contain (keep proportions)</option>
-                  <option value="fill">Fill Cell (edge to edge)</option>
-                </select>
-              </div>
-            </div>
+        <div class="pos-card-title">Position <span class="front-tag">FRONT</span></div>
+        <div class="pos-picker" id="frontPicker">
+          <div class="pos-cell" data-side="front" data-pos="top-left"   onclick="setPos('front','top-left')">&#8598;</div>
+          <div class="pos-cell" data-side="front" data-pos="top-center" onclick="setPos('front','top-center')">&#8593;</div>
+          <div class="pos-cell" data-side="front" data-pos="top-right"  onclick="setPos('front','top-right')">&#8599;</div>
+          <div class="pos-cell" data-side="front" data-pos="mid-left"   onclick="setPos('front','mid-left')">&#8592;</div>
+          <div class="pos-cell active" data-side="front" data-pos="center" onclick="setPos('front','center')">&#9679;</div>
+          <div class="pos-cell" data-side="front" data-pos="mid-right"  onclick="setPos('front','mid-right')">&#8594;</div>
+          <div class="pos-cell" data-side="front" data-pos="bot-left"   onclick="setPos('front','bot-left')">&#8601;</div>
+          <div class="pos-cell" data-side="front" data-pos="bot-center" onclick="setPos('front','bot-center')">&#8595;</div>
+          <div class="pos-cell" data-side="front" data-pos="bot-right"  onclick="setPos('front','bot-right')">&#8600;</div>
+        </div>
+        <div class="pos-extra">
+          <div class="opt"><label>Scale <span class="sl-v" id="frontScaleV">90%</span></label>
+            <div class="sl-wrap"><input type="range" id="frontScale" min="20" max="150" value="90" oninput="updateScaleLabel('front');updatePosPreview()"></div>
           </div>
-          <div>
-            <div class="pos-card-title">Live Preview</div>
-            <div class="pos-preview" id="posPreviewFront"><div class="pos-preview-card" id="previewFrontCard">FRONT</div></div>
+          <div class="opt"><label>Fit Mode</label>
+            <select id="frontFit" onchange="updatePosPreview()">
+              <option value="contain">Contain (keep proportions)</option>
+              <option value="fill">Fill Cell (edge to edge)</option>
+            </select>
           </div>
         </div>
       </div>
       <div class="pos-tab-content" id="tab-back">
-        <div class="pos-grid">
-          <div>
-            <div class="pos-card-title">Position <span class="back-tag">BACK</span></div>
-            <div class="pos-picker" id="backPicker">
-              <div class="pos-cell" data-side="back" data-pos="top-left"   onclick="setPos('back','top-left')">&#8598;</div>
-              <div class="pos-cell" data-side="back" data-pos="top-center" onclick="setPos('back','top-center')">&#8593;</div>
-              <div class="pos-cell" data-side="back" data-pos="top-right"  onclick="setPos('back','top-right')">&#8599;</div>
-              <div class="pos-cell" data-side="back" data-pos="mid-left"   onclick="setPos('back','mid-left')">&#8592;</div>
-              <div class="pos-cell active active-back" data-side="back" data-pos="center" onclick="setPos('back','center')">&#9679;</div>
-              <div class="pos-cell" data-side="back" data-pos="mid-right"  onclick="setPos('back','mid-right')">&#8594;</div>
-              <div class="pos-cell" data-side="back" data-pos="bot-left"   onclick="setPos('back','bot-left')">&#8601;</div>
-              <div class="pos-cell" data-side="back" data-pos="bot-center" onclick="setPos('back','bot-center')">&#8595;</div>
-              <div class="pos-cell" data-side="back" data-pos="bot-right"  onclick="setPos('back','bot-right')">&#8600;</div>
-            </div>
-            <div class="pos-extra">
-              <div class="opt"><label>Scale <span class="sl-v" id="backScaleV">90%</span></label>
-                <div class="sl-wrap"><input type="range" id="backScale" min="20" max="150" value="90" oninput="updateScaleLabel('back');updatePosPreview()"></div>
-              </div>
-              <div class="opt"><label>Fit Mode</label>
-                <select id="backFit" onchange="updatePosPreview()">
-                  <option value="contain">Contain (keep proportions)</option>
-                  <option value="fill">Fill Cell (edge to edge)</option>
-                </select>
-              </div>
-            </div>
+        <div class="pos-card-title">Position <span class="back-tag">BACK</span></div>
+        <div class="pos-picker" id="backPicker">
+          <div class="pos-cell" data-side="back" data-pos="top-left"   onclick="setPos('back','top-left')">&#8598;</div>
+          <div class="pos-cell" data-side="back" data-pos="top-center" onclick="setPos('back','top-center')">&#8593;</div>
+          <div class="pos-cell" data-side="back" data-pos="top-right"  onclick="setPos('back','top-right')">&#8599;</div>
+          <div class="pos-cell" data-side="back" data-pos="mid-left"   onclick="setPos('back','mid-left')">&#8592;</div>
+          <div class="pos-cell active active-back" data-side="back" data-pos="center" onclick="setPos('back','center')">&#9679;</div>
+          <div class="pos-cell" data-side="back" data-pos="mid-right"  onclick="setPos('back','mid-right')">&#8594;</div>
+          <div class="pos-cell" data-side="back" data-pos="bot-left"   onclick="setPos('back','bot-left')">&#8601;</div>
+          <div class="pos-cell" data-side="back" data-pos="bot-center" onclick="setPos('back','bot-center')">&#8595;</div>
+          <div class="pos-cell" data-side="back" data-pos="bot-right"  onclick="setPos('back','bot-right')">&#8600;</div>
+        </div>
+        <div class="pos-extra">
+          <div class="opt"><label>Scale <span class="sl-v" id="backScaleV">90%</span></label>
+            <div class="sl-wrap"><input type="range" id="backScale" min="20" max="150" value="90" oninput="updateScaleLabel('back');updatePosPreview()"></div>
           </div>
-          <div>
-            <div class="pos-card-title">Live Preview</div>
-            <div class="pos-preview" id="posPreviewBack"><div class="pos-preview-card back-card" id="previewBackCard">BACK</div></div>
+          <div class="opt"><label>Fit Mode</label>
+            <select id="backFit" onchange="updatePosPreview()">
+              <option value="contain">Contain (keep proportions)</option>
+              <option value="fill">Fill Cell (edge to edge)</option>
+            </select>
           </div>
         </div>
       </div>
@@ -357,6 +342,11 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
           <button class="preset-btn" onclick="applyPreset('compact')"><div class="preset-icon">📐</div><div class="preset-name">Compact 80%</div></button>
           <button class="preset-btn" onclick="applyPreset('camscanner')"><div class="preset-icon">📷</div><div class="preset-name">CamScanner Style</div></button>
         </div>
+      </div>
+      <div class="pos-card-title" style="margin-top:16px;">🖼️ Live Preview — Both Sides</div>
+      <div class="pos-preview-combined" id="posPreviewCombined">
+        <div class="pos-preview" id="posPreviewFront"><div class="pos-preview-card" id="previewFrontCard">FRONT</div></div>
+        <div class="pos-preview" id="posPreviewBack"><div class="pos-preview-card back-card" id="previewBackCard">BACK</div></div>
       </div>
     </div>
 
@@ -413,11 +403,12 @@ var posState={front:{pos:'center',scale:90,fit:'contain'},back:{pos:'center',sca
 var customCropBox={front:{x:0,y:0,w:0,h:0,initialized:false},back:{x:0,y:0,w:0,h:0,initialized:false}};
 var currentCropSide='front',activeHandle=null,isDraggingBox=false,dragStartX=0,dragStartY=0;
 var boxInstance={x:50,y:50,w:200,h:130};
+var cropSourceCanvas=null; // holds the rotated full-image canvas currently open in the crop modal
 var A4={a4port:{W:1240,H:1754,label:'A4 Portrait 150dpi'},a4land:{W:1754,H:1240,label:'A4 Landscape 150dpi'},a4land2:{W:2339,H:1654,label:'A4 Landscape 200dpi'}};
 var A4_MM_W=210,A4_MM_H=297;
 
-document.getElementById('fRot').addEventListener('input',function(){document.getElementById('fRotV').textContent=this.value+'°';});
-document.getElementById('bRot').addEventListener('input',function(){document.getElementById('bRotV').textContent=this.value+'°';});
+document.getElementById('fRot').addEventListener('input',function(){document.getElementById('fRotV').textContent=this.value+'°';customCropBox.front.initialized=false;});
+document.getElementById('bRot').addEventListener('input',function(){document.getElementById('bRotV').textContent=this.value+'°';customCropBox.back.initialized=false;});
 document.getElementById('bri').addEventListener('input',function(){var v=parseInt(this.value);document.getElementById('briV').textContent=(v>=0?'+':'')+v;});
 document.getElementById('con').addEventListener('input',function(){var v=parseInt(this.value);document.getElementById('conV').textContent=(v>=0?'+':'')+v;});
 document.getElementById('frontFile').addEventListener('change',function(e){if(e.target.files[0])loadImg(e.target.files[0],'front');});
@@ -469,29 +460,55 @@ function handleCropSelectChange(side){
 
 function rotateDirection(side,dir){
   rotations[side]=(dir==='right')?(rotations[side]+90)%360:(rotations[side]-90+360)%360;
+  // any previously saved custom crop box was defined against the old rotation's
+  // canvas size, so it no longer lines up — clear it and let the crop tool
+  // re-open fresh against the newly rotated image.
+  customCropBox[side].initialized=false;
   liveRefreshUploadBox(side);
+}
+
+// Builds a canvas containing the FULL source image already rotated by the
+// combination of the coarse 90°-step rotation and the fine tilt slider.
+// Everything downstream (live preview, the crop tool, and final processing)
+// crops out of this rotated canvas, so whatever rotation the user dialed in
+// is exactly what they see and crop against.
+function getRotatedFullCanvas(side){
+  var src=(side==='front')?frontImg:backImg;
+  if(!src)return null;
+  var fa=parseInt(document.getElementById(side==='front'?'fRot':'bRot').value)*Math.PI/180;
+  var fl=rotations[side];
+  var ta=fa+(fl*Math.PI/180);
+  var sW=src.width,sH=src.height;
+  var rW=Math.abs(sW*Math.cos(ta))+Math.abs(sH*Math.sin(ta));
+  var rH=Math.abs(sW*Math.sin(ta))+Math.abs(sH*Math.cos(ta));
+  var rc=document.createElement('canvas');
+  rc.width=Math.max(1,Math.round(rW));rc.height=Math.max(1,Math.round(rH));
+  var rctx=rc.getContext('2d');
+  rctx.save();
+  rctx.translate(rc.width/2,rc.height/2);
+  rctx.rotate(ta);
+  rctx.drawImage(src,-sW/2,-sH/2,sW,sH);
+  rctx.restore();
+  return rc;
 }
 
 function liveRefreshUploadBox(side){
   var src=(side==='front')?frontImg:backImg;
   var prev=document.getElementById(side+'Preview');
   if(!src||!prev)return;
-  var tc=document.getElementById('livePreviewCanvas'),ctx=tc.getContext('2d');
+  var rc=getRotatedFullCanvas(side);
   var ct=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
-  var fa=parseInt(document.getElementById(side==='front'?'fRot':'bRot').value)*Math.PI/180;
-  var fl=rotations[side];
-  var sX=0,sY=0,sW=src.width,sH=src.height,fW=sW,fH=sH;
+  var sX=0,sY=0,sW=rc.width,sH=rc.height,fW=sW,fH=sH;
   if(ct==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX=(sW-fW)/2;sY=(sH-fH)/2;}
   else if(ct==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX=(sW-fW)/2;sY=(sH-fH)/2;}
   else if(ct==='tight'){fW=sW*.85;fH=sH*.85;sX=(sW-fW)/2;sY=(sH-fH)/2;}
   else if((ct==='custom'||ct==='free')&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
-  var ta=fa+(fl*Math.PI/180);
-  var rW=Math.abs(fW*Math.cos(ta))+Math.abs(fH*Math.sin(ta));
-  var rH=Math.abs(fW*Math.sin(ta))+Math.abs(fH*Math.cos(ta));
-  tc.width=rW;tc.height=rH;
-  ctx.save();ctx.translate(rW/2,rH/2);ctx.rotate(ta);
-  ctx.drawImage(src,sX,sY,fW,fH,-fW/2,-fH/2,fW,fH);ctx.restore();
+  var tc=document.getElementById('livePreviewCanvas'),ctx=tc.getContext('2d');
+  tc.width=Math.max(1,fW);tc.height=Math.max(1,fH);
+  ctx.clearRect(0,0,tc.width,tc.height);
+  ctx.drawImage(rc,sX,sY,fW,fH,0,0,tc.width,tc.height);
   prev.src=tc.toDataURL();
+  updatePosPreview();
 }
 
 function loadImg(file,side){
@@ -523,15 +540,16 @@ function checkReady(){
 }
 
 function openVisualCropModal(side){
-  var src=(side==='front')?frontImg:backImg;
-  if(!src)return;
+  var rc=getRotatedFullCanvas(side);
+  if(!rc)return;
   currentCropSide=side;
+  cropSourceCanvas=rc;
   var cropType=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
   document.getElementById('cropModalTitle').textContent=(cropType==='free'?'Free Size Crop: ':'Crop: ')+side.toUpperCase()+' IMAGE';
   var mc=document.getElementById('interactiveCropCanvas');
   var mW=Math.min(window.innerWidth-60,560),mH=380;
-  var r=Math.min(mW/src.width,mH/src.height);
-  mc.width=Math.floor(src.width*r);mc.height=Math.floor(src.height*r);
+  var r=Math.min(mW/rc.width,mH/rc.height);
+  mc.width=Math.floor(rc.width*r);mc.height=Math.floor(rc.height*r);
   if(!customCropBox[side].initialized){
     if(cropType==='free'){
       var fdW=mc.width*.92,fdH=mc.height*.92;
@@ -544,10 +562,10 @@ function openVisualCropModal(side){
       boxInstance.x=(mc.width-dW)/2;boxInstance.y=(mc.height-dH)/2;
     }
   }else{
-    boxInstance.x=(customCropBox[side].x/src.width)*mc.width;
-    boxInstance.y=(customCropBox[side].y/src.height)*mc.height;
-    boxInstance.w=(customCropBox[side].w/src.width)*mc.width;
-    boxInstance.h=(customCropBox[side].h/src.height)*mc.height;
+    boxInstance.x=(customCropBox[side].x/rc.width)*mc.width;
+    boxInstance.y=(customCropBox[side].y/rc.height)*mc.height;
+    boxInstance.w=(customCropBox[side].w/rc.width)*mc.width;
+    boxInstance.h=(customCropBox[side].h/rc.height)*mc.height;
   }
   document.getElementById('cropModalOverlay').style.display='flex';
   drawCropCanvas();
@@ -555,7 +573,8 @@ function openVisualCropModal(side){
 
 function drawCropCanvas(){
   var c=document.getElementById('interactiveCropCanvas'),ctx=c.getContext('2d');
-  var src=(currentCropSide==='front')?frontImg:backImg;
+  var src=cropSourceCanvas;
+  if(!src)return;
   ctx.clearRect(0,0,c.width,c.height);ctx.drawImage(src,0,0,c.width,c.height);
   ctx.fillStyle='rgba(0,0,0,0.55)';
   ctx.fillRect(0,0,c.width,boxInstance.y);
@@ -568,14 +587,15 @@ function drawCropCanvas(){
 }
 
 function closeVisualCropModal(save){
-  if(save){
+  if(save&&cropSourceCanvas){
     var c=document.getElementById('interactiveCropCanvas');
-    var src=(currentCropSide==='front')?frontImg:backImg;
-    var fx=src.width/c.width,fy=src.height/c.height;
+    var rc=cropSourceCanvas;
+    var fx=rc.width/c.width,fy=rc.height/c.height;
     customCropBox[currentCropSide]={x:boxInstance.x*fx,y:boxInstance.y*fy,w:boxInstance.w*fx,h:boxInstance.h*fy,initialized:true};
     liveRefreshUploadBox(currentCropSide);
   }
   document.getElementById('cropModalOverlay').style.display='none';
+  cropSourceCanvas=null;
 }
 
 function getCP(canvas,cx,cy){var r=canvas.getBoundingClientRect();return{x:(cx-r.left)*(canvas.width/r.width),y:(cy-r.top)*(canvas.height/r.height)};}
@@ -640,17 +660,26 @@ function updatePosPreview(){
   var fS=document.getElementById('frontScale').value/100,bS=document.getElementById('backScale').value/100;
   posState.front.fit=document.getElementById('frontFit').value;
   posState.back.fit=document.getElementById('backFit').value;
+  var wrap=document.getElementById('posPreviewCombined');
   var pf=document.getElementById('posPreviewFront'),pb=document.getElementById('posPreviewBack');
-  if(layout==='side'){pf.style.cssText+=';display:block;width:50%;float:left';pb.style.cssText+=';display:block;width:50%;float:left';}
-  else if(layout==='stack'){pf.style.cssText+=';display:block;width:100%;float:none';pb.style.cssText+=';display:block;width:100%;float:none';}
-  else{pf.style.cssText+=';display:block;width:100%;float:none';pb.style.display='none';}
-  placePrevCard(document.getElementById('previewFrontCard'),posState.front.pos,fS);
-  placePrevCard(document.getElementById('previewBackCard'),posState.back.pos,bS);
+  // Combined preview always shows both sides together (regardless of which
+  // tab is active), arranged the same way the final A4 sheet will be:
+  // side-by-side, stacked, or single.
+  if(layout==='side'){wrap.style.flexDirection='row';pf.style.display='block';pb.style.display='block';}
+  else if(layout==='stack'){wrap.style.flexDirection='column';pf.style.display='block';pb.style.display='block';}
+  else{wrap.style.flexDirection='row';pf.style.display='block';pb.style.display='none';}
+  // Show the actual (crop + rotation adjusted) uploaded image in the live
+  // preview instead of a plain placeholder cell, so the user sees exactly
+  // what will be placed before hitting "Scan and Generate".
+  var frontSrc=(frontImg&&document.getElementById('frontPreview').src)?document.getElementById('frontPreview').src:null;
+  var backSrc=(backImg&&document.getElementById('backPreview').src)?document.getElementById('backPreview').src:null;
+  placePrevCard(document.getElementById('previewFrontCard'),posState.front.pos,fS,frontSrc,posState.front.fit,'FRONT');
+  placePrevCard(document.getElementById('previewBackCard'),posState.back.pos,bS,backSrc,posState.back.fit,'BACK');
 }
 
-function placePrevCard(el,pos,sf){
+function placePrevCard(el,pos,sf,imgSrc,fitMode,label){
   if(!el)return;
-  var w=60*sf,h=38*sf;el.style.width=w+'px';el.style.height=h+'px';
+  var w=112*sf,h=70*sf;el.style.width=w+'px';el.style.height=h+'px';
   el.style.top='50%';el.style.left='50%';el.style.transform='translate(-50%,-50%)';el.style.right='auto';el.style.bottom='auto';
   switch(pos){
     case'top-left':   el.style.top='4px';el.style.left='4px';el.style.transform='none';break;
@@ -661,6 +690,16 @@ function placePrevCard(el,pos,sf){
     case'bot-left':   el.style.top='auto';el.style.bottom='4px';el.style.left='4px';el.style.transform='none';break;
     case'bot-center': el.style.top='auto';el.style.bottom='4px';el.style.left='50%';el.style.transform='translateX(-50%)';break;
     case'bot-right':  el.style.top='auto';el.style.bottom='4px';el.style.left='auto';el.style.right='4px';el.style.transform='none';break;
+  }
+  if(imgSrc){
+    el.style.backgroundImage='url("'+imgSrc+'")';
+    el.style.backgroundSize=(fitMode==='fill')?'cover':'contain';
+    el.style.backgroundPosition='center';
+    el.style.backgroundRepeat='no-repeat';
+    el.textContent='';
+  }else{
+    el.style.backgroundImage='none';
+    el.textContent=label||'';
   }
 }
 
@@ -791,25 +830,24 @@ function processImg(srcImg,side){
   var shr=parseInt(document.getElementById('shr').value)||0;
   var filter=document.getElementById('magicFilter').value;
   var ct=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
-  var fa=parseInt(document.getElementById(side==='front'?'fRot':'bRot').value)*Math.PI/180;
-  var fl=rotations[side];
-  var sX=0,sY=0,sW=srcImg.width,sH=srcImg.height;
+  // Rotate the FULL image first (coarse 90° steps + fine tilt), then crop out
+  // of that rotated canvas — this keeps the final output consistent with
+  // whatever the user saw in the live preview and the visual crop tool.
+  var rc=getRotatedFullCanvas(side);
+  var sX=0,sY=0,sW=rc.width,sH=rc.height;
   if((cm==='auto'||cm==='edge')&&ct!=='custom'&&ct!=='free'){
-    var bounds=detectContentBounds(srcImg,cm);
+    var bounds=detectContentBounds(rc,cm);
     if(bounds){sX=bounds.x;sY=bounds.y;sW=bounds.w;sH=bounds.h;}
-    else{sX=srcImg.width*.04;sY=srcImg.height*.04;sW=srcImg.width*.92;sH=srcImg.height*.92;}
+    else{sX=rc.width*.04;sY=rc.height*.04;sW=rc.width*.92;sH=rc.height*.92;}
   }
   var fW=sW,fH=sH;
   if(ct==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
   else if(ct==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
   else if(ct==='tight'){fW=sW*.85;fH=sH*.85;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
   else if((ct==='custom'||ct==='free')&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
-  var ta=fa+(fl*Math.PI/180);
-  var rW=Math.abs(fW*Math.cos(ta))+Math.abs(fH*Math.sin(ta));
-  var rH=Math.abs(fW*Math.sin(ta))+Math.abs(fH*Math.cos(ta));
-  wc.width=rW;wc.height=rH;
-  ctx.save();ctx.translate(wc.width/2,wc.height/2);ctx.rotate(ta);
-  ctx.drawImage(srcImg,sX,sY,fW,fH,-fW/2,-fH/2,fW,fH);ctx.restore();
+  wc.width=Math.max(1,fW);wc.height=Math.max(1,fH);
+  ctx.clearRect(0,0,wc.width,wc.height);
+  ctx.drawImage(rc,sX,sY,fW,fH,0,0,wc.width,wc.height);
   var id=ctx.getImageData(0,0,wc.width,wc.height),d=id.data;
   var width=wc.width,height=wc.height;
   var fc=(259*(con+255))/(255*(259-con));
@@ -905,33 +943,46 @@ function buildA4(){
   var layout=document.getElementById('layout').value;
   oc.width=td.W;oc.height=td.H;ctx.fillStyle='#fff';ctx.fillRect(0,0,td.W,td.H);
   var cW=td.W,cH=td.H,bX=0,bY=0;
-  if(layout==='side'){cW=td.W/2;bX=cW;if(frontImg)drawCell(ctx,processedFront,0,0,cW,cH,posState.front);if(backImg)drawCell(ctx,processedBack,bX,bY,cW,cH,posState.back);}
-  else if(layout==='stack'){cH=td.H/2;bY=cH;if(frontImg)drawCell(ctx,processedFront,0,0,cW,cH,posState.front);if(backImg)drawCell(ctx,processedBack,bX,bY,cW,cH,posState.back);}
-  else{if(frontImg)drawCell(ctx,processedFront,0,0,td.W,td.H,posState.front);}
+  if(layout==='side'){cW=td.W/2;bX=cW;if(frontImg)drawCell(ctx,processedFront,0,0,cW,cH,posState.front,td.W,td.H);if(backImg)drawCell(ctx,processedBack,bX,bY,cW,cH,posState.back,td.W,td.H);}
+  else if(layout==='stack'){cH=td.H/2;bY=cH;if(frontImg)drawCell(ctx,processedFront,0,0,cW,cH,posState.front,td.W,td.H);if(backImg)drawCell(ctx,processedBack,bX,bY,cW,cH,posState.back,td.W,td.H);}
+  else{if(frontImg)drawCell(ctx,processedFront,0,0,td.W,td.H,posState.front,td.W,td.H);}
   document.getElementById('a4info').textContent=td.label+' assembled.';
   document.getElementById('printImageLayer').src=oc.toDataURL('image/jpeg',1.0);
 }
 
-function drawCell(ctx,img,cX,cY,cW,cH,state){
+function drawCell(ctx,img,cX,cY,cW,cH,state,pageW,pageH){
   if(!img||!img.width)return;
   var iW=img.width,iH=img.height,tW,tH;
   var sf=(typeof state.scale==='number'?state.scale:90)/100;
+  var margin=40;
+  // The image can never be scaled beyond its own cell area (minus a safety
+  // margin) — this stops a high scale % from pushing the card past the
+  // printable region, into the other card, or off the paper edge.
+  var maxW=Math.max(10,cW-margin*2),maxH=Math.max(10,cH-margin*2);
   if(state.fit==='fill'){
-    tW=(cW-40)*sf;tH=(cH-40)*sf;
+    tW=maxW*sf;tH=maxH*sf;
   }else{
     var r=Math.min(cW/iW,cH/iH)*sf;tW=iW*r;tH=iH*r;
   }
+  if(tW>maxW){var s1=maxW/tW;tW*=s1;tH*=s1;}
+  if(tH>maxH){var s2=maxH/tH;tW*=s2;tH*=s2;}
   var dX=cX+(cW-tW)/2,dY=cY+(cH-tH)/2;
   switch(state.pos){
-    case'top-left':   dX=cX+40;dY=cY+40;break;
-    case'top-center': dX=cX+(cW-tW)/2;dY=cY+40;break;
-    case'top-right':  dX=cX+cW-tW-40;dY=cY+40;break;
-    case'mid-left':   dX=cX+40;dY=cY+(cH-tH)/2;break;
-    case'mid-right':  dX=cX+cW-tW-40;dY=cY+(cH-tH)/2;break;
-    case'bot-left':   dX=cX+40;dY=cY+cH-tH-40;break;
-    case'bot-center': dX=cX+(cW-tW)/2;dY=cY+cH-tH-40;break;
-    case'bot-right':  dX=cX+cW-tW-40;dY=cY+cH-tH-40;break;
+    case'top-left':   dX=cX+margin;dY=cY+margin;break;
+    case'top-center': dX=cX+(cW-tW)/2;dY=cY+margin;break;
+    case'top-right':  dX=cX+cW-tW-margin;dY=cY+margin;break;
+    case'mid-left':   dX=cX+margin;dY=cY+(cH-tH)/2;break;
+    case'mid-right':  dX=cX+cW-tW-margin;dY=cY+(cH-tH)/2;break;
+    case'bot-left':   dX=cX+margin;dY=cY+cH-tH-margin;break;
+    case'bot-center': dX=cX+(cW-tW)/2;dY=cY+cH-tH-margin;break;
+    case'bot-right':  dX=cX+cW-tW-margin;dY=cY+cH-tH-margin;break;
   }
+  // Final safety clamp: keep the image fully inside its own cell...
+  dX=Math.max(cX,Math.min(cX+cW-tW,dX));
+  dY=Math.max(cY,Math.min(cY+cH-tH,dY));
+  // ...and also fully inside the physical printable page, no matter what.
+  if(pageW)dX=Math.max(0,Math.min(pageW-tW,dX));
+  if(pageH)dY=Math.max(0,Math.min(pageH-tH,dY));
   ctx.drawImage(img,dX,dY,tW,tH);
 }
 
@@ -963,6 +1014,7 @@ function downloadPDF(){
 function resetAll(){
   frontImg=null;backImg=null;processedFront=null;processedBack=null;rotations={front:0,back:0};
   customCropBox={front:{x:0,y:0,w:0,h:0,initialized:false},back:{x:0,y:0,w:0,h:0,initialized:false}};
+  cropSourceCanvas=null;
   ['frontFile','backFile'].forEach(function(id){document.getElementById(id).value='';});
   ['frontPreview','backPreview'].forEach(function(id){document.getElementById(id).style.display='none';});
   ['frontBox','backBox'].forEach(function(id){document.getElementById(id).classList.remove('done');});
