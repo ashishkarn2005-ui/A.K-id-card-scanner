@@ -29,6 +29,8 @@ body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;min-height:100vh;paddi
 .preview-img{width:100%;max-height:130px;object-fit:contain;border-radius:8px;margin-top:10px;display:none;border:1px solid rgba(255,255,255,0.1);}
 .tick-badge{position:absolute;top:10px;right:10px;background:#4CAF50;color:white;width:22px;height:22px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:12px;font-weight:700;z-index:3;}
 .done .tick-badge{display:flex;}
+.file-type-badge{position:absolute;top:10px;left:10px;background:rgba(102,126,234,0.9);color:#fff;font-size:10px;font-weight:800;letter-spacing:0.5px;padding:2px 8px;border-radius:10px;z-index:3;display:none;}
+.done .file-type-badge{display:block;}
 .opts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px;background:rgba(255,255,255,0.02);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);}
 .opt{display:flex;flex-direction:column;gap:6px;}
 .opt label{font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.8px;}
@@ -110,6 +112,16 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 #interactiveCropCanvas{max-width:100%;max-height:400px;display:block;cursor:crosshair;-webkit-user-select:none;user-select:none;touch-action:none;}
 .custom-dpi-row{display:none;grid-column:1 / -1;display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(102,126,234,0.25);border-radius:10px;padding:12px;margin-top:-4px;gap:12px;grid-template-columns:1fr 1fr;}
 .custom-dpi-row.show{display:grid;}
+.pdf-page-picker{display:none;position:fixed;z-index:110;inset:0;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;padding:20px;}
+.pdf-page-picker.show{display:flex;}
+.pdf-page-picker-content{background:#1e1e2e;border-radius:14px;width:100%;max-width:560px;padding:20px;border:1px solid rgba(255,255,255,0.1);}
+.pdf-page-picker-content h3{color:#fff;font-size:1rem;margin-bottom:14px;text-align:center;}
+.pdf-page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;max-height:360px;overflow-y:auto;margin-bottom:16px;padding-right:4px;}
+.pdf-page-thumb{border:2px solid rgba(255,255,255,0.12);border-radius:8px;overflow:hidden;cursor:pointer;background:#0b0b13;text-align:center;transition:all 0.2s;}
+.pdf-page-thumb:hover{border-color:#667eea;transform:translateY(-2px);}
+.pdf-page-thumb canvas{width:100%;display:block;}
+.pdf-page-thumb .pnum{font-size:0.68rem;color:rgba(255,255,255,0.5);padding:4px;}
+.pdf-loading-msg{text-align:center;color:rgba(255,255,255,0.5);font-size:0.85rem;padding:30px 0;}
 
 @media print {
   @page { size: auto; margin: 0mm !important; }
@@ -138,28 +150,30 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 <div class="container">
   <div class="header">
     <h1>ID Card <span>Scanner Pro</span></h1>
-    <p>Auto crop &bull; Magic enhance &bull; Full position control &bull; A4 PDF &amp; Print output</p>
+    <p>Auto crop &bull; Magic enhance &bull; Full position control &bull; Image or PDF input &bull; A4 PDF &amp; Print output</p>
   </div>
 
   <div class="card">
-    <div class="section-title">📤 Upload ID Card</div>
+    <div class="section-title">📤 Upload ID Card (Image or PDF)</div>
     <div class="upload-grid">
       <div class="upload-box" id="frontBox">
-        <input type="file" id="frontFile" accept="image/*">
+        <input type="file" id="frontFile" accept="image/*,application/pdf">
         <div class="tick-badge">&#10003;</div>
+        <div class="file-type-badge" id="frontTypeBadge">IMG</div>
         <span class="badge badge-f">FRONT SIDE</span>
         <div class="uicon" id="frontIcon">📄</div>
         <h3 id="frontTitle">Upload Front Side</h3>
-        <p id="frontSub">Click or drag image here</p>
+        <p id="frontSub">Click or drag image / PDF here</p>
         <img id="frontPreview" class="preview-img" alt="front">
       </div>
       <div class="upload-box" id="backBox">
-        <input type="file" id="backFile" accept="image/*">
+        <input type="file" id="backFile" accept="image/*,application/pdf">
         <div class="tick-badge">&#10003;</div>
+        <div class="file-type-badge" id="backTypeBadge">IMG</div>
         <span class="badge badge-b">BACK SIDE</span>
         <div class="uicon" id="backIcon">📋</div>
         <h3 id="backTitle">Upload Back Side</h3>
-        <p id="backSub">Click or drag image here (Optional)</p>
+        <p id="backSub">Click or drag image / PDF here (Optional)</p>
         <img id="backPreview" class="preview-img" alt="back">
       </div>
     </div>
@@ -392,11 +406,29 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
   </div>
 </div>
 
+<div class="pdf-page-picker" id="pdfPagePicker">
+  <div class="pdf-page-picker-content">
+    <h3 id="pdfPagePickerTitle">Select a page from PDF</h3>
+    <div class="pdf-page-grid" id="pdfPageGrid">
+      <div class="pdf-loading-msg">Rendering PDF pages...</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" style="padding:8px 16px;font-size:0.8rem;border-color:rgba(255,255,255,0.2);color:white;" onclick="closePdfPagePicker()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <img id="printImageLayer" alt="">
 <canvas id="workCanvas" style="display:none;"></canvas>
 <canvas id="livePreviewCanvas" style="display:none;"></canvas>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
+if(window['pdfjsLib']){
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
 var frontImg=null,backImg=null,processedFront=null,processedBack=null;
 var rotations={front:0,back:0};
 var posState={front:{pos:'center',scale:90,fit:'contain'},back:{pos:'center',scale:90,fit:'contain'}};
@@ -406,20 +438,125 @@ var boxInstance={x:50,y:50,w:200,h:130};
 var cropSourceCanvas=null; // holds the rotated full-image canvas currently open in the crop modal
 var A4={a4port:{W:1240,H:1754,label:'A4 Portrait 150dpi'},a4land:{W:1754,H:1240,label:'A4 Landscape 150dpi'},a4land2:{W:2339,H:1654,label:'A4 Landscape 200dpi'}};
 var A4_MM_W=210,A4_MM_H=297;
+var pdfPickerSide=null,pdfPickerDoc=null;
 
 document.getElementById('fRot').addEventListener('input',function(){document.getElementById('fRotV').textContent=this.value+'°';customCropBox.front.initialized=false;});
 document.getElementById('bRot').addEventListener('input',function(){document.getElementById('bRotV').textContent=this.value+'°';customCropBox.back.initialized=false;});
 document.getElementById('bri').addEventListener('input',function(){var v=parseInt(this.value);document.getElementById('briV').textContent=(v>=0?'+':'')+v;});
 document.getElementById('con').addEventListener('input',function(){var v=parseInt(this.value);document.getElementById('conV').textContent=(v>=0?'+':'')+v;});
-document.getElementById('frontFile').addEventListener('change',function(e){if(e.target.files[0])loadImg(e.target.files[0],'front');});
-document.getElementById('backFile').addEventListener('change',function(e){if(e.target.files[0])loadImg(e.target.files[0],'back');});
+document.getElementById('frontFile').addEventListener('change',function(e){if(e.target.files[0])handleUploadedFile(e.target.files[0],'front');});
+document.getElementById('backFile').addEventListener('change',function(e){if(e.target.files[0])handleUploadedFile(e.target.files[0],'back');});
 setupDrop('frontBox','front');setupDrop('backBox','back');
 
 function setupDrop(id,side){
   var b=document.getElementById(id);
   b.addEventListener('dragover',function(e){e.preventDefault();b.style.borderColor='#e94560';});
   b.addEventListener('dragleave',function(){b.style.borderColor='';});
-  b.addEventListener('drop',function(e){e.preventDefault();b.style.borderColor='';if(e.dataTransfer.files&&e.dataTransfer.files[0])loadImg(e.dataTransfer.files[0],side);});
+  b.addEventListener('drop',function(e){e.preventDefault();b.style.borderColor='';if(e.dataTransfer.files&&e.dataTransfer.files[0])handleUploadedFile(e.dataTransfer.files[0],side);});
+}
+
+// Entry point for any newly selected/dropped file. Routes images straight
+// into loadImg(), and PDFs through pdf.js so a page can be rasterized and
+// used exactly like an uploaded photo (crop, rotate, filters, A4 layout all
+// work identically afterwards since it just becomes a normal Image object).
+function handleUploadedFile(file,side){
+  var isPdf=(file.type==='application/pdf')||/\.pdf$/i.test(file.name||'');
+  if(isPdf){
+    if(!window['pdfjsLib']){alert('PDF library failed to load. Please check your connection and try again.');return;}
+    loadPdfFile(file,side);
+  }else{
+    loadImg(file,side);
+  }
+}
+
+function loadPdfFile(file,side){
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var typedArray=new Uint8Array(e.target.result);
+    pdfjsLib.getDocument({data:typedArray}).promise.then(function(pdfDoc){
+      if(pdfDoc.numPages<=1){
+        renderPdfPageToImage(pdfDoc,1,side);
+      }else{
+        openPdfPagePicker(pdfDoc,side);
+      }
+    }).catch(function(err){
+      console.error(err);
+      alert('Could not read this PDF. It may be corrupted, password-protected, or not a valid PDF file.');
+    });
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function openPdfPagePicker(pdfDoc,side){
+  pdfPickerSide=side;pdfPickerDoc=pdfDoc;
+  document.getElementById('pdfPagePickerTitle').textContent='Select a page for '+side.toUpperCase()+' side ('+pdfDoc.numPages+' pages)';
+  var grid=document.getElementById('pdfPageGrid');
+  grid.innerHTML='<div class="pdf-loading-msg">Rendering PDF pages...</div>';
+  document.getElementById('pdfPagePicker').classList.add('show');
+  var thumbs=[];
+  var chain=Promise.resolve();
+  var _loop=function(n){
+    chain=chain.then(function(){
+      return pdfDoc.getPage(n).then(function(page){
+        var vp=page.getViewport({scale:1});
+        var scale=220/vp.width;
+        var svp=page.getViewport({scale:scale});
+        var c=document.createElement('canvas');
+        c.width=svp.width;c.height=svp.height;
+        return page.render({canvasContext:c.getContext('2d'),viewport:svp}).promise.then(function(){
+          thumbs.push({n:n,canvas:c});
+        });
+      });
+    });
+  };
+  for(var n=1;n<=pdfDoc.numPages;n++){_loop(n);}
+  chain.then(function(){
+    if(pdfPickerDoc!==pdfDoc)return; // picker was closed/reopened meanwhile
+    grid.innerHTML='';
+    thumbs.forEach(function(t){
+      var box=document.createElement('div');
+      box.className='pdf-page-thumb';
+      box.appendChild(t.canvas);
+      var lbl=document.createElement('div');lbl.className='pnum';lbl.textContent='Page '+t.n;
+      box.appendChild(lbl);
+      box.onclick=function(){renderPdfPageToImage(pdfDoc,t.n,side);closePdfPagePicker();};
+      grid.appendChild(box);
+    });
+  }).catch(function(err){
+    console.error(err);
+    grid.innerHTML='<div class="pdf-loading-msg">Failed to render pages.</div>';
+  });
+}
+
+function closePdfPagePicker(){
+  document.getElementById('pdfPagePicker').classList.remove('show');
+  pdfPickerSide=null;pdfPickerDoc=null;
+}
+
+// Renders one PDF page at high resolution (good enough for print/scan
+// quality) onto a canvas, converts it to a data-URL, then hands it to the
+// same loadImg() path used for photo uploads so every downstream feature
+// (crop, rotate, filters, positioning) works unchanged.
+function renderPdfPageToImage(pdfDoc,pageNum,side){
+  pdfDoc.getPage(pageNum).then(function(page){
+    var vp=page.getViewport({scale:1});
+    var targetLongSide=1800;
+    var scale=targetLongSide/Math.max(vp.width,vp.height);
+    if(scale<1)scale=1;
+    var svp=page.getViewport({scale:scale});
+    var c=document.createElement('canvas');
+    c.width=svp.width;c.height=svp.height;
+    var ctx=c.getContext('2d');
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,c.width,c.height);
+    page.render({canvasContext:ctx,viewport:svp}).promise.then(function(){
+      var dataUrl=c.toDataURL('image/png');
+      var img=new Image();
+      img.onload=function(){
+        applyLoadedImage(img,side,dataUrl,true);
+      };
+      img.src=dataUrl;
+    });
+  });
 }
 
 function handleOutputSizeChange(){
@@ -516,21 +653,41 @@ function loadImg(file,side){
   reader.onload=function(e){
     var img=new Image();
     img.onload=function(){
-      if(side==='front'){frontImg=img;showBoxDone('frontBox','frontIcon','frontTitle','frontSub','frontPreview',e.target.result);customCropBox.front={x:0,y:0,w:img.width,h:img.height,initialized:false};liveRefreshUploadBox('front');}
-      else{backImg=img;showBoxDone('backBox','backIcon','backTitle','backSub','backPreview',e.target.result);customCropBox.back={x:0,y:0,w:img.width,h:img.height,initialized:false};liveRefreshUploadBox('back');}
-      checkReady();
+      applyLoadedImage(img,side,e.target.result,false);
     };
     img.src=e.target.result;
   };
   reader.readAsDataURL(file);
 }
 
-function showBoxDone(bId,iId,tId,sId,pId,src){
+// Shared finishing step for both photo uploads and rasterized PDF pages:
+// stores the Image object, marks the upload box as done (showing IMG/PDF
+// badge), resets crop state for the new source, and refreshes previews.
+function applyLoadedImage(img,side,dataUrl,fromPdf){
+  if(side==='front'){
+    frontImg=img;
+    showBoxDone('frontBox','frontIcon','frontTitle','frontSub','frontPreview',dataUrl,'frontTypeBadge',fromPdf);
+    customCropBox.front={x:0,y:0,w:img.width,h:img.height,initialized:false};
+    liveRefreshUploadBox('front');
+  }else{
+    backImg=img;
+    showBoxDone('backBox','backIcon','backTitle','backSub','backPreview',dataUrl,'backTypeBadge',fromPdf);
+    customCropBox.back={x:0,y:0,w:img.width,h:img.height,initialized:false};
+    liveRefreshUploadBox('back');
+  }
+  checkReady();
+}
+
+function showBoxDone(bId,iId,tId,sId,pId,src,badgeId,fromPdf){
   document.getElementById(bId).classList.add('done');
   document.getElementById(iId).style.display='none';
   document.getElementById(tId).style.display='none';
   document.getElementById(sId).style.display='none';
   var p=document.getElementById(pId);p.src=src;p.style.display='block';
+  if(badgeId){
+    var badge=document.getElementById(badgeId);
+    if(badge){badge.textContent=fromPdf?'PDF':'IMG';}
+  }
 }
 
 function checkReady(){
@@ -1002,12 +1159,37 @@ function downloadImg(){
   a.click();
 }
 
+// Real PDF generation via jsPDF: the finished A4 sheet (already built by
+// buildA4()) is embedded as a full-bleed image inside a PDF page sized to
+// match the exact orientation/dimensions the user picked in Output Size —
+// so this is a true downloadable .pdf, not just a "print to PDF" workaround.
 function downloadPDF(){
-  var img=document.getElementById('outputCanvas').toDataURL('image/jpeg',1.0);
+  var oc=document.getElementById('outputCanvas');
+  var sk=document.getElementById('outputSize').value;
+  var isCustom=(sk==='custom');
+  var orientation;
+  if(isCustom){orientation=(document.getElementById('customDpiOrientation').value==='land')?'landscape':'portrait';}
+  else{var td=A4[sk];orientation=(td.W>td.H)?'landscape':'portrait';}
+  var wMM=(orientation==='landscape')?A4_MM_H:A4_MM_W;
+  var hMM=(orientation==='landscape')?A4_MM_W:A4_MM_H;
+  var imgData=oc.toDataURL('image/jpeg',0.95);
+
+  if(window.jspdf&&window.jspdf.jsPDF){
+    try{
+      var doc=new window.jspdf.jsPDF({orientation:orientation,unit:'mm',format:[wMM,hMM],compress:true});
+      doc.addImage(imgData,'JPEG',0,0,wMM,hMM,undefined,'FAST');
+      doc.save('scanned-id-card.pdf');
+      return;
+    }catch(err){
+      console.error('jsPDF generation failed, falling back to print dialog:',err);
+    }
+  }
+  // Fallback: if the PDF library failed to load (e.g. offline), fall back
+  // to the browser's own print-to-PDF dialog so the feature still works.
   var w=window.open('','_blank');
   if(!w){alert('Popup blocked.');return;}
   w.document.open();
-  w.document.write('<!DOCTYPE html><html><head><title>PDF</title><style>@page{size:auto;margin:0mm;}html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#fff;}img{display:block;position:fixed;top:0;left:0;width:100%;height:100%;object-fit:contain;}</style></head><body><img src="'+img+'" onload="window.print();setTimeout(function(){window.close();},800);"></body></html>');
+  w.document.write('<!DOCTYPE html><html><head><title>PDF</title><style>@page{size:auto;margin:0mm;}html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#fff;}img{display:block;position:fixed;top:0;left:0;width:100%;height:100%;object-fit:contain;}</style></head><body><img src="'+imgData+'" onload="window.print();setTimeout(function(){window.close();},800);"></body></html>');
   w.document.close();
 }
 
@@ -1015,6 +1197,7 @@ function resetAll(){
   frontImg=null;backImg=null;processedFront=null;processedBack=null;rotations={front:0,back:0};
   customCropBox={front:{x:0,y:0,w:0,h:0,initialized:false},back:{x:0,y:0,w:0,h:0,initialized:false}};
   cropSourceCanvas=null;
+  closePdfPagePicker();
   ['frontFile','backFile'].forEach(function(id){document.getElementById(id).value='';});
   ['frontPreview','backPreview'].forEach(function(id){document.getElementById(id).style.display='none';});
   ['frontBox','backBox'].forEach(function(id){document.getElementById(id).classList.remove('done');});
