@@ -15,22 +15,22 @@ body{font-family:'Segoe UI',sans-serif;background:#0f0f1a;min-height:100vh;paddi
 .card{background:#1e1e2e;border-radius:18px;padding:24px;margin-bottom:18px;border:1px solid rgba(255,255,255,0.07);}
 .section-title{font-size:0.72rem;font-weight:800;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:2px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
-.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
-.upload-box{border:2px dashed rgba(255,255,255,0.15);border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(255,255,255,0.03);position:relative;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
+.section-hint{font-size:0.72rem;color:rgba(255,255,255,0.3);margin:-8px 0 14px;}
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.upload-box{border:2px dashed rgba(255,255,255,0.15);border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.3s;background:rgba(255,255,255,0.03);position:relative;min-height:190px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
 .upload-box:hover{border-color:#667eea;background:rgba(102,126,234,0.08);transform:translateY(-2px);}
 .upload-box.done{border-color:#4CAF50;border-style:solid;background:rgba(76,175,80,0.06);}
 .upload-box input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;z-index:2;width:100%;height:100%;}
 .badge{font-size:0.68rem;font-weight:800;letter-spacing:1.5px;padding:3px 12px;border-radius:20px;margin-bottom:10px;display:inline-block;}
 .badge-f{background:rgba(33,150,243,0.2);color:#64b5f6;}
 .badge-b{background:rgba(233,69,96,0.2);color:#ef9a9a;}
-.uicon{font-size:2.5rem;margin-bottom:8px;}
-.upload-box h3{font-size:0.88rem;color:rgba(255,255,255,0.85);margin-bottom:4px;}
-.upload-box p{font-size:0.73rem;color:rgba(255,255,255,0.35);}
-.preview-img{width:100%;max-height:130px;object-fit:contain;border-radius:8px;margin-top:10px;display:none;border:1px solid rgba(255,255,255,0.1);}
+.uicon{font-size:2.3rem;margin-bottom:8px;}
+.upload-box h3{font-size:0.86rem;color:rgba(255,255,255,0.85);margin-bottom:4px;}
+.upload-box p{font-size:0.72rem;color:rgba(255,255,255,0.35);}
+.preview-img{width:100%;max-height:120px;object-fit:contain;border-radius:8px;margin-top:10px;display:none;border:1px solid rgba(255,255,255,0.1);}
 .tick-badge{position:absolute;top:10px;right:10px;background:#4CAF50;color:white;width:22px;height:22px;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:12px;font-weight:700;z-index:3;}
 .done .tick-badge{display:flex;}
-.file-type-badge{position:absolute;top:10px;left:10px;background:rgba(102,126,234,0.9);color:#fff;font-size:10px;font-weight:800;letter-spacing:0.5px;padding:2px 8px;border-radius:10px;z-index:3;display:none;}
-.done .file-type-badge{display:block;}
+.file-type-badge{position:absolute;top:10px;left:10px;background:rgba(102,126,234,0.9);color:#fff;font-size:10px;font-weight:800;letter-spacing:0.5px;padding:2px 8px;border-radius:10px;z-index:3;}
 .opts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px;background:rgba(255,255,255,0.02);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);}
 .opt{display:flex;flex-direction:column;gap:6px;}
 .opt label{font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.8px;}
@@ -39,12 +39,13 @@ select:focus{border-color:#667eea;}
 select option{background:#1e1e2e;color:#fff;}
 input[type="number"]{padding:8px 10px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;font-size:0.82rem;color:#fff;background:rgba(255,255,255,0.07);outline:none;width:100%;}
 input[type="number"]:focus{border-color:#667eea;}
+input[type="password"],input[type="text"]{padding:8px 10px;border:1px solid rgba(255,255,255,0.12);border-radius:8px;font-size:0.82rem;color:#fff;background:rgba(255,255,255,0.07);outline:none;width:100%;}
+input[type="password"]:focus,input[type="text"]:focus{border-color:#667eea;}
 .sl-wrap{display:flex;align-items:center;gap:6px;}
 input[type="range"]{flex:1;height:3px;-webkit-appearance:none;background:rgba(102,126,234,0.4);border-radius:2px;outline:none;cursor:pointer;}
 input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#667eea;cursor:pointer;}
 .sl-v{font-size:0.72rem;font-weight:700;color:#667eea;min-width:30px;text-align:right;}
 .position-panel{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;margin-bottom:18px;}
-.pos-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 .pos-card-title{font-size:0.72rem;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
 .pos-card-title span{padding:2px 10px;border-radius:20px;font-size:0.65rem;}
 .front-tag{background:rgba(33,150,243,0.2);color:#64b5f6;}
@@ -95,7 +96,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 .preset-btn:hover{border-color:#667eea;background:rgba(102,126,234,0.12);transform:translateY(-2px);}
 .preset-icon{font-size:1.8rem;margin-bottom:6px;}
 .preset-name{font-size:0.82rem;font-weight:700;color:#fff;margin-bottom:3px;}
-.manual-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;}
+.manual-controls-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px;}
 .control-subcard{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:12px;}
 .control-subcard h4{font-size:0.75rem;color:#64b5f6;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;}
 .control-subcard.back h4{color:#ef9a9a;}
@@ -110,7 +111,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 .crop-modal-header h3{font-size:1rem;}
 .crop-canvas-wrapper{background:#0b0b13;border-radius:8px;overflow:hidden;position:relative;display:flex;justify-content:center;align-items:center;margin-bottom:16px;min-height:300px;max-height:450px;}
 #interactiveCropCanvas{max-width:100%;max-height:400px;display:block;cursor:crosshair;-webkit-user-select:none;user-select:none;touch-action:none;}
-.custom-dpi-row{display:none;grid-column:1 / -1;display:none;background:rgba(255,255,255,0.03);border:1px solid rgba(102,126,234,0.25);border-radius:10px;padding:12px;margin-top:-4px;gap:12px;grid-template-columns:1fr 1fr;}
+.custom-dpi-row{display:none;grid-column:1 / -1;background:rgba(255,255,255,0.03);border:1px solid rgba(102,126,234,0.25);border-radius:10px;padding:12px;margin-top:-4px;gap:12px;grid-template-columns:1fr 1fr;}
 .custom-dpi-row.show{display:grid;}
 .pdf-page-picker{display:none;position:fixed;z-index:110;inset:0;background:rgba(0,0,0,0.85);align-items:center;justify-content:center;padding:20px;}
 .pdf-page-picker.show{display:flex;}
@@ -122,6 +123,32 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 .pdf-page-thumb canvas{width:100%;display:block;}
 .pdf-page-thumb .pnum{font-size:0.68rem;color:rgba(255,255,255,0.5);padding:4px;}
 .pdf-loading-msg{text-align:center;color:rgba(255,255,255,0.5);font-size:0.85rem;padding:30px 0;}
+.lock-panel{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:18px;margin-bottom:18px;}
+.lock-toggle-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer;user-select:none;}
+.lock-toggle-row input[type="checkbox"]{width:18px;height:18px;accent-color:#f7971e;cursor:pointer;}
+.lock-toggle-row span{font-size:0.86rem;color:#fff;font-weight:700;}
+.lock-fields{display:none;grid-template-columns:1fr 1fr;gap:12px;}
+.lock-fields.show{display:grid;}
+.lock-hint{font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:8px;grid-column:1/-1;}
+.pw-mismatch{color:#ef9a9a !important;}
+.lock-status-badge{display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;font-weight:800;letter-spacing:0.5px;padding:3px 10px;border-radius:20px;background:rgba(247,151,30,0.18);color:#ffd200;margin-left:8px;}
+
+.id-card-block{border:1px solid rgba(255,255,255,0.09);border-radius:16px;padding:18px;margin-bottom:16px;background:rgba(255,255,255,0.015);}
+.id-card-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.id-card-badge{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-weight:800;font-size:0.85rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.id-card-name{flex:1;background:transparent;border:none;border-bottom:1px dashed rgba(255,255,255,0.18);color:#fff;font-size:1rem;font-weight:700;padding:4px 2px;outline:none;min-width:0;}
+.id-card-name:focus{border-bottom-color:#667eea;}
+.id-card-status{display:flex;gap:10px;font-size:0.68rem;color:rgba(255,255,255,0.35);flex-shrink:0;white-space:nowrap;align-items:center;}
+.id-card-status .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.15);display:inline-block;margin-right:4px;}
+.id-card-status .dot.on{background:#4CAF50;}
+.icard-remove-btn{background:rgba(233,69,96,0.12);border:1px solid rgba(233,69,96,0.3);color:#ef9a9a;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:0.85rem;flex-shrink:0;transition:all .2s;}
+.icard-remove-btn:hover{background:rgba(233,69,96,0.25);}
+.add-card-btn{width:100%;border:2px dashed rgba(102,126,234,0.4);background:rgba(102,126,234,0.05);color:#8fa3f3;border-radius:14px;padding:16px;font-size:0.9rem;font-weight:700;cursor:pointer;margin-bottom:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.add-card-btn:hover{background:rgba(102,126,234,0.12);border-color:#667eea;color:#fff;transform:translateY(-2px);}
+.sheet-tabs{display:none;gap:6px;flex-wrap:wrap;margin-bottom:12px;justify-content:center;}
+.sheet-tab{padding:6px 14px;border-radius:20px;font-size:0.76rem;font-weight:700;cursor:pointer;border:1.5px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);background:transparent;transition:all .2s;}
+.sheet-tab.active-sheet{border-color:#e94560;color:#fff;background:rgba(233,69,96,0.18);}
+.sheets-hint{text-align:center;font-size:0.72rem;color:rgba(255,255,255,0.3);margin-bottom:10px;}
 
 @media print {
   @page { size: auto; margin: 0mm !important; }
@@ -135,12 +162,6 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
     width: 100% !important; height: 100% !important;
     object-fit: contain !important;
     margin: 0 !important; padding: 0 !important;
-    page-break-before: avoid !important;
-    page-break-after: avoid !important;
-    page-break-inside: avoid !important;
-    break-before: avoid !important;
-    break-after: avoid !important;
-    break-inside: avoid !important;
   }
 }
 </style>
@@ -150,92 +171,17 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 <div class="container">
   <div class="header">
     <h1>ID Card <span>Scanner Pro</span></h1>
-    <p>Auto crop &bull; Magic enhance &bull; Full position control &bull; Image or PDF input &bull; A4 PDF &amp; Print output</p>
+    <p>Auto crop &bull; Magic enhance &bull; Multiple ID cards, one sheet each &bull; Image or PDF input &bull; A4 PDF &amp; Print output &bull; Password Lock</p>
   </div>
 
   <div class="card">
-    <div class="section-title">📤 Upload ID Card (Image or PDF)</div>
-    <div class="upload-grid">
-      <div class="upload-box" id="frontBox">
-        <input type="file" id="frontFile" accept="image/*,application/pdf">
-        <div class="tick-badge">&#10003;</div>
-        <div class="file-type-badge" id="frontTypeBadge">IMG</div>
-        <span class="badge badge-f">FRONT SIDE</span>
-        <div class="uicon" id="frontIcon">📄</div>
-        <h3 id="frontTitle">Upload Front Side</h3>
-        <p id="frontSub">Click or drag image / PDF here</p>
-        <img id="frontPreview" class="preview-img" alt="front">
-      </div>
-      <div class="upload-box" id="backBox">
-        <input type="file" id="backFile" accept="image/*,application/pdf">
-        <div class="tick-badge">&#10003;</div>
-        <div class="file-type-badge" id="backTypeBadge">IMG</div>
-        <span class="badge badge-b">BACK SIDE</span>
-        <div class="uicon" id="backIcon">📋</div>
-        <h3 id="backTitle">Upload Back Side</h3>
-        <p id="backSub">Click or drag image / PDF here (Optional)</p>
-        <img id="backPreview" class="preview-img" alt="back">
-      </div>
-    </div>
+    <div class="section-title">📤 ID Cards to Scan</div>
+    <div class="section-hint">Each card gets its own A4 sheet in the final print / PDF. Use "Add Another ID Card" to add more.</div>
 
-    <div class="section-title">✂️ Selection Crop &amp; Rotation Modifiers</div>
-    <div class="manual-controls-grid">
-      <div class="control-subcard">
-        <h4>Front Adjustments</h4>
-        <div class="control-row-item">
-          <label>Selection Crop Window</label>
-          <select id="fCropSelect" style="width:100%;margin-top:4px;" onchange="handleCropSelectChange('front')">
-            <option value="full">No Crop (100% Full Image)</option>
-            <option value="id1" selected>Standard ID Card (85mm x 54mm)</option>
-            <option value="passport">Passport / Square Profile</option>
-            <option value="tight">Tight Auto Margin Border</option>
-            <option value="free">Free Size Crop (Any Ratio)</option>
-            <option value="custom">Custom Area Selection...</option>
-          </select>
-          <button class="btn btn-crop" id="btnFrontCropModal" style="display:none;" onclick="openVisualCropModal('front')">📐 Open Visual Crop Tool</button>
-        </div>
-        <div class="control-row-item" style="margin-top:12px;">
-          <label>Orientation Rotation Controls</label>
-          <div class="rot-btn-group">
-            <button class="rot-btn" onclick="rotateDirection('front','left')">↩️ Rotate Left</button>
-            <button class="rot-btn" onclick="rotateDirection('front','right')">↪️ Rotate Right</button>
-          </div>
-        </div>
-        <div class="control-row-item" style="margin-top:12px;">
-          <label><span>Fine Tilt Adjust</span><span class="sl-v" id="fRotV">0°</span></label>
-          <input type="range" id="fRot" min="-45" max="45" value="0" style="width:100%;" oninput="liveRefreshUploadBox('front')">
-        </div>
-      </div>
-      <div class="control-subcard back">
-        <h4>Back Adjustments</h4>
-        <div class="control-row-item">
-          <label>Selection Crop Window</label>
-          <select id="bCropSelect" style="width:100%;margin-top:4px;" onchange="handleCropSelectChange('back')">
-            <option value="full">No Crop (100% Full Image)</option>
-            <option value="id1" selected>Standard ID Card (85mm x 54mm)</option>
-            <option value="passport">Passport / Square Profile</option>
-            <option value="tight">Tight Auto Margin Border</option>
-            <option value="free">Free Size Crop (Any Ratio)</option>
-            <option value="custom">Custom Area Selection...</option>
-          </select>
-          <button class="btn btn-crop" id="btnBackCropModal" style="display:none;" onclick="openVisualCropModal('back')">📐 Open Visual Crop Tool</button>
-        </div>
-        <div class="control-row-item" style="margin-top:12px;">
-          <label>Orientation Rotation Controls</label>
-          <div class="rot-btn-group">
-            <button class="rot-btn" onclick="rotateDirection('back','left')">↩️ Rotate Left</button>
-            <button class="rot-btn" onclick="rotateDirection('back','right')">↪️ Rotate Right</button>
-          </div>
-        </div>
-        <div class="control-row-item" style="margin-top:12px;">
-          <label><span>Fine Tilt Adjust</span><span class="sl-v" id="bRotV">0°</span></label>
-          <input type="range" id="bRot" min="-45" max="45" value="0" style="width:100%;" oninput="liveRefreshUploadBox('back')">
-        </div>
-      </div>
-    </div>
-    <br>
+    <div id="cardsContainer"></div>
+    <button class="add-card-btn" onclick="addCard()">➕ Add Another ID Card (New Sheet)</button>
 
-    <div class="section-title">⚙️ Enhancement Settings</div>
+    <div class="section-title" style="margin-top:22px;">⚙️ Enhancement Settings <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(255,255,255,0.25);">(applies to all cards)</span></div>
     <div class="opts-grid">
       <div class="opt"><label>Layout</label>
         <select id="layout" onchange="updatePosPreview()">
@@ -290,7 +236,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
       </div>
     </div>
 
-    <div class="section-title">📍 Position Control</div>
+    <div class="section-title">📍 Position Control <span style="font-weight:400;text-transform:none;letter-spacing:0;color:rgba(255,255,255,0.25);">(applies to all cards)</span></div>
     <div class="position-panel">
       <div class="pos-tabs">
         <button class="pos-tab active-tab" onclick="switchTab('front')">📄 Front Card</button>
@@ -357,10 +303,32 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
           <button class="preset-btn" onclick="applyPreset('camscanner')"><div class="preset-icon">📷</div><div class="preset-name">CamScanner Style</div></button>
         </div>
       </div>
-      <div class="pos-card-title" style="margin-top:16px;">🖼️ Live Preview — Both Sides</div>
+      <div class="pos-card-title" style="margin-top:16px;">🖼️ Live Preview — Currently Edited Card</div>
       <div class="pos-preview-combined" id="posPreviewCombined">
         <div class="pos-preview" id="posPreviewFront"><div class="pos-preview-card" id="previewFrontCard">FRONT</div></div>
         <div class="pos-preview" id="posPreviewBack"><div class="pos-preview-card back-card" id="previewBackCard">BACK</div></div>
+      </div>
+    </div>
+
+    <div class="section-title">🔒 PDF Security <span class="lock-status-badge" id="lockStatusBadge" style="display:none;">LOCK ON</span></div>
+    <div class="lock-panel">
+      <label class="lock-toggle-row">
+        <input type="checkbox" id="lockEnabled" onchange="toggleLockFields()">
+        <span>Password Protect the Saved PDF</span>
+      </label>
+      <div class="lock-fields" id="lockFields">
+        <div class="opt"><label>Set Password</label>
+          <input type="password" id="pdfPassword" placeholder="Enter password" oninput="checkPwMatch()">
+        </div>
+        <div class="opt"><label>Confirm Password</label>
+          <input type="password" id="pdfPasswordConfirm" placeholder="Re-enter password" oninput="checkPwMatch()">
+        </div>
+        <div class="opt" style="grid-column:1/-1;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="checkbox" id="showPw" style="width:14px;height:14px;" onchange="toggleShowPw()"> Show password
+          </label>
+        </div>
+        <div class="lock-hint" id="pwHintMsg">One password protects the whole PDF (every sheet). This only applies to "Save as PDF" — direct print and JPG download stay unaffected.</div>
       </div>
     </div>
 
@@ -368,7 +336,7 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
       <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
       <div class="prog-msg" id="progMsg"></div>
     </div>
-    <div class="status-line" id="statusLine">Upload both sides of your ID card to get started</div>
+    <div class="status-line" id="statusLine">Upload at least the front side of one ID card to get started</div>
     <div class="btn-row">
       <button class="btn btn-primary" id="processBtn" disabled onclick="startProcess()">⚡ Scan and Generate</button>
       <button class="btn btn-outline" onclick="resetAll()">🔄 Reset</button>
@@ -376,7 +344,9 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
   </div>
 
   <div class="result-wrap" id="resultWrap">
-    <h2>✅ Scanned ID Card — A4 Ready</h2>
+    <h2>✅ Scanned ID Cards — A4 Ready</h2>
+    <div class="sheets-hint" id="sheetsHint" style="display:none;">Each card was placed on its own sheet — tap a tab to preview it.</div>
+    <div class="sheet-tabs" id="sheetTabsWrap"></div>
     <div class="preview-pair">
       <div class="preview-panel" id="prevFrontPanel"><p>Front — Processed</p><canvas id="prevFront"></canvas></div>
       <div class="preview-panel" id="prevBackPanel"><p>Back — Processed</p><canvas id="prevBack"></canvas></div>
@@ -386,7 +356,9 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
     <div class="btn-row" style="margin-top:16px;">
       <button class="btn btn-purple" onclick="directPrint()">🖨️ Direct Print</button>
       <button class="btn btn-green"  onclick="downloadImg()">⬇️ Download JPG</button>
-      <button class="btn btn-red"    onclick="downloadPDF()">📄 Save as PDF</button>
+      <button class="btn btn-red"    onclick="downloadPDF()" id="savePdfBtn">📄 Save as PDF</button>
+    </div>
+    <div class="btn-row" style="margin-top:10px;">
       <button class="btn btn-outline" onclick="resetAll()">🔄 New Scan</button>
     </div>
   </div>
@@ -424,61 +396,238 @@ input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;hei
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 if(window['pdfjsLib']){
   pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 }
 
-var frontImg=null,backImg=null,processedFront=null,processedBack=null;
-var rotations={front:0,back:0};
+// ===================== STATE =====================
+var cards=[];             // array of card objects
+var cardCounter=0;
+var activePreviewCardId=null;
+var outputSheets=[];      // built after "Scan and Generate": [{cardId,name,canvas}]
+var currentSheetIdx=0;
+
 var posState={front:{pos:'center',scale:90,fit:'contain'},back:{pos:'center',scale:90,fit:'contain'}};
-var customCropBox={front:{x:0,y:0,w:0,h:0,initialized:false},back:{x:0,y:0,w:0,h:0,initialized:false}};
-var currentCropSide='front',activeHandle=null,isDraggingBox=false,dragStartX=0,dragStartY=0;
+var currentCropCardId=null,currentCropSide='front',activeHandle=null,isDraggingBox=false,dragStartX=0,dragStartY=0;
 var boxInstance={x:50,y:50,w:200,h:130};
-var cropSourceCanvas=null; // holds the rotated full-image canvas currently open in the crop modal
+var cropSourceCanvas=null;
 var A4={a4port:{W:1240,H:1754,label:'A4 Portrait 150dpi'},a4land:{W:1754,H:1240,label:'A4 Landscape 150dpi'},a4land2:{W:2339,H:1654,label:'A4 Landscape 200dpi'}};
 var A4_MM_W=210,A4_MM_H=297;
-var pdfPickerSide=null,pdfPickerDoc=null;
+var pdfPickerCardId=null,pdfPickerSide=null,pdfPickerDoc=null;
 
-document.getElementById('fRot').addEventListener('input',function(){document.getElementById('fRotV').textContent=this.value+'°';customCropBox.front.initialized=false;});
-document.getElementById('bRot').addEventListener('input',function(){document.getElementById('bRotV').textContent=this.value+'°';customCropBox.back.initialized=false;});
 document.getElementById('bri').addEventListener('input',function(){var v=parseInt(this.value);document.getElementById('briV').textContent=(v>=0?'+':'')+v;});
 document.getElementById('con').addEventListener('input',function(){var v=parseInt(this.value);document.getElementById('conV').textContent=(v>=0?'+':'')+v;});
-document.getElementById('frontFile').addEventListener('change',function(e){if(e.target.files[0])handleUploadedFile(e.target.files[0],'front');});
-document.getElementById('backFile').addEventListener('change',function(e){if(e.target.files[0])handleUploadedFile(e.target.files[0],'back');});
-setupDrop('frontBox','front');setupDrop('backBox','back');
 
-function setupDrop(id,side){
-  var b=document.getElementById(id);
-  b.addEventListener('dragover',function(e){e.preventDefault();b.style.borderColor='#e94560';});
-  b.addEventListener('dragleave',function(){b.style.borderColor='';});
-  b.addEventListener('drop',function(e){e.preventDefault();b.style.borderColor='';if(e.dataTransfer.files&&e.dataTransfer.files[0])handleUploadedFile(e.dataTransfer.files[0],side);});
+// ===================== HELPERS =====================
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g,function(m){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m];});
+}
+function getCard(id){return cards.find(function(c){return c.id===id;});}
+function newSideState(){return{img:null,dataUrl:null,rotation:0,tilt:0,cropType:'id1',cropBox:{x:0,y:0,w:0,h:0,initialized:false},fromPdf:false,processed:null};}
+function cropOptionsHtml(sel){
+  var opts=[['full','No Crop (100% Full Image)'],['id1','Standard ID Card (85mm x 54mm)'],['passport','Passport / Square Profile'],['tight','Tight Auto Margin Border'],['free','Free Size Crop (Any Ratio)'],['custom','Custom Area Selection...']];
+  return opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===sel?' selected':'')+'>'+o[1]+'</option>';}).join('');
+}
+function sanitizeFilename(s){return(s||'card').replace(/[^a-z0-9\-_]+/gi,'_').slice(0,40);}
+
+// ===================== CARD MANAGEMENT =====================
+function addCard(){
+  cardCounter++;
+  var card={id:'card'+cardCounter,name:'ID Card '+cards.length1,front:newSideState(),back:newSideState()};
+  card.name='ID Card '+(cards.length+1);
+  cards.push(card);
+  activePreviewCardId=card.id;
+  renderCards();
+  checkReady();
+}
+function removeCard(cardId){
+  if(cards.length<=1){alert('At least one ID card is required. Use Reset to clear it instead.');return;}
+  cards=cards.filter(function(c){return c.id!==cardId;});
+  if(activePreviewCardId===cardId)activePreviewCardId=cards.length?cards[0].id:null;
+  renderCards();
+  checkReady();
+}
+function renameCard(cardId,val){
+  var card=getCard(cardId);
+  if(card)card.name=(val&&val.trim())?val.trim():card.name;
 }
 
-// Entry point for any newly selected/dropped file. Routes images straight
-// into loadImg(), and PDFs through pdf.js so a page can be rasterized and
-// used exactly like an uploaded photo (crop, rotate, filters, A4 layout all
-// work identically afterwards since it just becomes a normal Image object).
-function handleUploadedFile(file,side){
+function cardTemplate(card,idx){
+  var fDone=card.front.img?'done':'';
+  var bDone=card.back.img?'done':'';
+  var fCropBtnShow=(card.front.cropType==='custom'||card.front.cropType==='free')?'block':'none';
+  var bCropBtnShow=(card.back.cropType==='custom'||card.back.cropType==='free')?'block':'none';
+  return ''+
+  '<div class="id-card-block" data-card-id="'+card.id+'">'+
+    '<div class="id-card-header">'+
+      '<div class="id-card-badge">'+(idx+1)+'</div>'+
+      '<input class="id-card-name" value="'+escapeHtml(card.name)+'" onchange="renameCard(\''+card.id+'\',this.value)" title="Click to rename">'+
+      '<div class="id-card-status">'+
+        '<span><span class="dot '+(card.front.img?'on':'')+'" id="dotfront_'+card.id+'"></span>Front</span>'+
+        '<span><span class="dot '+(card.back.img?'on':'')+'" id="dotback_'+card.id+'"></span>Back</span>'+
+      '</div>'+
+      '<button class="icard-remove-btn" onclick="removeCard(\''+card.id+'\')" title="Remove this card">🗑️</button>'+
+    '</div>'+
+    '<div class="upload-grid">'+
+      '<div class="upload-box '+fDone+'" id="box_'+card.id+'_front">'+
+        '<input type="file" id="file_'+card.id+'_front" accept="image/*,application/pdf" onchange="handleUploadedFile(this.files[0],\''+card.id+'\',\'front\')">'+
+        '<div class="tick-badge">&#10003;</div>'+
+        '<div class="file-type-badge" id="typebadge_'+card.id+'_front" style="display:'+(card.front.img?'block':'none')+'">'+(card.front.fromPdf?'PDF':'IMG')+'</div>'+
+        '<span class="badge badge-f">FRONT SIDE</span>'+
+        '<div class="uicon" id="icon_'+card.id+'_front" style="display:'+(card.front.img?'none':'block')+'">📄</div>'+
+        '<h3 id="title_'+card.id+'_front" style="display:'+(card.front.img?'none':'block')+'">Upload Front Side</h3>'+
+        '<p id="sub_'+card.id+'_front" style="display:'+(card.front.img?'none':'block')+'">Click or drag image / PDF here</p>'+
+        '<img class="preview-img" id="prev_'+card.id+'_front" style="display:'+(card.front.img?'block':'none')+'" src="'+(card.front.dataUrl||'')+'" alt="front">'+
+      '</div>'+
+      '<div class="upload-box '+bDone+'" id="box_'+card.id+'_back">'+
+        '<input type="file" id="file_'+card.id+'_back" accept="image/*,application/pdf" onchange="handleUploadedFile(this.files[0],\''+card.id+'\',\'back\')">'+
+        '<div class="tick-badge">&#10003;</div>'+
+        '<div class="file-type-badge" id="typebadge_'+card.id+'_back" style="display:'+(card.back.img?'block':'none')+'">'+(card.back.fromPdf?'PDF':'IMG')+'</div>'+
+        '<span class="badge badge-b">BACK SIDE</span>'+
+        '<div class="uicon" id="icon_'+card.id+'_back" style="display:'+(card.back.img?'none':'block')+'">📋</div>'+
+        '<h3 id="title_'+card.id+'_back" style="display:'+(card.back.img?'none':'block')+'">Upload Back Side</h3>'+
+        '<p id="sub_'+card.id+'_back" style="display:'+(card.back.img?'none':'block')+'">Click or drag image / PDF here (Optional)</p>'+
+        '<img class="preview-img" id="prev_'+card.id+'_back" style="display:'+(card.back.img?'block':'none')+'" src="'+(card.back.dataUrl||'')+'" alt="back">'+
+      '</div>'+
+    '</div>'+
+    '<div class="manual-controls-grid">'+
+      '<div class="control-subcard">'+
+        '<h4>Front Adjustments</h4>'+
+        '<div class="control-row-item">'+
+          '<label>Selection Crop Window</label>'+
+          '<select style="width:100%;margin-top:4px;" onchange="handleCropSelectChange(\''+card.id+'\',\'front\',this.value)">'+cropOptionsHtml(card.front.cropType)+'</select>'+
+          '<button class="btn btn-crop" id="cropbtn_'+card.id+'_front" style="display:'+fCropBtnShow+';" onclick="openVisualCropModal(\''+card.id+'\',\'front\')">📐 Open Visual Crop Tool</button>'+
+        '</div>'+
+        '<div class="control-row-item" style="margin-top:12px;">'+
+          '<label>Orientation Rotation Controls</label>'+
+          '<div class="rot-btn-group">'+
+            '<button class="rot-btn" onclick="rotateDirection(\''+card.id+'\',\'front\',\'left\')">↩️ Rotate Left</button>'+
+            '<button class="rot-btn" onclick="rotateDirection(\''+card.id+'\',\'front\',\'right\')">↪️ Rotate Right</button>'+
+          '</div>'+
+        '</div>'+
+        '<div class="control-row-item" style="margin-top:12px;">'+
+          '<label><span>Fine Tilt Adjust</span><span class="sl-v" id="tiltv_'+card.id+'_front">'+card.front.tilt+'°</span></label>'+
+          '<input type="range" min="-45" max="45" value="'+card.front.tilt+'" style="width:100%;" oninput="handleTiltChange(\''+card.id+'\',\'front\',this.value)">'+
+        '</div>'+
+      '</div>'+
+      '<div class="control-subcard back">'+
+        '<h4>Back Adjustments</h4>'+
+        '<div class="control-row-item">'+
+          '<label>Selection Crop Window</label>'+
+          '<select style="width:100%;margin-top:4px;" onchange="handleCropSelectChange(\''+card.id+'\',\'back\',this.value)">'+cropOptionsHtml(card.back.cropType)+'</select>'+
+          '<button class="btn btn-crop" id="cropbtn_'+card.id+'_back" style="display:'+bCropBtnShow+';" onclick="openVisualCropModal(\''+card.id+'\',\'back\')">📐 Open Visual Crop Tool</button>'+
+        '</div>'+
+        '<div class="control-row-item" style="margin-top:12px;">'+
+          '<label>Orientation Rotation Controls</label>'+
+          '<div class="rot-btn-group">'+
+            '<button class="rot-btn" onclick="rotateDirection(\''+card.id+'\',\'back\',\'left\')">↩️ Rotate Left</button>'+
+            '<button class="rot-btn" onclick="rotateDirection(\''+card.id+'\',\'back\',\'right\')">↪️ Rotate Right</button>'+
+          '</div>'+
+        '</div>'+
+        '<div class="control-row-item" style="margin-top:12px;">'+
+          '<label><span>Fine Tilt Adjust</span><span class="sl-v" id="tiltv_'+card.id+'_back">'+card.back.tilt+'°</span></label>'+
+          '<input type="range" min="-45" max="45" value="'+card.back.tilt+'" style="width:100%;" oninput="handleTiltChange(\''+card.id+'\',\'back\',this.value)">'+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function renderCards(){
+  var container=document.getElementById('cardsContainer');
+  container.innerHTML=cards.map(function(c,i){return cardTemplate(c,i);}).join('');
+  cards.forEach(function(c){
+    setupDrop(c.id,'front');
+    setupDrop(c.id,'back');
+    liveRefreshUploadBox(c.id,'front');
+    liveRefreshUploadBox(c.id,'back');
+  });
+}
+
+function updateCardStatusDots(cardId){
+  var card=getCard(cardId);if(!card)return;
+  var df=document.getElementById('dotfront_'+cardId),db=document.getElementById('dotback_'+cardId);
+  if(df)df.classList.toggle('on',!!card.front.img);
+  if(db)db.classList.toggle('on',!!card.back.img);
+}
+
+function setupDrop(cardId,side){
+  var b=document.getElementById('box_'+cardId+'_'+side);
+  if(!b||b._dropBound)return;
+  b._dropBound=true;
+  b.addEventListener('dragover',function(e){e.preventDefault();b.style.borderColor='#e94560';});
+  b.addEventListener('dragleave',function(){b.style.borderColor='';});
+  b.addEventListener('drop',function(e){e.preventDefault();b.style.borderColor='';if(e.dataTransfer.files&&e.dataTransfer.files[0])handleUploadedFile(e.dataTransfer.files[0],cardId,side);});
+}
+
+// ===================== PDF PASSWORD LOCK =====================
+function toggleLockFields(){
+  var en=document.getElementById('lockEnabled').checked;
+  document.getElementById('lockFields').classList.toggle('show',en);
+  document.getElementById('lockStatusBadge').style.display=en?'inline-flex':'none';
+  checkPwMatch();
+}
+function toggleShowPw(){
+  var t=document.getElementById('showPw').checked?'text':'password';
+  document.getElementById('pdfPassword').type=t;
+  document.getElementById('pdfPasswordConfirm').type=t;
+}
+function checkPwMatch(){
+  var p1=document.getElementById('pdfPassword').value,p2=document.getElementById('pdfPasswordConfirm').value;
+  var hint=document.getElementById('pwHintMsg');
+  if(!document.getElementById('lockEnabled').checked){
+    hint.textContent='One password protects the whole PDF (every sheet). This only applies to "Save as PDF" — direct print and JPG download stay unaffected.';
+    hint.classList.remove('pw-mismatch');
+    return true;
+  }
+  if(p2.length>0&&p1!==p2){hint.textContent='⚠️ Passwords do not match.';hint.classList.add('pw-mismatch');return false;}
+  if(p1.length>0&&p1.length<4){hint.textContent='⚠️ Use at least 4 characters for the password.';hint.classList.add('pw-mismatch');return false;}
+  hint.textContent='One password protects the whole PDF (every sheet). This only applies to "Save as PDF" — direct print and JPG download stay unaffected.';
+  hint.classList.remove('pw-mismatch');
+  return true;
+}
+function getLockConfig(){
+  var enabled=document.getElementById('lockEnabled').checked;
+  if(!enabled)return null;
+  var p1=document.getElementById('pdfPassword').value;
+  var p2=document.getElementById('pdfPasswordConfirm').value;
+  if(!p1){alert('Please enter a password to lock the PDF, or turn off "Password Protect the Saved PDF".');return false;}
+  if(p1.length<4){alert('Password should be at least 4 characters long.');return false;}
+  if(p1!==p2){alert('Passwords do not match. Please re-enter.');return false;}
+  return{userPassword:p1,ownerPassword:p1+'_owner'};
+}
+
+// ===================== FILE HANDLING =====================
+function handleUploadedFile(file,cardId,side){
+  if(!file)return;
   var isPdf=(file.type==='application/pdf')||/\.pdf$/i.test(file.name||'');
   if(isPdf){
     if(!window['pdfjsLib']){alert('PDF library failed to load. Please check your connection and try again.');return;}
-    loadPdfFile(file,side);
+    loadPdfFile(file,cardId,side);
   }else{
-    loadImg(file,side);
+    loadImg(file,cardId,side);
   }
 }
 
-function loadPdfFile(file,side){
+function loadImg(file,cardId,side){
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){applyLoadedImage(img,cardId,side,e.target.result,false);};
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadPdfFile(file,cardId,side){
   var reader=new FileReader();
   reader.onload=function(e){
     var typedArray=new Uint8Array(e.target.result);
     pdfjsLib.getDocument({data:typedArray}).promise.then(function(pdfDoc){
-      if(pdfDoc.numPages<=1){
-        renderPdfPageToImage(pdfDoc,1,side);
-      }else{
-        openPdfPagePicker(pdfDoc,side);
-      }
+      if(pdfDoc.numPages<=1){renderPdfPageToImage(pdfDoc,1,cardId,side);}
+      else{openPdfPagePicker(pdfDoc,cardId,side);}
     }).catch(function(err){
       console.error(err);
       alert('Could not read this PDF. It may be corrupted, password-protected, or not a valid PDF file.');
@@ -487,8 +636,8 @@ function loadPdfFile(file,side){
   reader.readAsArrayBuffer(file);
 }
 
-function openPdfPagePicker(pdfDoc,side){
-  pdfPickerSide=side;pdfPickerDoc=pdfDoc;
+function openPdfPagePicker(pdfDoc,cardId,side){
+  pdfPickerCardId=cardId;pdfPickerSide=side;pdfPickerDoc=pdfDoc;
   document.getElementById('pdfPagePickerTitle').textContent='Select a page for '+side.toUpperCase()+' side ('+pdfDoc.numPages+' pages)';
   var grid=document.getElementById('pdfPageGrid');
   grid.innerHTML='<div class="pdf-loading-msg">Rendering PDF pages...</div>';
@@ -503,15 +652,13 @@ function openPdfPagePicker(pdfDoc,side){
         var svp=page.getViewport({scale:scale});
         var c=document.createElement('canvas');
         c.width=svp.width;c.height=svp.height;
-        return page.render({canvasContext:c.getContext('2d'),viewport:svp}).promise.then(function(){
-          thumbs.push({n:n,canvas:c});
-        });
+        return page.render({canvasContext:c.getContext('2d'),viewport:svp}).promise.then(function(){thumbs.push({n:n,canvas:c});});
       });
     });
   };
   for(var n=1;n<=pdfDoc.numPages;n++){_loop(n);}
   chain.then(function(){
-    if(pdfPickerDoc!==pdfDoc)return; // picker was closed/reopened meanwhile
+    if(pdfPickerDoc!==pdfDoc)return;
     grid.innerHTML='';
     thumbs.forEach(function(t){
       var box=document.createElement('div');
@@ -519,25 +666,18 @@ function openPdfPagePicker(pdfDoc,side){
       box.appendChild(t.canvas);
       var lbl=document.createElement('div');lbl.className='pnum';lbl.textContent='Page '+t.n;
       box.appendChild(lbl);
-      box.onclick=function(){renderPdfPageToImage(pdfDoc,t.n,side);closePdfPagePicker();};
+      box.onclick=function(){renderPdfPageToImage(pdfDoc,t.n,cardId,side);closePdfPagePicker();};
       grid.appendChild(box);
     });
-  }).catch(function(err){
-    console.error(err);
-    grid.innerHTML='<div class="pdf-loading-msg">Failed to render pages.</div>';
-  });
+  }).catch(function(err){console.error(err);grid.innerHTML='<div class="pdf-loading-msg">Failed to render pages.</div>';});
 }
 
 function closePdfPagePicker(){
   document.getElementById('pdfPagePicker').classList.remove('show');
-  pdfPickerSide=null;pdfPickerDoc=null;
+  pdfPickerCardId=null;pdfPickerSide=null;pdfPickerDoc=null;
 }
 
-// Renders one PDF page at high resolution (good enough for print/scan
-// quality) onto a canvas, converts it to a data-URL, then hands it to the
-// same loadImg() path used for photo uploads so every downstream feature
-// (crop, rotate, filters, positioning) works unchanged.
-function renderPdfPageToImage(pdfDoc,pageNum,side){
+function renderPdfPageToImage(pdfDoc,pageNum,cardId,side){
   pdfDoc.getPage(pageNum).then(function(page){
     var vp=page.getViewport({scale:1});
     var targetLongSide=1800;
@@ -551,69 +691,54 @@ function renderPdfPageToImage(pdfDoc,pageNum,side){
     page.render({canvasContext:ctx,viewport:svp}).promise.then(function(){
       var dataUrl=c.toDataURL('image/png');
       var img=new Image();
-      img.onload=function(){
-        applyLoadedImage(img,side,dataUrl,true);
-      };
+      img.onload=function(){applyLoadedImage(img,cardId,side,dataUrl,true);};
       img.src=dataUrl;
     });
   });
 }
 
-function handleOutputSizeChange(){
-  var sel=document.getElementById('outputSize').value;
-  var row=document.getElementById('customDpiRow');
-  if(sel==='custom'){row.classList.add('show');}
-  else{row.classList.remove('show');}
+function applyLoadedImage(img,cardId,side,dataUrl,fromPdf){
+  var card=getCard(cardId);if(!card)return;
+  var st=card[side];
+  st.img=img;st.dataUrl=dataUrl;st.fromPdf=fromPdf;
+  st.cropBox={x:0,y:0,w:img.width,h:img.height,initialized:false};
+  var box=document.getElementById('box_'+cardId+'_'+side);
+  if(box){
+    box.classList.add('done');
+    var icon=document.getElementById('icon_'+cardId+'_'+side);if(icon)icon.style.display='none';
+    var title=document.getElementById('title_'+cardId+'_'+side);if(title)title.style.display='none';
+    var sub=document.getElementById('sub_'+cardId+'_'+side);if(sub)sub.style.display='none';
+    var badge=document.getElementById('typebadge_'+cardId+'_'+side);if(badge){badge.style.display='block';badge.textContent=fromPdf?'PDF':'IMG';}
+  }
+  activePreviewCardId=cardId;
+  liveRefreshUploadBox(cardId,side);
+  updateCardStatusDots(cardId);
+  checkReady();
 }
 
-function handleCustomDpiChange(){
-  var v=document.getElementById('customDpiValue');
-  var n=parseInt(v.value);
-  if(isNaN(n))return;
-  if(n<1)v.value=1;
-  if(n>1200)v.value=1200;
+function checkReady(){
+  var btn=document.getElementById('processBtn'),st=document.getElementById('statusLine'),ld=document.getElementById('layout');
+  var withFront=cards.filter(function(c){return c.front.img;}).length;
+  var withBoth=cards.filter(function(c){return c.front.img&&c.back.img;}).length;
+  if(withFront===0){btn.disabled=true;st.textContent='Upload at least the front side of one ID card to get started';st.style.color='rgba(255,255,255,0.4)';return;}
+  btn.disabled=false;
+  if(cards.length===1){
+    if(withBoth===1){st.textContent='Ready! Both faces loaded.';st.style.color='#4CAF50';if(ld.value==='single')ld.value='side';}
+    else{st.textContent='Single image detected. Ready.';st.style.color='#64b5f6';if(ld.value!=='single')ld.value='single';}
+  }else{
+    st.textContent=withFront+' card'+(withFront>1?'s':'')+' ready — will generate '+withFront+' sheet'+(withFront>1?'s':'')+'.';
+    st.style.color='#4CAF50';
+  }
+  updatePosPreview();
 }
 
-function getCustomDpiConfig(){
-  var dpiInput=document.getElementById('customDpiValue');
-  var dpi=parseInt(dpiInput.value);
-  if(isNaN(dpi)||dpi<1)dpi=1;
-  if(dpi>1200)dpi=1200;
-  var orient=document.getElementById('customDpiOrientation').value;
-  var wMM=(orient==='land')?A4_MM_H:A4_MM_W;
-  var hMM=(orient==='land')?A4_MM_W:A4_MM_H;
-  var W=Math.round((wMM/25.4)*dpi);
-  var H=Math.round((hMM/25.4)*dpi);
-  var label='A4 '+(orient==='land'?'Landscape':'Portrait')+' '+dpi+'dpi (Custom)';
-  return{W:W,H:H,label:label};
-}
-
-function handleCropSelectChange(side){
-  var sel=document.getElementById(side==='front'?'fCropSelect':'bCropSelect');
-  var btn=document.getElementById(side==='front'?'btnFrontCropModal':'btnBackCropModal');
-  if(sel.value==='custom'||sel.value==='free'){btn.style.display='block';if(!customCropBox[side].initialized)openVisualCropModal(side);}
-  else{btn.style.display='none';liveRefreshUploadBox(side);}
-}
-
-function rotateDirection(side,dir){
-  rotations[side]=(dir==='right')?(rotations[side]+90)%360:(rotations[side]-90+360)%360;
-  // any previously saved custom crop box was defined against the old rotation's
-  // canvas size, so it no longer lines up — clear it and let the crop tool
-  // re-open fresh against the newly rotated image.
-  customCropBox[side].initialized=false;
-  liveRefreshUploadBox(side);
-}
-
-// Builds a canvas containing the FULL source image already rotated by the
-// combination of the coarse 90°-step rotation and the fine tilt slider.
-// Everything downstream (live preview, the crop tool, and final processing)
-// crops out of this rotated canvas, so whatever rotation the user dialed in
-// is exactly what they see and crop against.
-function getRotatedFullCanvas(side){
-  var src=(side==='front')?frontImg:backImg;
+// ===================== ROTATION / TILT / CROP SELECTION =====================
+function getRotatedFullCanvas(card,side){
+  var st=card[side];
+  var src=st.img;
   if(!src)return null;
-  var fa=parseInt(document.getElementById(side==='front'?'fRot':'bRot').value)*Math.PI/180;
-  var fl=rotations[side];
+  var fa=(st.tilt||0)*Math.PI/180;
+  var fl=st.rotation||0;
   var ta=fa+(fl*Math.PI/180);
   var sW=src.width,sH=src.height;
   var rW=Math.abs(sW*Math.cos(ta))+Math.abs(sH*Math.sin(ta));
@@ -621,94 +746,75 @@ function getRotatedFullCanvas(side){
   var rc=document.createElement('canvas');
   rc.width=Math.max(1,Math.round(rW));rc.height=Math.max(1,Math.round(rH));
   var rctx=rc.getContext('2d');
-  rctx.save();
-  rctx.translate(rc.width/2,rc.height/2);
-  rctx.rotate(ta);
-  rctx.drawImage(src,-sW/2,-sH/2,sW,sH);
-  rctx.restore();
+  rctx.save();rctx.translate(rc.width/2,rc.height/2);rctx.rotate(ta);rctx.drawImage(src,-sW/2,-sH/2,sW,sH);rctx.restore();
   return rc;
 }
 
-function liveRefreshUploadBox(side){
-  var src=(side==='front')?frontImg:backImg;
-  var prev=document.getElementById(side+'Preview');
-  if(!src||!prev)return;
-  var rc=getRotatedFullCanvas(side);
-  var ct=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
+function rotateDirection(cardId,side,dir){
+  var card=getCard(cardId);if(!card)return;
+  var st=card[side];
+  st.rotation=(dir==='right')?(st.rotation+90)%360:(st.rotation-90+360)%360;
+  st.cropBox.initialized=false;
+  activePreviewCardId=cardId;
+  liveRefreshUploadBox(cardId,side);
+}
+
+function handleTiltChange(cardId,side,val){
+  var card=getCard(cardId);if(!card)return;
+  var st=card[side];
+  st.tilt=parseInt(val)||0;
+  var lbl=document.getElementById('tiltv_'+cardId+'_'+side);if(lbl)lbl.textContent=st.tilt+'°';
+  st.cropBox.initialized=false;
+  activePreviewCardId=cardId;
+  liveRefreshUploadBox(cardId,side);
+}
+
+function handleCropSelectChange(cardId,side,val){
+  var card=getCard(cardId);if(!card)return;
+  var st=card[side];
+  st.cropType=val;
+  var btn=document.getElementById('cropbtn_'+cardId+'_'+side);
+  if(val==='custom'||val==='free'){if(btn)btn.style.display='block';if(!st.cropBox.initialized)openVisualCropModal(cardId,side);}
+  else{if(btn)btn.style.display='none';liveRefreshUploadBox(cardId,side);}
+}
+
+function liveRefreshUploadBox(cardId,side){
+  var card=getCard(cardId);if(!card)return;
+  var st=card[side];
+  var prevEl=document.getElementById('prev_'+cardId+'_'+side);
+  if(!st.img||!prevEl)return;
+  var rc=getRotatedFullCanvas(card,side);
+  var ct=st.cropType;
   var sX=0,sY=0,sW=rc.width,sH=rc.height,fW=sW,fH=sH;
   if(ct==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX=(sW-fW)/2;sY=(sH-fH)/2;}
   else if(ct==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX=(sW-fW)/2;sY=(sH-fH)/2;}
   else if(ct==='tight'){fW=sW*.85;fH=sH*.85;sX=(sW-fW)/2;sY=(sH-fH)/2;}
-  else if((ct==='custom'||ct==='free')&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
+  else if((ct==='custom'||ct==='free')&&st.cropBox.initialized){sX=st.cropBox.x;sY=st.cropBox.y;fW=st.cropBox.w;fH=st.cropBox.h;}
   var tc=document.getElementById('livePreviewCanvas'),ctx=tc.getContext('2d');
   tc.width=Math.max(1,fW);tc.height=Math.max(1,fH);
   ctx.clearRect(0,0,tc.width,tc.height);
   ctx.drawImage(rc,sX,sY,fW,fH,0,0,tc.width,tc.height);
-  prev.src=tc.toDataURL();
+  var dataUrl=tc.toDataURL();
+  st.dataUrl=dataUrl;
+  prevEl.src=dataUrl;
   updatePosPreview();
 }
 
-function loadImg(file,side){
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var img=new Image();
-    img.onload=function(){
-      applyLoadedImage(img,side,e.target.result,false);
-    };
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-// Shared finishing step for both photo uploads and rasterized PDF pages:
-// stores the Image object, marks the upload box as done (showing IMG/PDF
-// badge), resets crop state for the new source, and refreshes previews.
-function applyLoadedImage(img,side,dataUrl,fromPdf){
-  if(side==='front'){
-    frontImg=img;
-    showBoxDone('frontBox','frontIcon','frontTitle','frontSub','frontPreview',dataUrl,'frontTypeBadge',fromPdf);
-    customCropBox.front={x:0,y:0,w:img.width,h:img.height,initialized:false};
-    liveRefreshUploadBox('front');
-  }else{
-    backImg=img;
-    showBoxDone('backBox','backIcon','backTitle','backSub','backPreview',dataUrl,'backTypeBadge',fromPdf);
-    customCropBox.back={x:0,y:0,w:img.width,h:img.height,initialized:false};
-    liveRefreshUploadBox('back');
-  }
-  checkReady();
-}
-
-function showBoxDone(bId,iId,tId,sId,pId,src,badgeId,fromPdf){
-  document.getElementById(bId).classList.add('done');
-  document.getElementById(iId).style.display='none';
-  document.getElementById(tId).style.display='none';
-  document.getElementById(sId).style.display='none';
-  var p=document.getElementById(pId);p.src=src;p.style.display='block';
-  if(badgeId){
-    var badge=document.getElementById(badgeId);
-    if(badge){badge.textContent=fromPdf?'PDF':'IMG';}
-  }
-}
-
-function checkReady(){
-  var btn=document.getElementById('processBtn'),st=document.getElementById('statusLine'),ld=document.getElementById('layout');
-  if(frontImg&&backImg){btn.disabled=false;st.textContent="Ready! Both faces loaded.";st.style.color='#4CAF50';if(ld.value==='single')ld.value='side';updatePosPreview();}
-  else if(frontImg){btn.disabled=false;st.textContent="Single image detected. Ready.";st.style.color='#64b5f6';if(ld.value!=='single')ld.value='single';updatePosPreview();}
-}
-
-function openVisualCropModal(side){
-  var rc=getRotatedFullCanvas(side);
+// ===================== VISUAL CROP MODAL =====================
+function openVisualCropModal(cardId,side){
+  var card=getCard(cardId);if(!card)return;
+  var rc=getRotatedFullCanvas(card,side);
   if(!rc)return;
-  currentCropSide=side;
+  currentCropCardId=cardId;currentCropSide=side;
   cropSourceCanvas=rc;
-  var cropType=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
-  document.getElementById('cropModalTitle').textContent=(cropType==='free'?'Free Size Crop: ':'Crop: ')+side.toUpperCase()+' IMAGE';
+  var st=card[side];
+  document.getElementById('cropModalTitle').textContent=(st.cropType==='free'?'Free Size Crop: ':'Crop: ')+card.name+' — '+side.toUpperCase();
   var mc=document.getElementById('interactiveCropCanvas');
   var mW=Math.min(window.innerWidth-60,560),mH=380;
   var r=Math.min(mW/rc.width,mH/rc.height);
   mc.width=Math.floor(rc.width*r);mc.height=Math.floor(rc.height*r);
-  if(!customCropBox[side].initialized){
-    if(cropType==='free'){
+  if(!st.cropBox.initialized){
+    if(st.cropType==='free'){
       var fdW=mc.width*.92,fdH=mc.height*.92;
       boxInstance.w=fdW;boxInstance.h=fdH;
       boxInstance.x=(mc.width-fdW)/2;boxInstance.y=(mc.height-fdH)/2;
@@ -719,10 +825,10 @@ function openVisualCropModal(side){
       boxInstance.x=(mc.width-dW)/2;boxInstance.y=(mc.height-dH)/2;
     }
   }else{
-    boxInstance.x=(customCropBox[side].x/rc.width)*mc.width;
-    boxInstance.y=(customCropBox[side].y/rc.height)*mc.height;
-    boxInstance.w=(customCropBox[side].w/rc.width)*mc.width;
-    boxInstance.h=(customCropBox[side].h/rc.height)*mc.height;
+    boxInstance.x=(st.cropBox.x/rc.width)*mc.width;
+    boxInstance.y=(st.cropBox.y/rc.height)*mc.height;
+    boxInstance.w=(st.cropBox.w/rc.width)*mc.width;
+    boxInstance.h=(st.cropBox.h/rc.height)*mc.height;
   }
   document.getElementById('cropModalOverlay').style.display='flex';
   drawCropCanvas();
@@ -744,12 +850,15 @@ function drawCropCanvas(){
 }
 
 function closeVisualCropModal(save){
-  if(save&&cropSourceCanvas){
+  if(save&&cropSourceCanvas&&currentCropCardId){
     var c=document.getElementById('interactiveCropCanvas');
     var rc=cropSourceCanvas;
     var fx=rc.width/c.width,fy=rc.height/c.height;
-    customCropBox[currentCropSide]={x:boxInstance.x*fx,y:boxInstance.y*fy,w:boxInstance.w*fx,h:boxInstance.h*fy,initialized:true};
-    liveRefreshUploadBox(currentCropSide);
+    var card=getCard(currentCropCardId);
+    if(card){
+      card[currentCropSide].cropBox={x:boxInstance.x*fx,y:boxInstance.y*fy,w:boxInstance.w*fx,h:boxInstance.h*fy,initialized:true};
+      liveRefreshUploadBox(currentCropCardId,currentCropSide);
+    }
   }
   document.getElementById('cropModalOverlay').style.display='none';
   cropSourceCanvas=null;
@@ -766,23 +875,19 @@ function detectH(mx,my){
   if(mx>boxInstance.x&&mx<boxInstance.x+boxInstance.w&&my>boxInstance.y&&my<boxInstance.y+boxInstance.h)return'INSIDE';
   return null;
 }
-
 function dragStart(mx,my){activeHandle=detectH(mx,my);if(activeHandle){isDraggingBox=true;dragStartX=mx;dragStartY=my;}}
-
 function dragMove(mx,my){
   if(!isDraggingBox)return;
   var c=document.getElementById('interactiveCropCanvas');
   var dx=mx-dragStartX,dy=my-dragStartY;
   if(activeHandle==='INSIDE'){boxInstance.x=Math.max(0,Math.min(c.width-boxInstance.w,boxInstance.x+dx));boxInstance.y=Math.max(0,Math.min(c.height-boxInstance.h,boxInstance.y+dy));}
   else if(activeHandle==='TL'){var nx=Math.max(0,Math.min(boxInstance.x+boxInstance.w-20,boxInstance.x+dx));boxInstance.w+=(boxInstance.x-nx);boxInstance.x=nx;var ny=Math.max(0,Math.min(boxInstance.y+boxInstance.h-20,boxInstance.y+dy));boxInstance.h+=(boxInstance.y-ny);boxInstance.y=ny;}
-  else if(activeHandle==='TR'){boxInstance.w=Math.max(20,Math.min(c.width-boxInstance.x,boxInstance.w+dx));var ny=Math.max(0,Math.min(boxInstance.y+boxInstance.h-20,boxInstance.y+dy));boxInstance.h+=(boxInstance.y-ny);boxInstance.y=ny;}
-  else if(activeHandle==='BL'){var nx=Math.max(0,Math.min(boxInstance.x+boxInstance.w-20,boxInstance.x+dx));boxInstance.w+=(boxInstance.x-nx);boxInstance.x=nx;boxInstance.h=Math.max(20,Math.min(c.height-boxInstance.y,boxInstance.h+dy));}
+  else if(activeHandle==='TR'){boxInstance.w=Math.max(20,Math.min(c.width-boxInstance.x,boxInstance.w+dx));var ny2=Math.max(0,Math.min(boxInstance.y+boxInstance.h-20,boxInstance.y+dy));boxInstance.h+=(boxInstance.y-ny2);boxInstance.y=ny2;}
+  else if(activeHandle==='BL'){var nx2=Math.max(0,Math.min(boxInstance.x+boxInstance.w-20,boxInstance.x+dx));boxInstance.w+=(boxInstance.x-nx2);boxInstance.x=nx2;boxInstance.h=Math.max(20,Math.min(c.height-boxInstance.y,boxInstance.h+dy));}
   else if(activeHandle==='BR'){boxInstance.w=Math.max(20,Math.min(c.width-boxInstance.x,boxInstance.w+dx));boxInstance.h=Math.max(20,Math.min(c.height-boxInstance.y,boxInstance.h+dy));}
   dragStartX=mx;dragStartY=my;drawCropCanvas();
 }
-
 function dragEnd(){isDraggingBox=false;activeHandle=null;}
-
 (function(){
   var c=document.getElementById('interactiveCropCanvas');
   c.addEventListener('mousedown',function(e){var p=getCP(c,e.clientX,e.clientY);dragStart(p.x,p.y);});
@@ -793,6 +898,33 @@ function dragEnd(){isDraggingBox=false;activeHandle=null;}
   c.addEventListener('touchend',function(e){e.preventDefault();dragEnd();},{passive:false});
   c.addEventListener('touchcancel',dragEnd);
 })();
+
+// ===================== POSITION CONTROL =====================
+function handleOutputSizeChange(){
+  var sel=document.getElementById('outputSize').value;
+  var row=document.getElementById('customDpiRow');
+  if(sel==='custom'){row.classList.add('show');}else{row.classList.remove('show');}
+}
+function handleCustomDpiChange(){
+  var v=document.getElementById('customDpiValue');
+  var n=parseInt(v.value);
+  if(isNaN(n))return;
+  if(n<1)v.value=1;
+  if(n>1200)v.value=1200;
+}
+function getCustomDpiConfig(){
+  var dpiInput=document.getElementById('customDpiValue');
+  var dpi=parseInt(dpiInput.value);
+  if(isNaN(dpi)||dpi<1)dpi=1;
+  if(dpi>1200)dpi=1200;
+  var orient=document.getElementById('customDpiOrientation').value;
+  var wMM=(orient==='land')?A4_MM_H:A4_MM_W;
+  var hMM=(orient==='land')?A4_MM_W:A4_MM_H;
+  var W=Math.round((wMM/25.4)*dpi);
+  var H=Math.round((hMM/25.4)*dpi);
+  var label='A4 '+(orient==='land'?'Landscape':'Portrait')+' '+dpi+'dpi (Custom)';
+  return{W:W,H:H,label:label};
+}
 
 function switchTab(side){
   document.querySelectorAll('.pos-tab').forEach(function(t){t.classList.remove('active-tab');});
@@ -809,7 +941,6 @@ function setPos(side,pos){
   if(t){t.classList.add('active');if(side==='back')t.classList.add('active-back');}
   updatePosPreview();
 }
-
 function updateScaleLabel(side){var v=document.getElementById(side+'Scale').value;document.getElementById(side+'ScaleV').textContent=v+'%';posState[side].scale=parseInt(v);}
 
 function updatePosPreview(){
@@ -819,17 +950,12 @@ function updatePosPreview(){
   posState.back.fit=document.getElementById('backFit').value;
   var wrap=document.getElementById('posPreviewCombined');
   var pf=document.getElementById('posPreviewFront'),pb=document.getElementById('posPreviewBack');
-  // Combined preview always shows both sides together (regardless of which
-  // tab is active), arranged the same way the final A4 sheet will be:
-  // side-by-side, stacked, or single.
   if(layout==='side'){wrap.style.flexDirection='row';pf.style.display='block';pb.style.display='block';}
   else if(layout==='stack'){wrap.style.flexDirection='column';pf.style.display='block';pb.style.display='block';}
   else{wrap.style.flexDirection='row';pf.style.display='block';pb.style.display='none';}
-  // Show the actual (crop + rotation adjusted) uploaded image in the live
-  // preview instead of a plain placeholder cell, so the user sees exactly
-  // what will be placed before hitting "Scan and Generate".
-  var frontSrc=(frontImg&&document.getElementById('frontPreview').src)?document.getElementById('frontPreview').src:null;
-  var backSrc=(backImg&&document.getElementById('backPreview').src)?document.getElementById('backPreview').src:null;
+  var pCard=getCard(activePreviewCardId)||cards[0];
+  var frontSrc=(pCard&&pCard.front.img&&pCard.front.dataUrl)?pCard.front.dataUrl:null;
+  var backSrc=(pCard&&pCard.back.img&&pCard.back.dataUrl)?pCard.back.dataUrl:null;
   placePrevCard(document.getElementById('previewFrontCard'),posState.front.pos,fS,frontSrc,posState.front.fit,'FRONT');
   placePrevCard(document.getElementById('previewBackCard'),posState.back.pos,bS,backSrc,posState.back.fit,'BACK');
 }
@@ -871,23 +997,9 @@ function applyPreset(type){
   }
   updatePosPreview();
 }
-
 function resetScales(v){document.getElementById('frontScale').value=Math.min(150,Math.max(20,v));document.getElementById('backScale').value=Math.min(150,Math.max(20,v));updateScaleLabel('front');updateScaleLabel('back');}
 
-function startProcess(){
-  if(!frontImg&&!backImg)return;
-  var pw=document.getElementById('progWrap'),pf=document.getElementById('progFill'),pm=document.getElementById('progMsg');
-  pw.style.display='block';pf.style.width='20%';pm.textContent='Calculating...';
-  setTimeout(function(){
-    pf.style.width='60%';pm.textContent='Enhancing...';
-    if(frontImg)processedFront=processImg(frontImg,'front');
-    if(backImg&&document.getElementById('layout').value!=='single')processedBack=processImg(backImg,'back');
-    renderPreviews();
-  },300);
-  setTimeout(function(){pf.style.width='90%';pm.textContent='Building A4...';buildA4();},700);
-  setTimeout(function(){pf.style.width='100%';document.getElementById('resultWrap').style.display='block';pw.style.display='none';document.getElementById('resultWrap').scrollIntoView({behavior:'smooth'});},1000);
-}
-
+// ===================== IMAGE PROCESSING =====================
 function detectContentBounds(srcImg,mode){
   var aw=140,ah=Math.max(1,Math.round(140*srcImg.height/srcImg.width));
   var ac=document.createElement('canvas');ac.width=aw;ac.height=ah;
@@ -907,11 +1019,7 @@ function detectContentBounds(srcImg,mode){
     }
     var maxG=0;for(i=0;i<gmag.length;i++)if(gmag[i]>maxG)maxG=gmag[i];
     var thr=maxG*0.18;
-    for(var yy=0;yy<ah;yy++){
-      for(var xx=0;xx<aw;xx++){
-        if(gmag[yy*aw+xx]>thr){found=true;if(xx<minX)minX=xx;if(xx>maxX)maxX=xx;if(yy<minY)minY=yy;if(yy>maxY)maxY=yy;}
-      }
-    }
+    for(var yy=0;yy<ah;yy++){for(var xx=0;xx<aw;xx++){if(gmag[yy*aw+xx]>thr){found=true;if(xx<minX)minX=xx;if(xx>maxX)maxX=xx;if(yy<minY)minY=yy;if(yy>maxY)maxY=yy;}}}
   }else{
     var borderVals=[];
     for(var x=0;x<aw;x++){borderVals.push(gray[x]);borderVals.push(gray[(ah-1)*aw+x]);}
@@ -919,11 +1027,7 @@ function detectContentBounds(srcImg,mode){
     borderVals.sort(function(a,b){return a-b;});
     var bg=borderVals[Math.floor(borderVals.length/2)];
     var thresh=32;
-    for(var yy2=0;yy2<ah;yy2++){
-      for(var xx2=0;xx2<aw;xx2++){
-        if(Math.abs(gray[yy2*aw+xx2]-bg)>thresh){found=true;if(xx2<minX)minX=xx2;if(xx2>maxX)maxX=xx2;if(yy2<minY)minY=yy2;if(yy2>maxY)maxY=yy2;}
-      }
-    }
+    for(var yy2=0;yy2<ah;yy2++){for(var xx2=0;xx2<aw;xx2++){if(Math.abs(gray[yy2*aw+xx2]-bg)>thresh){found=true;if(xx2<minX)minX=xx2;if(xx2>maxX)maxX=xx2;if(yy2<minY)minY=yy2;if(yy2>maxY)maxY=yy2;}}}
   }
   if(!found||maxX<=minX||maxY<=minY)return null;
   var mgX=(maxX-minX)*0.05,mgY=(maxY-minY)*0.05;
@@ -945,24 +1049,13 @@ function rgb2hsl(r,g,b){
   }
   return[h,s,l];
 }
-function hue2rgb(p,q,t){
-  if(t<0)t+=1;if(t>1)t-=1;
-  if(t<1/6)return p+(q-p)*6*t;
-  if(t<1/2)return q;
-  if(t<2/3)return p+(q-p)*(2/3-t)*6;
-  return p;
-}
+function hue2rgb(p,q,t){if(t<0)t+=1;if(t>1)t-=1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;}
 function hsl2rgb(h,s,l){
   var r,g,b;
   if(s===0){r=g=b=l;}
-  else{
-    var q=l<0.5?l*(1+s):l+s-l*s;
-    var p=2*l-q;
-    r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3);
-  }
+  else{var q=l<0.5?l*(1+s):l+s-l*s;var p=2*l-q;r=hue2rgb(p,q,h+1/3);g=hue2rgb(p,q,h);b=hue2rgb(p,q,h-1/3);}
   return[r*255,g*255,b*255];
 }
-
 function applySharpen(data,width,height,amount){
   if(amount<=0.001)return;
   var src=new Uint8ClampedArray(data);
@@ -980,17 +1073,15 @@ function applySharpen(data,width,height,amount){
   }
 }
 
-function processImg(srcImg,side){
+function processImg(card,side){
+  var st=card[side];
   var wc=document.getElementById('workCanvas'),ctx=wc.getContext('2d');
   var cm=document.getElementById('cropMode').value;
   var bri=parseInt(document.getElementById('bri').value),con=parseInt(document.getElementById('con').value);
   var shr=parseInt(document.getElementById('shr').value)||0;
   var filter=document.getElementById('magicFilter').value;
-  var ct=document.getElementById(side==='front'?'fCropSelect':'bCropSelect').value;
-  // Rotate the FULL image first (coarse 90° steps + fine tilt), then crop out
-  // of that rotated canvas — this keeps the final output consistent with
-  // whatever the user saw in the live preview and the visual crop tool.
-  var rc=getRotatedFullCanvas(side);
+  var ct=st.cropType;
+  var rc=getRotatedFullCanvas(card,side);
   var sX=0,sY=0,sW=rc.width,sH=rc.height;
   if((cm==='auto'||cm==='edge')&&ct!=='custom'&&ct!=='free'){
     var bounds=detectContentBounds(rc,cm);
@@ -1001,7 +1092,7 @@ function processImg(srcImg,side){
   if(ct==='id1'){if(sW/sH>1.58){fW=sH*1.58;}else{fH=sW/1.58;}sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
   else if(ct==='passport'){var m=Math.min(sW,sH);fW=m;fH=m;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
   else if(ct==='tight'){fW=sW*.85;fH=sH*.85;sX+=(sW-fW)/2;sY+=(sH-fH)/2;}
-  else if((ct==='custom'||ct==='free')&&customCropBox[side].initialized){sX=customCropBox[side].x;sY=customCropBox[side].y;fW=customCropBox[side].w;fH=customCropBox[side].h;}
+  else if((ct==='custom'||ct==='free')&&st.cropBox.initialized){sX=st.cropBox.x;sY=st.cropBox.y;fW=st.cropBox.w;fH=st.cropBox.h;}
   wc.width=Math.max(1,fW);wc.height=Math.max(1,fH);
   ctx.clearRect(0,0,wc.width,wc.height);
   ctx.drawImage(rc,sX,sY,fW,fH,0,0,wc.width,wc.height);
@@ -1009,14 +1100,12 @@ function processImg(srcImg,side){
   var width=wc.width,height=wc.height;
   var fc=(259*(con+255))/(255*(259-con));
 
-  // Pass 1: brightness + contrast (base tone correction for every filter)
   for(var i=0;i<d.length;i+=4){
     if(d[i+3]===0)continue;
     for(var c=0;c<3;c++){var v=d[i+c]+bri;v=fc*(v-128)+128;d[i+c]=v<0?0:(v>255?255:v);}
   }
 
   if(filter==='magic'){
-    // Auto white-balance (gray-world assumption) removes color casts, then a gentle saturation lift
     var rSum=0,gSum=0,bSum=0,n=0,step=68;
     for(i=0;i<d.length;i+=step){if(d[i+3]===0)continue;rSum+=d[i];gSum+=d[i+1];bSum+=d[i+2];n++;}
     if(n>0){
@@ -1044,7 +1133,6 @@ function processImg(srcImg,side){
       d[i+2]=rgb2[2]<0?0:(rgb2[2]>255?255:rgb2[2]);
     }
   }else if(filter==='scan'){
-    // Mimic a flatbed scan: mild desaturation toward luminance + brighten whites
     for(i=0;i<d.length;i+=4){
       if(d[i+3]===0)continue;
       var lum=.299*d[i]+.587*d[i+1]+.114*d[i+2];
@@ -1052,8 +1140,6 @@ function processImg(srcImg,side){
       d[i]=Math.min(255,d[i]*1.06);d[i+1]=Math.min(255,d[i+1]*1.06);d[i+2]=Math.min(255,d[i+2]*1.04);
     }
   }else if(filter==='bw'){
-    // Local-adaptive threshold (like a simplified Bradley threshold) instead of one global cutoff,
-    // so uneven lighting across the card doesn't wipe out half the text
     var blockSize=Math.max(8,Math.round(Math.min(width,height)/24));
     var bw=Math.ceil(width/blockSize),bh=Math.ceil(height/blockSize);
     var sums=new Float32Array(bw*bh),counts=new Int32Array(bw*bh);
@@ -1078,49 +1164,22 @@ function processImg(srcImg,side){
     }
   }
 
-  // Sharpness pass: real unsharp-mask, applied after color/tone so it always reflects the slider
   applySharpen(d,width,height,(shr/100)*1.3);
-
   ctx.putImageData(id,0,0);
   var pi=new Image();pi.src=wc.toDataURL();return pi;
 }
 
-function renderPreviews(){
-  if(frontImg)drawToCanvas('prevFront',processedFront);
-  if(backImg&&document.getElementById('layout').value!=='single'){drawToCanvas('prevBack',processedBack);document.getElementById('prevBackPanel').style.display='block';}
-  else{document.getElementById('prevBackPanel').style.display='none';}
-}
-
+// ===================== SHEET BUILD / RESULT =====================
 function drawToCanvas(id,img){var c=document.getElementById(id),ctx=c.getContext('2d');c.width=img.width||300;c.height=img.height||180;ctx.drawImage(img,0,0);}
-
-function buildA4(){
-  var oc=document.getElementById('outputCanvas'),ctx=oc.getContext('2d');
-  var sk=document.getElementById('outputSize').value;
-  var td=(sk==='custom')?getCustomDpiConfig():A4[sk];
-  var layout=document.getElementById('layout').value;
-  oc.width=td.W;oc.height=td.H;ctx.fillStyle='#fff';ctx.fillRect(0,0,td.W,td.H);
-  var cW=td.W,cH=td.H,bX=0,bY=0;
-  if(layout==='side'){cW=td.W/2;bX=cW;if(frontImg)drawCell(ctx,processedFront,0,0,cW,cH,posState.front,td.W,td.H);if(backImg)drawCell(ctx,processedBack,bX,bY,cW,cH,posState.back,td.W,td.H);}
-  else if(layout==='stack'){cH=td.H/2;bY=cH;if(frontImg)drawCell(ctx,processedFront,0,0,cW,cH,posState.front,td.W,td.H);if(backImg)drawCell(ctx,processedBack,bX,bY,cW,cH,posState.back,td.W,td.H);}
-  else{if(frontImg)drawCell(ctx,processedFront,0,0,td.W,td.H,posState.front,td.W,td.H);}
-  document.getElementById('a4info').textContent=td.label+' assembled.';
-  document.getElementById('printImageLayer').src=oc.toDataURL('image/jpeg',1.0);
-}
 
 function drawCell(ctx,img,cX,cY,cW,cH,state,pageW,pageH){
   if(!img||!img.width)return;
   var iW=img.width,iH=img.height,tW,tH;
   var sf=(typeof state.scale==='number'?state.scale:90)/100;
   var margin=40;
-  // The image can never be scaled beyond its own cell area (minus a safety
-  // margin) — this stops a high scale % from pushing the card past the
-  // printable region, into the other card, or off the paper edge.
   var maxW=Math.max(10,cW-margin*2),maxH=Math.max(10,cH-margin*2);
-  if(state.fit==='fill'){
-    tW=maxW*sf;tH=maxH*sf;
-  }else{
-    var r=Math.min(cW/iW,cH/iH)*sf;tW=iW*r;tH=iH*r;
-  }
+  if(state.fit==='fill'){tW=maxW*sf;tH=maxH*sf;}
+  else{var r=Math.min(cW/iW,cH/iH)*sf;tW=iW*r;tH=iH*r;}
   if(tW>maxW){var s1=maxW/tW;tW*=s1;tH*=s1;}
   if(tH>maxH){var s2=maxH/tH;tW*=s2;tH*=s2;}
   var dX=cX+(cW-tW)/2,dY=cY+(cH-tH)/2;
@@ -1134,91 +1193,192 @@ function drawCell(ctx,img,cX,cY,cW,cH,state,pageW,pageH){
     case'bot-center': dX=cX+(cW-tW)/2;dY=cY+cH-tH-margin;break;
     case'bot-right':  dX=cX+cW-tW-margin;dY=cY+cH-tH-margin;break;
   }
-  // Final safety clamp: keep the image fully inside its own cell...
   dX=Math.max(cX,Math.min(cX+cW-tW,dX));
   dY=Math.max(cY,Math.min(cY+cH-tH,dY));
-  // ...and also fully inside the physical printable page, no matter what.
   if(pageW)dX=Math.max(0,Math.min(pageW-tW,dX));
   if(pageH)dY=Math.max(0,Math.min(pageH-tH,dY));
   ctx.drawImage(img,dX,dY,tW,tH);
 }
 
+function buildA4ForCard(card){
+  var sk=document.getElementById('outputSize').value;
+  var td=(sk==='custom')?getCustomDpiConfig():A4[sk];
+  var layout=document.getElementById('layout').value;
+  var oc=document.createElement('canvas');
+  oc.width=td.W;oc.height=td.H;
+  var ctx=oc.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,td.W,td.H);
+  var cW=td.W,cH=td.H,bX=0,bY=0;
+  if(layout==='side'){cW=td.W/2;bX=cW;if(card.front.processed)drawCell(ctx,card.front.processed,0,0,cW,cH,posState.front,td.W,td.H);if(card.back.processed)drawCell(ctx,card.back.processed,bX,bY,cW,cH,posState.back,td.W,td.H);}
+  else if(layout==='stack'){cH=td.H/2;bY=cH;if(card.front.processed)drawCell(ctx,card.front.processed,0,0,cW,cH,posState.front,td.W,td.H);if(card.back.processed)drawCell(ctx,card.back.processed,bX,bY,cW,cH,posState.back,td.W,td.H);}
+  else{if(card.front.processed)drawCell(ctx,card.front.processed,0,0,td.W,td.H,posState.front,td.W,td.H);}
+  return oc;
+}
+
+function startProcess(){
+  var validCards=cards.filter(function(c){return c.front.img||c.back.img;});
+  if(validCards.length===0)return;
+  if(document.getElementById('lockEnabled').checked&&getLockConfig()===false)return;
+  var pw=document.getElementById('progWrap'),pf=document.getElementById('progFill'),pm=document.getElementById('progMsg');
+  pw.style.display='block';pf.style.width='15%';pm.textContent='Calculating...';
+  setTimeout(function(){
+    pf.style.width='55%';pm.textContent='Enhancing '+validCards.length+' card sheet'+(validCards.length>1?'s':'')+'...';
+    var layout=document.getElementById('layout').value;
+    validCards.forEach(function(card){
+      card.front.processed=card.front.img?processImg(card,'front'):null;
+      card.back.processed=(card.back.img&&layout!=='single')?processImg(card,'back'):null;
+    });
+  },250);
+  setTimeout(function(){
+    pf.style.width='85%';pm.textContent='Building A4 sheets...';
+    outputSheets=[];
+    validCards.forEach(function(card){
+      var sheetCanvas=buildA4ForCard(card);
+      outputSheets.push({cardId:card.id,name:card.name,canvas:sheetCanvas});
+    });
+    renderSheetTabs();
+    showSheet(0);
+  },600);
+  setTimeout(function(){
+    pf.style.width='100%';document.getElementById('resultWrap').style.display='block';pw.style.display='none';
+    document.getElementById('resultWrap').scrollIntoView({behavior:'smooth'});
+  },900);
+}
+
+function renderSheetTabs(){
+  var wrap=document.getElementById('sheetTabsWrap');
+  var hint=document.getElementById('sheetsHint');
+  if(outputSheets.length<=1){wrap.style.display='none';wrap.innerHTML='';hint.style.display='none';return;}
+  wrap.style.display='flex';hint.style.display='block';
+  wrap.innerHTML=outputSheets.map(function(s,i){return '<button class="sheet-tab" onclick="showSheet('+i+')">'+(i+1)+'. '+escapeHtml(s.name)+'</button>';}).join('');
+}
+
+function showSheet(idx){
+  var sheet=outputSheets[idx];
+  if(!sheet)return;
+  currentSheetIdx=idx;
+  var oc=document.getElementById('outputCanvas'),ctx=oc.getContext('2d');
+  oc.width=sheet.canvas.width;oc.height=sheet.canvas.height;
+  ctx.drawImage(sheet.canvas,0,0);
+  var card=getCard(sheet.cardId);
+  if(card){
+    if(card.front.processed){drawToCanvas('prevFront',card.front.processed);document.getElementById('prevFrontPanel').style.display='block';}
+    else{document.getElementById('prevFrontPanel').style.display='none';}
+    if(card.back.processed){drawToCanvas('prevBack',card.back.processed);document.getElementById('prevBackPanel').style.display='block';}
+    else{document.getElementById('prevBackPanel').style.display='none';}
+  }
+  var sk=document.getElementById('outputSize').value;
+  var td=(sk==='custom')?getCustomDpiConfig():A4[sk];
+  var lockOn=document.getElementById('lockEnabled').checked;
+  document.getElementById('a4info').textContent='Sheet '+(idx+1)+' of '+outputSheets.length+' — '+sheet.name+' — '+td.label+' assembled.'+(lockOn?' PDF will be password protected on save.':'');
+  document.getElementById('printImageLayer').src=sheet.canvas.toDataURL('image/jpeg',1.0);
+  document.querySelectorAll('.sheet-tab').forEach(function(t,i){t.classList.toggle('active-sheet',i===idx);});
+}
+
+// ===================== OUTPUT ACTIONS =====================
 function directPrint(){
-  var img=document.getElementById('outputCanvas').toDataURL('image/jpeg',1.0);
+  if(!outputSheets.length)return;
+  var imgs=outputSheets.map(function(s){return s.canvas.toDataURL('image/jpeg',1.0);});
   var w=window.open('','_blank');
   if(!w){alert('Popup blocked. Please allow popups for this site.');return;}
+  var pagesHtml=imgs.map(function(src){return '<div class="pg"><img src="'+src+'"></div>';}).join('');
   w.document.open();
-  w.document.write('<!DOCTYPE html><html><head><title>Print</title><style>@page{size:auto;margin:0mm;}html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#fff;}img{display:block;position:fixed;top:0;left:0;width:100%;height:100%;object-fit:contain;}</style></head><body><img src="'+img+'" onload="window.focus();window.print();setTimeout(function(){window.close();},800);"></body></html>');
+  w.document.write('<!DOCTYPE html><html><head><title>Print</title><style>@page{size:auto;margin:0mm;}html,body{margin:0;padding:0;background:#fff;}.pg{width:100vw;height:100vh;page-break-after:always;display:flex;align-items:center;justify-content:center;overflow:hidden;}.pg:last-child{page-break-after:auto;}.pg img{width:100%;height:100%;object-fit:contain;display:block;}</style></head><body>'+pagesHtml+'<script>window.onload=function(){window.focus();window.print();setTimeout(function(){window.close();},800);};<\/script></body></html>');
   w.document.close();
 }
 
 function downloadImg(){
-  var a=document.createElement('a');
-  a.download='scanned-id-card.jpg';
-  a.href=document.getElementById('outputCanvas').toDataURL('image/jpeg',0.92);
-  a.click();
+  if(!outputSheets.length)return;
+  if(outputSheets.length===1){
+    var a=document.createElement('a');
+    a.download='scanned-id-card.jpg';
+    a.href=outputSheets[0].canvas.toDataURL('image/jpeg',0.92);
+    a.click();
+    return;
+  }
+  if(!window.JSZip){
+    var a2=document.createElement('a');
+    a2.download='scanned-id-card-1.jpg';
+    a2.href=outputSheets[0].canvas.toDataURL('image/jpeg',0.92);
+    a2.click();
+    alert('Zip library unavailable — downloaded the first sheet only.');
+    return;
+  }
+  var zip=new JSZip();
+  outputSheets.forEach(function(s,i){
+    var dataUrl=s.canvas.toDataURL('image/jpeg',0.92);
+    var base64=dataUrl.split(',')[1];
+    zip.file('sheet-'+(i+1)+'-'+sanitizeFilename(s.name)+'.jpg',base64,{base64:true});
+  });
+  zip.generateAsync({type:'blob'}).then(function(blob){
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');a.download='scanned-id-cards.zip';a.href=url;a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);},2000);
+  });
 }
 
-// Real PDF generation via jsPDF: the finished A4 sheet (already built by
-// buildA4()) is embedded as a full-bleed image inside a PDF page sized to
-// match the exact orientation/dimensions the user picked in Output Size —
-// so this is a true downloadable .pdf, not just a "print to PDF" workaround.
 function downloadPDF(){
-  var oc=document.getElementById('outputCanvas');
+  if(!outputSheets.length)return;
   var sk=document.getElementById('outputSize').value;
   var isCustom=(sk==='custom');
   var orientation;
   if(isCustom){orientation=(document.getElementById('customDpiOrientation').value==='land')?'landscape':'portrait';}
-  else{var td=A4[sk];orientation=(td.W>td.H)?'landscape':'portrait';}
+  else{var td0=A4[sk];orientation=(td0.W>td0.H)?'landscape':'portrait';}
   var wMM=(orientation==='landscape')?A4_MM_H:A4_MM_W;
   var hMM=(orientation==='landscape')?A4_MM_W:A4_MM_H;
-  var imgData=oc.toDataURL('image/jpeg',0.95);
+
+  var lockCfg=getLockConfig();
+  if(lockCfg===false)return;
 
   if(window.jspdf&&window.jspdf.jsPDF){
     try{
-      var doc=new window.jspdf.jsPDF({orientation:orientation,unit:'mm',format:[wMM,hMM],compress:true});
-      doc.addImage(imgData,'JPEG',0,0,wMM,hMM,undefined,'FAST');
-      doc.save('scanned-id-card.pdf');
+      var docOpts={orientation:orientation,unit:'mm',format:[wMM,hMM],compress:true};
+      if(lockCfg){docOpts.encryption={userPassword:lockCfg.userPassword,ownerPassword:lockCfg.ownerPassword,userPermissions:["print","modify","copy","annot-forms"]};}
+      var doc=new window.jspdf.jsPDF(docOpts);
+      outputSheets.forEach(function(sheet,i){
+        if(i>0)doc.addPage([wMM,hMM],orientation);
+        var imgData=sheet.canvas.toDataURL('image/jpeg',0.95);
+        doc.addImage(imgData,'JPEG',0,0,wMM,hMM,undefined,'FAST');
+      });
+      doc.save('scanned-id-cards'+(lockCfg?'-locked':'')+'.pdf');
       return;
     }catch(err){
-      console.error('jsPDF generation failed, falling back to print dialog:',err);
+      console.error('jsPDF generation failed:',err);
+      if(lockCfg)alert('Could not generate a password-protected PDF in this browser. Falling back to the print dialog (unlocked).');
     }
   }
-  // Fallback: if the PDF library failed to load (e.g. offline), fall back
-  // to the browser's own print-to-PDF dialog so the feature still works.
-  var w=window.open('','_blank');
-  if(!w){alert('Popup blocked.');return;}
-  w.document.open();
-  w.document.write('<!DOCTYPE html><html><head><title>PDF</title><style>@page{size:auto;margin:0mm;}html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#fff;}img{display:block;position:fixed;top:0;left:0;width:100%;height:100%;object-fit:contain;}</style></head><body><img src="'+imgData+'" onload="window.print();setTimeout(function(){window.close();},800);"></body></html>');
-  w.document.close();
+  directPrint();
 }
 
+// ===================== RESET =====================
 function resetAll(){
-  frontImg=null;backImg=null;processedFront=null;processedBack=null;rotations={front:0,back:0};
-  customCropBox={front:{x:0,y:0,w:0,h:0,initialized:false},back:{x:0,y:0,w:0,h:0,initialized:false}};
-  cropSourceCanvas=null;
+  cards=[];cardCounter=0;outputSheets=[];currentSheetIdx=0;activePreviewCardId=null;
   closePdfPagePicker();
-  ['frontFile','backFile'].forEach(function(id){document.getElementById(id).value='';});
-  ['frontPreview','backPreview'].forEach(function(id){document.getElementById(id).style.display='none';});
-  ['frontBox','backBox'].forEach(function(id){document.getElementById(id).classList.remove('done');});
-  ['frontIcon','frontTitle','frontSub','backIcon','backTitle','backSub'].forEach(function(id){document.getElementById(id).style.display='block';});
-  document.getElementById('processBtn').disabled=true;
   document.getElementById('resultWrap').style.display='none';
-  document.getElementById('fCropSelect').value='id1';document.getElementById('bCropSelect').value='id1';
-  document.getElementById('btnFrontCropModal').style.display='none';document.getElementById('btnBackCropModal').style.display='none';
-  document.getElementById('fRot').value=0;document.getElementById('fRotV').textContent='0°';
-  document.getElementById('bRot').value=0;document.getElementById('bRotV').textContent='0°';
-  document.getElementById('printImageLayer').src='';
+  document.getElementById('sheetTabsWrap').innerHTML='';document.getElementById('sheetTabsWrap').style.display='none';
+  document.getElementById('sheetsHint').style.display='none';
   document.getElementById('outputSize').value='a4port';
   document.getElementById('customDpiValue').value=300;
   document.getElementById('customDpiOrientation').value='port';
   document.getElementById('customDpiRow').classList.remove('show');
   document.getElementById('frontFit').value='contain';document.getElementById('backFit').value='contain';
   document.getElementById('shr').value=60;document.getElementById('shrV').textContent='60';
-  var s=document.getElementById('statusLine');s.textContent='Upload both sides of your ID card to get started';s.style.color='rgba(255,255,255,0.4)';
+  document.getElementById('bri').value=8;document.getElementById('briV').textContent='+8';
+  document.getElementById('con').value=20;document.getElementById('conV').textContent='+20';
+  document.getElementById('layout').value='side';
+  document.getElementById('magicFilter').value='magic';
+  document.getElementById('cropMode').value='auto';
+  document.getElementById('lockEnabled').checked=false;
+  document.getElementById('pdfPassword').value='';
+  document.getElementById('pdfPasswordConfirm').value='';
+  document.getElementById('showPw').checked=false;
+  toggleShowPw();toggleLockFields();
+  document.getElementById('printImageLayer').src='';
+  addCard();
   applyPreset('centered');switchTab('front');
 }
 
+// ===================== INIT =====================
+addCard();
 updatePosPreview();
 </script>
 </body>
